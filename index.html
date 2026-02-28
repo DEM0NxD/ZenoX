@@ -4,26 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenoX | Advanced Discord Bot</title>
+    <title>ZenoX | Advanced Discord Security Bot</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-primary: #000000;
-            --bg-secondary: #0a0a0a;
-            --bg-tertiary: #141414;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
-            --text-tertiary: #606060;
-            --accent: #ffffff;
-            --border: #1a1a1a;
-            --hover: #1f1f1f;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --bg-card: #0f0f0f;
+            --text-primary: #ffffff;
+            --text-secondary: #a3a3a3;
+            --text-tertiary: #737373;
+            --border: #262626;
+            --hover: rgba(255, 255, 255, 0.05);
         }
 
         html {
@@ -31,34 +32,27 @@
         }
 
         body {
-            font-family: 'JetBrains Mono', 'Space Mono', monospace;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background-color: var(--bg-primary);
             color: var(--text-primary);
-            overflow-x: hidden;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* Terminal Cursor */
-        .cursor {
-            display: inline-block;
-            width: 2px;
-            height: 1.2em;
-            background: var(--accent);
-            margin-left: 2px;
-            animation: blink 1s infinite;
-            vertical-align: middle;
+        /* Skip to content */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
         }
 
-        @keyframes blink {
-            0%, 49% { opacity: 1; }
-            50%, 100% { opacity: 0; }
-        }
-
-        /* Container */
-        .container {
-            width: 90%;
-            max-width: 1400px;
-            margin: 0 auto;
+        .skip-link:focus {
+            top: 0;
         }
 
         /* Header */
@@ -66,68 +60,68 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
             z-index: 1000;
-            transition: transform 0.3s ease;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
         }
 
-        header.hidden {
-            transform: translateY(-100%);
-        }
-
-        .nav-container {
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 0;
+            height: 70px;
         }
 
-        .logo {
+        .logo-link {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 1.2rem;
-            font-weight: 700;
             text-decoration: none;
             color: var(--text-primary);
-            transition: opacity 0.3s ease;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: opacity 0.2s;
         }
 
-        .logo:hover {
-            opacity: 0.7;
+        .logo-link:hover {
+            opacity: 0.8;
         }
 
-        .logo-icon {
-            font-size: 1.5rem;
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
         }
 
         .logo-text::before {
-            content: '>_';
-            margin-right: 8px;
+            content: '>';
+            margin-right: 4px;
             color: var(--text-secondary);
         }
 
-        nav ul {
+        nav {
             display: flex;
-            list-style: none;
-            gap: 2rem;
+            gap: 3rem;
         }
 
         nav a {
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
             position: relative;
         }
 
         nav a::before {
             content: '>_';
-            margin-right: 5px;
+            margin-right: 6px;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.2s;
         }
 
         nav a:hover {
@@ -138,95 +132,84 @@
             opacity: 1;
         }
 
-        .mobile-menu-btn {
+        .mobile-menu {
             display: none;
-            background: none;
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.3s ease;
         }
 
-        .mobile-menu-btn:hover {
-            background: var(--hover);
+        /* Main Content */
+        main {
+            padding-top: 70px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
         }
 
         /* Hero Section */
         .hero {
-            min-height: 100vh;
+            min-height: calc(100vh - 70px);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 8rem 0 4rem;
-            position: relative;
+            padding: 6rem 2rem;
         }
 
-        .hero-content {
-            max-width: 900px;
+        .hero-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 2rem;
+            border: 2px solid var(--border);
         }
 
         .hero-greeting {
-            font-size: 0.9rem;
             color: var(--text-secondary);
+            font-size: 1rem;
             margin-bottom: 1rem;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 0.2s forwards;
+            font-weight: 400;
         }
 
         .hero-greeting::before {
             content: '> ';
         }
 
-        .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            font-weight: 700;
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 800;
             margin-bottom: 1.5rem;
-            line-height: 1.1;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 0.4s forwards;
+            letter-spacing: -0.02em;
         }
 
-        .hero-subtitle {
-            font-size: clamp(1rem, 2vw, 1.3rem);
+        .hero-description {
+            font-size: 1.15rem;
             color: var(--text-secondary);
-            margin-bottom: 3rem;
-            line-height: 1.8;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 0.6s forwards;
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
         }
 
         .cta-buttons {
             display: flex;
+            gap: 1rem;
             justify-content: center;
-            gap: 1.5rem;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 0.8s forwards;
             flex-wrap: wrap;
         }
 
         .btn {
-            padding: 1rem 2rem;
-            font-family: inherit;
-            font-size: 0.9rem;
-            font-weight: 500;
+            padding: 0.9rem 2rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
             text-decoration: none;
-            border: 1px solid var(--border);
-            background: transparent;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            transition: all 0.2s;
+            border: 1px solid var(--border);
         }
 
         .btn-primary {
@@ -235,135 +218,102 @@
             border-color: var(--text-primary);
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-        }
-
         .btn-primary:hover {
             background: var(--text-secondary);
             border-color: var(--text-secondary);
+            transform: translateY(-2px);
         }
 
-        /* Terminal Input */
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--hover);
+            transform: translateY(-2px);
+        }
+
         .terminal-input {
             margin-top: 3rem;
-            max-width: 600px;
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            max-width: 500px;
             margin-left: auto;
             margin-right: auto;
-            padding: 1rem 1.5rem;
-            border: 1px solid var(--border);
-            background: var(--bg-secondary);
-            font-family: inherit;
+        }
+
+        .terminal-input-text {
+            color: var(--text-tertiary);
             font-size: 0.9rem;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
         }
 
-        .terminal-input::before {
+        .terminal-input-text::before {
             content: '$ ';
-            color: var(--text-primary);
-            margin-right: 10px;
+            color: var(--text-secondary);
         }
 
-        /* Stats Section */
-        .stats {
+        /* Section */
+        .section {
             padding: 6rem 0;
+        }
+
+        .section-dark {
             background: var(--bg-secondary);
             border-top: 1px solid var(--border);
             border-bottom: 1px solid var(--border);
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-        }
-
-        .stat-card {
-            text-align: center;
-            padding: 2rem;
-            border: 1px solid var(--border);
-            background: var(--bg-tertiary);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            border-color: var(--text-primary);
-            transform: translateY(-5px);
-        }
-
-        .stat-card i {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            opacity: 0.8;
-        }
-
-        .stat-card h3 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-card p {
+        .section-label {
             color: var(--text-secondary);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 1rem;
         }
 
-        /* Section Titles */
+        .section-label::before {
+            content: '_';
+        }
+
         .section-title {
             font-size: clamp(2rem, 5vw, 3rem);
-            margin-bottom: 3rem;
+            font-weight: 700;
             text-align: center;
-            position: relative;
-        }
-
-        .section-title::before {
-            content: '>_';
-            display: block;
-            font-size: 1rem;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-        }
-
-        /* Features Section */
-        .features {
-            padding: 6rem 0;
-        }
-
-        .features-subtitle {
-            text-align: center;
-            color: var(--text-secondary);
             margin-bottom: 4rem;
-            font-size: 1rem;
+            letter-spacing: -0.02em;
         }
 
+        /* Features Grid */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
+            margin-bottom: 6rem;
         }
 
         .feature-card {
             padding: 2rem;
+            background: var(--bg-card);
             border: 1px solid var(--border);
-            background: var(--bg-secondary);
-            transition: all 0.3s ease;
+            border-radius: 8px;
+            transition: all 0.3s;
         }
 
         .feature-card:hover {
             border-color: var(--text-primary);
-            transform: translateY(-5px);
+            transform: translateY(-4px);
         }
 
         .feature-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
         }
 
         .feature-card h3::before {
@@ -374,38 +324,79 @@
         .feature-card p {
             color: var(--text-secondary);
             font-size: 0.9rem;
-            line-height: 1.8;
+            line-height: 1.6;
         }
 
-        .feature-card ul {
-            list-style: none;
-            margin-top: 1rem;
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
         }
 
-        .feature-card li {
-            padding: 0.5rem 0;
+        .about-content h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .about-content p {
             color: var(--text-secondary);
-            font-size: 0.85rem;
-            border-bottom: 1px solid var(--border);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
         }
 
-        .feature-card li:last-child {
-            border-bottom: none;
+        .about-features {
+            list-style: none;
+            margin: 2rem 0;
         }
 
-        .feature-card li::before {
-            content: '→ ';
+        .about-features li {
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .about-features li::before {
+            content: '•';
             color: var(--text-primary);
-            margin-right: 8px;
+            font-size: 1.5rem;
+        }
+
+        .about-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: opacity 0.2s;
+        }
+
+        .about-link:hover {
+            opacity: 0.7;
+        }
+
+        .about-image {
+            text-align: center;
+        }
+
+        .about-image img {
+            max-width: 400px;
+            width: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--border);
         }
 
         /* Commands Section */
-        .commands {
-            padding: 6rem 0;
-            background: var(--bg-secondary);
-        }
-
-        .command-tabs {
+        .commands-tabs {
             display: flex;
             gap: 1rem;
             margin-bottom: 3rem;
@@ -414,23 +405,38 @@
             border-bottom: 1px solid var(--border);
         }
 
+        .commands-tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .commands-tabs::-webkit-scrollbar-track {
+            background: var(--bg-card);
+        }
+
+        .commands-tabs::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
         .command-tab {
-            padding: 0.8rem 1.5rem;
+            padding: 0.75rem 1.5rem;
             background: transparent;
             border: 1px solid var(--border);
+            border-radius: 6px;
             color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
             cursor: pointer;
-            font-family: inherit;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
             white-space: nowrap;
+            font-family: inherit;
         }
 
         .command-tab:hover,
         .command-tab.active {
-            background: var(--bg-tertiary);
-            border-color: var(--text-primary);
+            background: var(--bg-card);
             color: var(--text-primary);
+            border-color: var(--text-primary);
         }
 
         .command-content {
@@ -439,82 +445,85 @@
 
         .command-content.active {
             display: block;
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.3s ease;
         }
 
-        .command-list {
-            display: grid;
-            gap: 0.5rem;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .command-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            border: 1px solid var(--border);
-            background: var(--bg-tertiary);
-            transition: all 0.3s ease;
-            cursor: pointer;
+        .command-description {
+            margin-bottom: 2rem;
         }
 
-        .command-item:hover {
-            border-color: var(--text-primary);
-            padding-left: 1.5rem;
+        .command-description h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
 
-        .command-name {
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .command-name::before {
-            content: '$ ';
+        .command-description h3::before {
+            content: '> ';
             color: var(--text-secondary);
-            margin-right: 5px;
         }
 
-        .command-desc {
+        .command-description p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .command-count {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
             color: var(--text-secondary);
             font-size: 0.85rem;
         }
 
         /* Process Section */
-        .process {
-            padding: 6rem 0;
-        }
-
         .process-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
-            margin-top: 3rem;
         }
 
         .process-step {
             text-align: center;
             padding: 2rem;
+            background: var(--bg-card);
             border: 1px solid var(--border);
-            background: var(--bg-secondary);
-            transition: all 0.3s ease;
+            border-radius: 8px;
+            transition: all 0.3s;
         }
 
         .process-step:hover {
             border-color: var(--text-primary);
-            transform: translateY(-5px);
+            transform: translateY(-4px);
         }
 
         .step-number {
+            color: var(--text-tertiary);
             font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
         }
 
         .process-step h3 {
             font-size: 1.3rem;
-            margin-bottom: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
         }
 
         .process-step h3::before {
@@ -524,17 +533,18 @@
 
         .process-step p {
             color: var(--text-secondary);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
         /* Footer */
         footer {
-            padding: 4rem 0 2rem;
             border-top: 1px solid var(--border);
+            padding: 4rem 0 2rem;
             background: var(--bg-secondary);
         }
 
-        .footer-content {
+        .footer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 3rem;
@@ -543,15 +553,10 @@
 
         .footer-section h4 {
             font-size: 0.9rem;
+            font-weight: 600;
             margin-bottom: 1.5rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .footer-section h4::before {
-            content: '>_';
-            margin-right: 8px;
-            color: var(--text-secondary);
+            letter-spacing: 1px;
         }
 
         .footer-links {
@@ -559,29 +564,18 @@
         }
 
         .footer-links li {
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.75rem;
         }
 
         .footer-links a {
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.85rem;
-            transition: color 0.3s ease;
+            font-size: 0.9rem;
+            transition: color 0.2s;
         }
 
         .footer-links a:hover {
             color: var(--text-primary);
-        }
-
-        .footer-links a::before {
-            content: '→ ';
-            margin-right: 5px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .footer-links a:hover::before {
-            opacity: 1;
         }
 
         .social-links {
@@ -589,607 +583,351 @@
             gap: 1rem;
         }
 
-        .social-links a {
+        .social-link {
             width: 40px;
             height: 40px;
             border: 1px solid var(--border);
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--text-primary);
             text-decoration: none;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
         }
 
-        .social-links a:hover {
+        .social-link:hover {
             border-color: var(--text-primary);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
 
-        .copyright {
-            text-align: center;
+        .footer-bottom {
             padding-top: 2rem;
             border-top: 1px solid var(--border);
+            text-align: center;
             color: var(--text-secondary);
-            font-size: 0.85rem;
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-tertiary);
+            font-size: 0.9rem;
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            .mobile-menu-btn {
-                display: block;
+        @media (max-width: 1024px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
             }
 
-            nav ul {
+            .about-image {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0 1rem;
+            }
+
+            nav {
                 display: none;
                 position: absolute;
-                top: 100%;
+                top: 70px;
                 left: 0;
-                width: 100%;
-                background: var(--bg-primary);
+                right: 0;
+                background: rgba(0, 0, 0, 0.98);
+                backdrop-filter: blur(12px);
                 flex-direction: column;
                 padding: 2rem;
-                border-top: 1px solid var(--border);
+                gap: 1.5rem;
+                border-bottom: 1px solid var(--border);
             }
 
-            nav ul.active {
+            nav.active {
                 display: flex;
             }
 
+            .mobile-menu {
+                display: block;
+                background: none;
+                border: 1px solid var(--border);
+                color: var(--text-primary);
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 1rem;
+            }
+
             .hero {
-                padding: 6rem 0 3rem;
+                padding: 4rem 1rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .section {
+                padding: 4rem 0;
             }
 
             .cta-buttons {
                 flex-direction: column;
-                align-items: stretch;
+                width: 100%;
             }
 
             .btn {
+                width: 100%;
                 justify-content: center;
-            }
-
-            .command-tabs {
-                flex-wrap: nowrap;
             }
 
             .features-grid,
             .process-grid {
                 grid-template-columns: 1fr;
             }
-        }
 
-        /* Animations */
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
             }
         }
 
-        .animate-in {
-            animation: slideUp 0.6s ease forwards;
-        }
-
-        /* Grid Background */
-        .grid-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(var(--border) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 50px 50px;
-            opacity: 0.03;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        /* Command Count Badge */
-        .command-count {
-            display: inline-block;
-            padding: 0.3rem 0.6rem;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            font-size: 0.75rem;
-            margin-left: auto;
-            color: var(--text-secondary);
+        @media (max-width: 480px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- Grid Background -->
-    <div class="grid-bg"></div>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <!-- Header -->
     <header>
-        <div class="container nav-container">
-            <a href="#" class="logo">
-                <i class="fas fa-robot logo-icon"></i>
+        <div class="header-container">
+            <a href="/" class="logo-link">
+                <img src="zenox.png" alt="ZenoX Logo" class="logo-img">
                 <span class="logo-text">zenox_bot</span>
             </a>
 
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <button class="mobile-menu" id="mobileMenuBtn" aria-label="Toggle menu">
                 <i class="fas fa-bars"></i>
             </button>
 
-            <nav>
-                <ul id="navMenu">
-                    <li><a href="#features">features</a></li>
-                    <li><a href="#commands">commands</a></li>
-                    <li><a href="#process">process</a></li>
-                    <li><a href="#stats">stats</a></li>
-                </ul>
+            <nav id="navMenu">
+                <a href="#features">features</a>
+                <a href="#commands">commands</a>
+                <a href="#about">about</a>
+                <a href="#process">process</a>
             </nav>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="container">
-            <div class="hero-content">
-                <p class="hero-greeting">hi, my name is</p>
-                <h1>ZenoX Bot<span class="cursor"></span></h1>
-                <p class="hero-subtitle">
-                    Advanced Discord Security & Automation. protecting thousands of servers with real-time monitoring,
-                    customizable moderation tools, and intelligent automation systems.
-                </p>
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <img src="zenox.png" alt="ZenoX Bot Avatar" class="hero-avatar">
+            <p class="hero-greeting">hi, my name is</p>
+            <h1 class="hero-title">ZenoX Bot</h1>
+            <p class="hero-description">
+                Advanced Discord Security & Moderation. protecting thousands of servers with real-time anti-nuke and
+                customizable tools.
+            </p>
 
-                <div class="cta-buttons">
-                    <a href="https://discord.com/oauth2/authorize?client_id=1462047381100036126&permissions=8&integration_type=0&scope=bot"
-                        class="btn btn-primary" target="_blank">
-                        <i class="fas fa-plus"></i> Add to Server
-                    </a>
-                    <a href="https://discord.gg/4WdpTb9cB4" class="btn" target="_blank">
-                        <i class="fab fa-discord"></i> Support Server
-                    </a>
-                </div>
-
-                <div class="terminal-input">
-                    Try typing 'help' or 'features'
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="stats" id="stats">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <i class="fas fa-server"></i>
-                    <h3>45+</h3>
-                    <p>Servers</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-users"></i>
-                    <h3>4.8K+</h3>
-                    <p>Users</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-code"></i>
-                    <h3>585</h3>
-                    <p>Commands</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-shield-alt"></i>
-                    <h3>24/7</h3>
-                    <p>Protection</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="container">
-            <h2 class="section-title">system_capabilities_</h2>
-            <p class="features-subtitle">comprehensive tools for modern discord servers</p>
-
-            <div class="features-grid">
-                <div class="feature-card">
-                    <h3>
-                        <i class="fas fa-shield-alt"></i>
-                        Security & Protection
-                    </h3>
-                    <p>Advanced anti-nuke protection with real-time threat detection and neutralization.</p>
-                    <ul>
-                        <li>Real-time threat monitoring</li>
-                        <li>Automated threat response</li>
-                        <li>Whitelist management</li>
-                        <li>Night mode protection</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h3>
-                        <i class="fas fa-robot"></i>
-                        Auto Moderation
-                    </h3>
-                    <p>Intelligent content filtering and automated moderation systems.</p>
-                    <ul>
-                        <li>Spam detection</li>
-                        <li>Word filtering</li>
-                        <li>Link blocking</li>
-                        <li>Customizable rules</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h3>
-                        <i class="fas fa-music"></i>
-                        Music System
-                    </h3>
-                    <p>High-quality music playback with advanced controls and filters.</p>
-                    <ul>
-                        <li>24/7 playback support</li>
-                        <li>Audio effects & filters</li>
-                        <li>Queue management</li>
-                        <li>Multiple sources</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h3>
-                        <i class="fas fa-gamepad"></i>
-                        Entertainment
-                    </h3>
-                    <p>Interactive games and fun features to engage your community.</p>
-                    <ul>
-                        <li>15+ mini games</li>
-                        <li>AI image generation</li>
-                        <li>Social commands</li>
-                        <li>Economy system</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h3>
-                        <i class="fas fa-cogs"></i>
-                        Server Management
-                    </h3>
-                    <p>Complete server automation and management tools.</p>
-                    <ul>
-                        <li>Auto setup wizards</li>
-                        <li>Role management</li>
-                        <li>Ticket system</li>
-                        <li>Welcome messages</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h3>
-                        <i class="fas fa-chart-line"></i>
-                        Analytics & Logging
-                    </h3>
-                    <p>Comprehensive logging and activity tracking systems.</p>
-                    <ul>
-                        <li>Detailed event logs</li>
-                        <li>Activity tracking</li>
-                        <li>Invite tracking</li>
-                        <li>Custom reports</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Commands Section -->
-    <section class="commands" id="commands">
-        <div class="container">
-            <h2 class="section-title">command_database_</h2>
-
-            <div class="command-tabs">
-                <button class="command-tab active" data-category="security">Security</button>
-                <button class="command-tab" data-category="moderation">Moderation</button>
-                <button class="command-tab" data-category="music">Music</button>
-                <button class="command-tab" data-category="fun">Fun</button>
-                <button class="command-tab" data-category="utility">Utility</button>
-                <button class="command-tab" data-category="server">Server</button>
-                <button class="command-tab" data-category="voice">Voice</button>
-                <button class="command-tab" data-category="games">Games</button>
+            <div class="cta-buttons">
+                <a href="https://discord.com/oauth2/authorize?client_id=1462047381100036126&permissions=8&integration_type=0&scope=bot"
+                    class="btn btn-primary" target="_blank">
+                    Add to Server
+                </a>
+                <a href="https://discord.gg/4WdpTb9cB4" class="btn btn-secondary" target="_blank">
+                    Support Server
+                </a>
             </div>
 
-            <!-- Security Commands -->
-            <div class="command-content active" id="security">
-                <div class="command-list">
-                    <div class="command-item">
-                        <span class="command-name">antinuke</span>
-                        <span class="command-desc">Enable/disable anti-nuke protection</span>
+            <div class="terminal-input">
+                <span class="terminal-input-text">Try typing 'help' or 'features'</span>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section" id="features">
+            <div class="container">
+                <p class="section-label">features</p>
+                <h2 class="section-title">system_capabilities_</h2>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>Real-Time Protection</h3>
+                        <p>Continuous monitoring and instant threat neutralization 24/7.</p>
                     </div>
-                    <div class="command-item">
-                        <span class="command-name">whitelist</span>
-                        <span class="command-desc">Manage whitelisted users</span>
+                    <div class="feature-card">
+                        <h3>Fully Customizable</h3>
+                        <p>Tailor every feature to your server's unique needs.</p>
                     </div>
-                    <div class="command-item">
-                        <span class="command-name">extraowner</span>
-                        <span class="command-desc">Manage extra owners</span>
+                    <div class="feature-card">
+                        <h3>Quick Setup</h3>
+                        <p>Deploy in minutes with smart defaults.</p>
                     </div>
-                    <div class="command-item">
-                        <span class="command-name">nightmode</span>
-                        <span class="command-desc">Toggle server night mode</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">security</span>
-                        <span class="command-desc">View security settings</span>
+                    <div class="feature-card">
+                        <h3>24/7 Monitoring</h3>
+                        <p>Round-the-clock vigilance for your security.</p>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Moderation Commands -->
-            <div class="command-content" id="moderation">
-                <div class="command-list">
-                    <div class="command-item">
-                        <span class="command-name">ban</span>
-                        <span class="command-desc">Ban a user from the server</span>
+        <!-- About Section -->
+        <section class="section section-dark" id="about">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-content">
+                        <p class="section-label">About ZenoX</p>
+                        <h2>Security that works for you.</h2>
+                        <p>
+                            Advanced Discord security ensuring your community stays safe. Real-time protection,
+                            customizable settings, 24/7 monitoring — all in one bot.
+                        </p>
+
+                        <ul class="about-features">
+                            <li>Real-time threat detection and neutralization</li>
+                            <li>Customizable security for your server</li>
+                            <li>24/7 vigilant protection that never sleeps</li>
+                        </ul>
+
+                        <a href="#" class="about-link">
+                            Learn more about us
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
-                    <div class="command-item">
-                        <span class="command-name">kick</span>
-                        <span class="command-desc">Kick a user from the server</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">mute</span>
-                        <span class="command-desc">Mute a user</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">warn</span>
-                        <span class="command-desc">Warn a user</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">clear</span>
-                        <span class="command-desc">Purge messages</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">lock</span>
-                        <span class="command-desc">Lock a channel</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">unlock</span>
-                        <span class="command-desc">Unlock a channel</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">slowmode</span>
-                        <span class="command-desc">Set channel slowmode</span>
+
+                    <div class="about-image">
+                        <img src="zenox.png" alt="ZenoX Bot">
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Music Commands -->
-            <div class="command-content" id="music">
-                <div class="command-list">
-                    <div class="command-item">
-                        <span class="command-name">play</span>
-                        <span class="command-desc">Play a song</span>
+        <!-- Commands Section -->
+        <section class="section" id="commands">
+            <div class="container">
+                <p class="section-label">core_modules</p>
+                <h2 class="section-title">essential_tools_</h2>
+
+                <div class="commands-tabs">
+                    <button class="command-tab active" data-tab="antinuke">Antinuke</button>
+                    <button class="command-tab" data-tab="moderation">Moderation</button>
+                    <button class="command-tab" data-tab="music">Music</button>
+                    <button class="command-tab" data-tab="games">Games</button>
+                    <button class="command-tab" data-tab="utility">Utility</button>
+                    <button class="command-tab" data-tab="voice">Voice</button>
+                    <button class="command-tab" data-tab="server">Server</button>
+                </div>
+
+                <!-- Antinuke Commands -->
+                <div class="command-content active" id="antinuke">
+                    <div class="command-description">
+                        <h3>Antinuke</h3>
+                        <p>Protect your server from mass destruction</p>
+                        <span class="command-count">12 active commands</span>
                     </div>
-                    <div class="command-item">
-                        <span class="command-name">pause</span>
-                        <span class="command-desc">Pause playback</span>
+                </div>
+
+                <!-- Moderation Commands -->
+                <div class="command-content" id="moderation">
+                    <div class="command-description">
+                        <h3>Moderation</h3>
+                        <p>Complete moderation toolkit for server management</p>
+                        <span class="command-count">25 active commands</span>
                     </div>
-                    <div class="command-item">
-                        <span class="command-name">skip</span>
-                        <span class="command-desc">Skip current track</span>
+                </div>
+
+                <!-- Music Commands -->
+                <div class="command-content" id="music">
+                    <div class="command-description">
+                        <h3>Music</h3>
+                        <p>High-quality music playback for your voice channels</p>
+                        <span class="command-count">18 active commands</span>
                     </div>
-                    <div class="command-item">
-                        <span class="command-name">queue</span>
-                        <span class="command-desc">View music queue</span>
+                </div>
+
+                <!-- Games Commands -->
+                <div class="command-content" id="games">
+                    <div class="command-description">
+                        <h3>Games</h3>
+                        <p>Interactive entertainment and mini-games</p>
+                        <span class="command-count">15 active commands</span>
                     </div>
-                    <div class="command-item">
-                        <span class="command-name">filter</span>
-                        <span class="command-desc">Apply audio filters</span>
+                </div>
+
+                <!-- Utility Commands -->
+                <div class="command-content" id="utility">
+                    <div class="command-description">
+                        <h3>Utility</h3>
+                        <p>Essential tools and information commands</p>
+                        <span class="command-count">30 active commands</span>
                     </div>
-                    <div class="command-item">
-                        <span class="command-name">volume</span>
-                        <span class="command-desc">Adjust volume</span>
+                </div>
+
+                <!-- Voice Commands -->
+                <div class="command-content" id="voice">
+                    <div class="command-description">
+                        <h3>Voice</h3>
+                        <p>Advanced voice channel management and controls</p>
+                        <span class="command-count">10 active commands</span>
+                    </div>
+                </div>
+
+                <!-- Server Commands -->
+                <div class="command-content" id="server">
+                    <div class="command-description">
+                        <h3>Server</h3>
+                        <p>Automated server setup and configuration tools</p>
+                        <span class="command-count">20 active commands</span>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Fun Commands -->
-            <div class="command-content" id="fun">
-                <div class="command-list">
-                    <div class="command-item">
-                        <span class="command-name">imagine</span>
-                        <span class="command-desc">Generate AI images</span>
+        <!-- Process Section -->
+        <section class="section section-dark" id="process">
+            <div class="container">
+                <p class="section-label">process</p>
+                <h2 class="section-title">execution_flow_</h2>
+
+                <div class="process-grid">
+                    <div class="process-step">
+                        <div class="step-number">STEP_01</div>
+                        <h3>Monitor</h3>
+                        <p>Scan activity</p>
                     </div>
-                    <div class="command-item">
-                        <span class="command-name">chat</span>
-                        <span class="command-desc">Chat with AI</span>
+                    <div class="process-step">
+                        <div class="step-number">STEP_02</div>
+                        <h3>Analyze</h3>
+                        <p>Assess threats</p>
                     </div>
-                    <div class="command-item">
-                        <span class="command-name">meme</span>
-                        <span class="command-desc">Get random memes</span>
+                    <div class="process-step">
+                        <div class="step-number">STEP_03</div>
+                        <h3>Act</h3>
+                        <p>Neutralize</p>
                     </div>
-                    <div class="command-item">
-                        <span class="command-name">ship</span>
-                        <span class="command-desc">Ship two users</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">8ball</span>
-                        <span class="command-desc">Ask magic 8ball</span>
+                    <div class="process-step">
+                        <div class="step-number">STEP_04</div>
+                        <h3>Log</h3>
+                        <p>Record event</p>
                     </div>
                 </div>
             </div>
-
-            <!-- Utility Commands -->
-            <div class="command-content" id="utility">
-                <div class="command-list">
-                    <div class="command-item">
-                        <span class="command-name">serverinfo</span>
-                        <span class="command-desc">View server information</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">userinfo</span>
-                        <span class="command-desc">View user information</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">avatar</span>
-                        <span class="command-desc">View user avatar</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">banner</span>
-                        <span class="command-desc">View user/server banner</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">ping</span>
-                        <span class="command-desc">Check bot latency</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">reminder</span>
-                        <span class="command-desc">Set reminders</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Server Commands -->
-            <div class="command-content" id="server">
-                <div class="command-list">
-                    <div class="command-item">
-                        <span class="command-name">setup</span>
-                        <span class="command-desc">Auto server setup</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">autorole</span>
-                        <span class="command-desc">Configure autoroles</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">welcome</span>
-                        <span class="command-desc">Setup welcome messages</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">ticket</span>
-                        <span class="command-desc">Setup ticket system</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">logging</span>
-                        <span class="command-desc">Configure server logs</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Voice Commands -->
-            <div class="command-content" id="voice">
-                <div class="command-list">
-                    <div class="command-item">
-                        <span class="command-name">voice kick</span>
-                        <span class="command-desc">Kick from voice channel</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">voice mute</span>
-                        <span class="command-desc">Mute in voice channel</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">voice move</span>
-                        <span class="command-desc">Move users between channels</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">vcrole</span>
-                        <span class="command-desc">Voice channel roles</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Games Commands -->
-            <div class="command-content" id="games">
-                <div class="command-list">
-                    <div class="command-item">
-                        <span class="command-name">blackjack</span>
-                        <span class="command-desc">Play blackjack</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">chess</span>
-                        <span class="command-desc">Play chess</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">tictactoe</span>
-                        <span class="command-desc">Play tic-tac-toe</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">wordle</span>
-                        <span class="command-desc">Play wordle</span>
-                    </div>
-                    <div class="command-item">
-                        <span class="command-name">rps</span>
-                        <span class="command-desc">Rock paper scissors</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Process Section -->
-    <section class="process" id="process">
-        <div class="container">
-            <h2 class="section-title">execution_flow_</h2>
-
-            <div class="process-grid">
-                <div class="process-step">
-                    <div class="step-number">STEP_01</div>
-                    <h3>Monitor</h3>
-                    <p>Continuous scanning of all server activities and events</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-number">STEP_02</div>
-                    <h3>Analyze</h3>
-                    <p>Real-time threat assessment using advanced algorithms</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-number">STEP_03</div>
-                    <h3>Act</h3>
-                    <p>Instant automated response to neutralize threats</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-number">STEP_04</div>
-                    <h3>Log</h3>
-                    <p>Comprehensive event recording and documentation</p>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-content">
+            <div class="footer-grid">
                 <div class="footer-section">
                     <h4>Product</h4>
                     <ul class="footer-links">
                         <li><a href="#features">Features</a></li>
                         <li><a href="#commands">Commands</a></li>
-                        <li><a href="#stats">Statistics</a></li>
-                        <li><a href="#">Documentation</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Company</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Team</a></li>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="#about">About</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -1202,25 +940,30 @@
                     </ul>
                 </div>
                 <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">DMCA</a></li>
+                        <li><a href="#">Defamation</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
                     <h4>Connect</h4>
                     <div class="social-links">
-                        <a href="https://discord.gg/4WdpTb9cB4" target="_blank">
+                        <a href="https://discord.gg/4WdpTb9cB4" class="social-link" target="_blank" aria-label="Discord">
                             <i class="fab fa-discord"></i>
                         </a>
-                        <a href="#" target="_blank">
+                        <a href="#" class="social-link" target="_blank" aria-label="GitHub">
                             <i class="fab fa-github"></i>
                         </a>
-                        <a href="#" target="_blank">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" target="_blank">
+                        <a href="#" class="social-link" target="_blank" aria-label="Instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
                     </div>
                 </div>
             </div>
 
-            <div class="copyright">
+            <div class="footer-bottom">
                 <p>&copy; 2025 ZenoX Bot. All rights reserved.</p>
             </div>
         </div>
@@ -1234,27 +977,28 @@
         mobileMenuBtn.addEventListener('click', () => {
             navMenu.classList.toggle('active');
             const icon = mobileMenuBtn.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-times');
+            if (navMenu.classList.contains('active')) {
+                icon.classList.replace('fa-bars', 'fa-times');
+            } else {
+                icon.classList.replace('fa-times', 'fa-bars');
+            }
         });
 
         // Command Tabs
-        const tabs = document.querySelectorAll('.command-tab');
-        const contents = document.querySelectorAll('.command-content');
+        const commandTabs = document.querySelectorAll('.command-tab');
+        const commandContents = document.querySelectorAll('.command-content');
 
-        tabs.forEach(tab => {
+        commandTabs.forEach(tab => {
             tab.addEventListener('click', () => {
-                const category = tab.getAttribute('data-category');
+                const targetId = tab.getAttribute('data-tab');
 
-                tabs.forEach(t => t.classList.remove('active'));
+                // Remove active class from all tabs and contents
+                commandTabs.forEach(t => t.classList.remove('active'));
+                commandContents.forEach(c => c.classList.remove('active'));
+
+                // Add active class to clicked tab and corresponding content
                 tab.classList.add('active');
-
-                contents.forEach(content => {
-                    content.classList.remove('active');
-                    if (content.id === category) {
-                        content.classList.add('active');
-                    }
-                });
+                document.getElementById(targetId).classList.add('active');
             });
         });
 
@@ -1262,60 +1006,25 @@
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 const href = this.getAttribute('href');
-                if (href !== '#' && href !== '') {
+                if (href !== '#' && document.querySelector(href)) {
                     e.preventDefault();
                     const target = document.querySelector(href);
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                        if (navMenu.classList.contains('active')) {
-                            navMenu.classList.remove('active');
-                            mobileMenuBtn.querySelector('i').classList.replace('fa-times', 'fa-bars');
-                        }
+                    const headerOffset = 70;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu if open
+                    if (navMenu.classList.contains('active')) {
+                        navMenu.classList.remove('active');
+                        mobileMenuBtn.querySelector('i').classList.replace('fa-times', 'fa-bars');
                     }
                 }
             });
-        });
-
-        // Header Hide on Scroll
-        let lastScroll = 0;
-        const header = document.querySelector('header');
-
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-
-            if (currentScroll <= 0) {
-                header.classList.remove('hidden');
-                return;
-            }
-
-            if (currentScroll > lastScroll && currentScroll > 100) {
-                header.classList.add('hidden');
-            } else {
-                header.classList.remove('hidden');
-            }
-
-            lastScroll = currentScroll;
-        });
-
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-in');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.stat-card, .feature-card, .process-step').forEach(el => {
-            observer.observe(el);
         });
     </script>
 </body>
