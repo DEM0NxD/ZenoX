@@ -6,23 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZenoX | Ultimate Discord Bot</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&family=Rajdhani:wght@500;600;700&display=swap">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-red: #edebeb;
-            --neon-red: #b5aeae;
-            --dark-red: #c97f7f;
-            --blood-red: #15d5d2;
-            --matrix-green: #00ff41;
-            --cyber-purple: #9d00ff;
-            --dark-bg: #0a0a0a;
-            --darker-bg: #050505;
-            --card-bg: rgba(20, 20, 20, 0.9);
-            --text-light: #f0f0f0;
-            --text-dim: #aaaaaa;
-            --gold: #ffd700;
-            --platinum: #e5e4e2;
+            --white: #ffffff;
+            --off-white: #f5f5f5;
+            --light-gray: #e0e0e0;
+            --gray: #999999;
+            --dark-gray: #333333;
+            --darker-gray: #1a1a1a;
+            --black: #000000;
+            --pure-black: #000000;
+            --shadow: rgba(0, 0, 0, 0.15);
+            --shadow-heavy: rgba(0, 0, 0, 0.3);
         }
 
         * {
@@ -36,635 +34,159 @@
         }
 
         body {
-            font-family: 'Rajdhani', 'Exo 2', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-light);
+            font-family: 'JetBrains Mono', 'Space Mono', monospace;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 50%, #ffffff 100%);
+            color: var(--black);
             overflow-x: hidden;
-            line-height: 1.6;
-            background-image:
-                radial-gradient(circle at 10% 20%, rgba(255, 0, 0, 0.05) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 0, 51, 0.05) 0%, transparent 20%);
+            line-height: 1.7;
+            position: relative;
         }
 
-        h1,
-        h2,
-        h3,
-        h4 {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            color: var(--primary-red);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Matrix Rain Background */
-        #matrix-bg {
+        /* Noise texture overlay */
+        body::before {
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: -2;
             opacity: 0.03;
-        }
-
-        /* Glitch Effect */
-        .glitch {
-            position: relative;
-            display: inline-block;
-        }
-
-        .glitch::before,
-        .glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .glitch::before {
-            left: 2px;
-            text-shadow: -2px 0 var(--matrix-green);
-            clip: rect(44px, 450px, 56px, 0);
-            animation: glitch-anim 5s infinite linear alternate-reverse;
-        }
-
-        .glitch::after {
-            left: -2px;
-            text-shadow: -2px 0 var(--cyber-purple);
-            clip: rect(44px, 450px, 56px, 0);
-            animation: glitch-anim2 3s infinite linear alternate-reverse;
-        }
-
-        @keyframes glitch-anim {
-            0% {
-                clip: rect(31px, 9999px, 94px, 0);
-            }
-
-            4% {
-                clip: rect(112px, 9999px, 76px, 0);
-            }
-
-            8% {
-                clip: rect(85px, 9999px, 77px, 0);
-            }
-
-            12% {
-                clip: rect(27px, 9999px, 97px, 0);
-            }
-
-            16% {
-                clip: rect(64px, 9999px, 98px, 0);
-            }
-
-            20% {
-                clip: rect(61px, 9999px, 85px, 0);
-            }
-
-            100% {
-                clip: rect(68px, 9999px, 91px, 0);
-            }
-        }
-
-        @keyframes glitch-anim2 {
-            0% {
-                clip: rect(65px, 9999px, 100px, 0);
-            }
-
-            4% {
-                clip: rect(52px, 9999px, 74px, 0);
-            }
-
-            8% {
-                clip: rect(79px, 9999px, 85px, 0);
-            }
-
-            12% {
-                clip: rect(84px, 9999px, 91px, 0);
-            }
-
-            16% {
-                clip: rect(58px, 9999px, 69px, 0);
-            }
-
-            20% {
-                clip: rect(98px, 9999px, 84px, 0);
-            }
-
-            100% {
-                clip: rect(55px, 9999px, 96px, 0);
-            }
-        }
-
-        /* Snowfall Animation */
-        #snowfall {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
             z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            pointer-events: none;
         }
 
-        .snowflake {
-            position: absolute;
-            background: linear-gradient(to bottom, var(--primary-red), var(--dark-red));
-            border-radius: 50%;
-            animation: fall linear infinite;
-            box-shadow: 0 0 10px var(--primary-red);
+        h1, h2, h3, h4 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--black);
         }
 
-        @keyframes fall {
-            0% {
-                transform: translateY(-10px) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-
-            10% {
-                opacity: 1;
-            }
-
-            90% {
-                opacity: 1;
-            }
-
-            100% {
-                transform: translateY(100vh) translateX(20px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Onboarding Overlay */
-        #onboarding-overlay {
+        /* Header */
+        header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            background: rgba(5, 5, 5, 0.98);
-            z-index: 2000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.5s ease;
-        }
-
-        #onboarding-container {
-            width: 90%;
-            max-width: 700px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 3rem;
-            border: 2px solid var(--primary-red);
-            box-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
-            position: relative;
-            overflow: hidden;
-            max-height: 90vh;
-            /* Responsive height */
-            overflow-y: auto;
-            /* Scrollable if too tall */
-        }
-
-        /* Custom Scrollbar for Onboarding */
-        #onboarding-container::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #onboarding-container::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.3);
-        }
-
-        #onboarding-container::-webkit-scrollbar-thumb {
-            background: var(--primary-red);
-            border-radius: 4px;
-        }
-
-        .onboarding-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .onboarding-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, var(--primary-red), var(--neon-red));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .onboarding-header p {
-            color: var(--text-dim);
-            font-size: 1.1rem;
-        }
-
-        .onboarding-step {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .skip-btn-container {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 10;
-        }
-
-        .skip-btn {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--text-dim);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .skip-btn:hover {
-            color: var(--text-light);
-            border-color: var(--primary-red);
-            background: rgba(255, 0, 0, 0.1);
-        }
-
-        .onboarding-step.active {
-            display: block;
-        }
-
-        .onboarding-question {
-            margin-bottom: 2rem;
-        }
-
-        .onboarding-question h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--text-light);
-        }
-
-        .onboarding-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .onboarding-option {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .onboarding-option:hover {
-            background: rgba(255, 0, 0, 0.1);
-            border-color: var(--primary-red);
-            transform: translateY(-5px);
-        }
-
-        .onboarding-option.selected {
-            background: rgba(255, 0, 0, 0.2);
-            border-color: var(--primary-red);
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
-        }
-
-        .onboarding-option i {
-            font-size: 2rem;
-            color: var(--primary-red);
-            margin-bottom: 1rem;
-        }
-
-        .onboarding-option h4 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-light);
-        }
-
-        .onboarding-option p {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-        }
-
-        .onboarding-input {
-            width: 100%;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 0, 0, 0.3);
-            border-radius: 10px;
-            color: var(--text-light);
-            font-size: 1rem;
-            margin-top: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .onboarding-input:focus {
-            outline: none;
-            border-color: var(--primary-red);
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
-        }
-
-        .onboarding-progress {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .progress-bar {
-            flex-grow: 1;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            margin: 0 2rem;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--dark-red), var(--primary-red));
-            border-radius: 4px;
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        .progress-text {
-            color: var(--text-dim);
-            font-weight: bold;
-            min-width: 60px;
-            text-align: center;
-        }
-
-        .onboarding-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-        }
-
-        .onboarding-btn {
-            padding: 0.8rem 2rem;
-            background: var(--primary-red);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .onboarding-btn:hover {
-            background: var(--neon-red);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
-        }
-
-        .onboarding-btn:disabled {
-            background: rgba(255, 0, 0, 0.3);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .onboarding-btn-secondary {
-            background: transparent;
-            border: 2px solid var(--primary-red);
-            color: var(--primary-red);
-        }
-
-        .onboarding-btn-secondary:hover {
-            background: rgba(255, 0, 0, 0.1);
-        }
-
-        .onboarding-results {
-            text-align: center;
-            padding: 2rem 0;
-        }
-
-        .onboarding-results h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: var(--primary-red);
-        }
-
-        .onboarding-results p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            color: var(--text-dim);
-        }
-
-        .recommendation-card {
-            background: rgba(255, 0, 0, 0.1);
-            border: 2px solid var(--primary-red);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-top: 2rem;
-        }
-
-        .recommendation-card h4 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--text-light);
-        }
-
-        .recommendation-card ul {
-            list-style: none;
-            text-align: left;
-            margin-top: 1rem;
-        }
-
-        .recommendation-card li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .recommendation-card li i {
-            color: var(--primary-red);
-        }
-
-        /* Header & Navigation */
-        header {
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(15px);
-            position: fixed;
-            top: 0;
-            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             z-index: 1000;
-            padding: 1rem 0;
-            border-bottom: 2px solid transparent;
-            border-image: linear-gradient(90deg, transparent, var(--primary-red), transparent) 1;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
-            transition: transform 0.3s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, background 0.3s ease;
         }
 
         header.hidden {
             transform: translateY(-100%);
         }
 
-        .container {
-            width: 90%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .nav-container {
+        nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 1.2rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 15px;
-            position: relative;
-        }
-
-        .logo h1 {
-            font-size: 2rem;
-            text-shadow: 0 0 10px var(--primary-red);
-            letter-spacing: 3px;
-            background: linear-gradient(45deg, var(--primary-red), var(--neon-red), var(--primary-red));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .logo-icon {
-            color: var(--primary-red);
-            font-size: 2.5rem;
-            animation: pulse 2s infinite, rotate 10s linear infinite;
-            filter: drop-shadow(0 0 5px var(--primary-red));
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.2);
-            }
-        }
-
-        @keyframes rotate {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .badge {
-            background: linear-gradient(45deg, var(--dark-red), var(--primary-red));
-            color: white;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            animation: badgeGlow 2s infinite alternate;
-        }
-
-        @keyframes badgeGlow {
-            0% {
-                box-shadow: 0 0 5px var(--primary-red);
-            }
-
-            100% {
-                box-shadow: 0 0 15px var(--primary-red);
-            }
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        nav a {
-            color: var(--text-light);
+            gap: 0.8rem;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: var(--black);
             text-decoration: none;
-            font-weight: 700;
-            font-size: 1.1rem;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            transition: all 0.3s ease;
+            letter-spacing: -0.02em;
+        }
+
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            border: 2px solid var(--black);
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover .logo-img {
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--dark-gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
             position: relative;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            transition: color 0.3s ease;
         }
 
-        nav a:hover {
-            color: var(--primary-red);
-            text-shadow: 0 0 10px var(--primary-red);
-        }
-
-        nav a::after {
+        .nav-links a::after {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: -5px;
+            left: 0;
             width: 0;
             height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary-red), transparent);
+            background: var(--black);
             transition: width 0.3s ease;
         }
 
-        nav a:hover::after {
+        .nav-links a:hover {
+            color: var(--black);
+        }
+
+        .nav-links a:hover::after {
             width: 100%;
+        }
+
+        .cta-button {
+            background: var(--black);
+            color: var(--white);
+            padding: 0.7rem 1.8rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--black);
+            letter-spacing: 0.03em;
+        }
+
+        .cta-button:hover {
+            background: var(--white);
+            color: var(--black);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px var(--shadow);
         }
 
         .mobile-menu-btn {
             display: none;
-            font-size: 1.5rem;
             background: none;
             border: none;
-            color: var(--text-light);
+            font-size: 1.5rem;
             cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .mobile-menu-btn:hover {
-            color: var(--primary-red);
+            color: var(--black);
         }
 
         /* Hero Section */
         .hero {
-            padding: 12rem 0 6rem;
-            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 5% 4rem;
             position: relative;
             overflow: hidden;
         }
@@ -672,692 +194,205 @@
         .hero::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, rgba(255, 0, 0, 0.1), transparent 70%);
-            z-index: -1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+            animation: pulse 8s ease-in-out infinite;
         }
 
-        .hero h2 {
-            font-size: 4rem;
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .hero-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid var(--black);
+            margin: 0 auto 2rem;
+            object-fit: cover;
+            box-shadow: 0 10px 40px var(--shadow-heavy);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
             margin-bottom: 1.5rem;
-            text-shadow: 0 0 20px var(--primary-red);
-            animation: glow 3s infinite alternate;
-            background: linear-gradient(45deg, var(--primary-red), var(--neon-red), var(--primary-red));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        @keyframes glow {
-            0% {
-                text-shadow: 0 0 10px var(--primary-red);
-            }
-
-            100% {
-                text-shadow: 0 0 30px var(--primary-red), 0 0 40px var(--dark-red);
-            }
+            line-height: 1;
+            animation: fadeInUp 1s ease-out;
         }
 
         .hero p {
-            font-size: 1.4rem;
-            max-width: 900px;
-            margin: 0 auto 3rem;
-            color: var(--text-dim);
-            line-height: 1.8;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 1s ease 0.5s forwards;
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: var(--dark-gray);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+            animation: fadeInUp 1s ease-out 0.2s both;
         }
 
         @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        .cta-buttons {
+        .hero-buttons {
             display: flex;
+            gap: 1.5rem;
             justify-content: center;
-            gap: 2rem;
-            margin-top: 3rem;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 1s ease 1s forwards;
-        }
-
-        .btn {
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1.2rem;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 15px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.4s both;
         }
 
         .btn-primary {
-            background: linear-gradient(45deg, var(--dark-red), var(--primary-red), var(--dark-red));
-            color: white;
-            border: 2px solid var(--primary-red);
-            background-size: 200% 100%;
-            animation: gradientShift 3s ease infinite;
+            background: var(--black);
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--black);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
         }
 
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
+        .btn-primary:hover {
+            background: var(--white);
+            color: var(--black);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px var(--shadow);
         }
 
         .btn-secondary {
-            background: transparent;
-            color: var(--primary-red);
-            border: 2px solid var(--primary-red);
+            background: var(--white);
+            color: var(--black);
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--black);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
         }
 
-        .btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 25px rgba(255, 0, 0, 0.4);
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.7s ease;
-            z-index: -1;
-        }
-
-        .btn:hover::before {
-            left: 100%;
+        .btn-secondary:hover {
+            background: var(--black);
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px var(--shadow);
         }
 
         /* Stats Section */
         .stats {
-            padding: 6rem 0;
-            background: rgba(5, 5, 5, 0.8);
-            border-top: 1px solid rgba(255, 0, 0, 0.3);
-            border-bottom: 1px solid rgba(255, 0, 0, 0.3);
-            position: relative;
-        }
-
-        .stats::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 0, 0, 0.03) 50%, transparent 70%);
-            z-index: -1;
+            padding: 4rem 5%;
+            background: var(--black);
+            color: var(--white);
         }
 
         .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2.5rem;
-        }
-
-        .stat-card {
-            background: rgba(20, 20, 20, 0.9);
-            padding: 2.5rem;
-            border-radius: 15px;
-            text-align: center;
-            border: 1px solid rgba(255, 0, 0, 0.3);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .stat-card.animate {
-            animation: slideUp 0.6s ease forwards;
-        }
-
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .stat-card:nth-child(1) {
-            animation-delay: 0.1s;
-        }
-
-        .stat-card:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .stat-card:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        .stat-card:nth-child(4) {
-            animation-delay: 0.4s;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, var(--primary-red), transparent, var(--primary-red));
-            z-index: -1;
-            border-radius: 17px;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 15px 35px rgba(255, 0, 0, 0.3);
-            border-color: var(--primary-red);
-        }
-
-        .stat-card:hover::before {
-            opacity: 1;
-            animation: borderRotate 3s linear infinite;
-        }
-
-        @keyframes borderRotate {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .stat-card i {
-            font-size: 3.5rem;
-            background: linear-gradient(45deg, var(--primary-red), var(--neon-red));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1.5rem;
-        }
-
-        .stat-card h3 {
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-card p {
-            color: var(--text-dim);
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        /* Commands Section */
-        .commands {
-            padding: 6rem 0;
-            position: relative;
-        }
-
-        .section-title {
-            text-align: center;
-            margin: 0 auto 4rem;
-            font-size: 3.5rem;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: white;
-            text-shadow:
-                0 0 10px var(--primary-red),
-                0 0 20px var(--primary-red),
-                0 0 40px var(--dark-red);
-            position: relative;
-            display: block;
-            width: fit-content;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 0.2s forwards;
-            background: none;
-            -webkit-text-fill-color: initial;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 150px;
-            height: 4px;
-            background: var(--primary-red);
-            box-shadow: 0 0 10px var(--primary-red);
-        }
-
-        /* Custom Dropdown Styles */
-        .custom-dropdown {
-            position: relative;
-            width: 300px;
-            margin: 0 auto 4rem;
-            z-index: 100;
-        }
-
-        .dropdown-selected {
-            background: rgba(20, 20, 20, 0.95);
-            border: 2px solid var(--primary-red);
-            color: var(--text-light);
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            letter-spacing: 1px;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .dropdown-selected:hover {
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.4);
-            background: rgba(30, 10, 10, 0.95);
-        }
-
-        .dropdown-options {
-            position: absolute;
-            top: 110%;
-            left: 0;
-            width: 100%;
-            background: rgba(10, 10, 10, 0.98);
-            border: 1px solid var(--primary-red);
-            border-radius: 10px;
-            overflow: hidden;
-            display: none;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-        }
-
-        .dropdown-options.show {
-            display: block;
-            animation: fadeInDown 0.3s ease;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .dropdown-option {
-            padding: 1rem 1.5rem;
-            color: var(--text-dim);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: 'Exo 2', sans-serif;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .dropdown-option:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-option:hover {
-            background: rgba(255, 0, 0, 0.2);
-            color: white;
-            padding-left: 2rem;
-        }
-
-        .dropdown-option.active {
-            background: var(--primary-red);
-            color: white;
-        }
-
-        /* Accordion Structure for Command Groups */
-        .command-groups-container {
             max-width: 1200px;
             margin: 0 auto;
-        }
-
-        .command-category-accordion {
-            background: rgba(20, 20, 20, 0.6);
-            border: 1px solid rgba(255, 0, 0, 0.2);
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .command-category-accordion:hover {
-            border-color: var(--primary-red);
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.1);
-        }
-
-        .accordion-header {
-            padding: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            background: linear-gradient(90deg, rgba(255, 0, 0, 0.05), transparent);
-        }
-
-        .accordion-header h4 {
-            margin: 0;
-            font-size: 1.4rem;
-            color: var(--text-light);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .accordion-header h4 i {
-            color: var(--primary-red);
-        }
-
-        .accordion-icon {
-            color: var(--primary-red);
-            transition: transform 0.3s ease;
-        }
-
-        .command-category-accordion.open .accordion-icon {
-            transform: rotate(180deg);
-        }
-
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .command-category-accordion.open .accordion-content {
-            max-height: 1000px;
-            /* Arbitrary large number */
-        }
-
-        .command-list {
-            padding: 1rem 2rem 2rem;
-            list-style: none;
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
         }
 
-        .command-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.2s ease;
-            cursor: pointer;
-            position: relative;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 8px;
+        .stat-item {
+            text-align: center;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .stat-item:nth-child(1) { animation-delay: 0.1s; }
+        .stat-item:nth-child(2) { animation-delay: 0.2s; }
+        .stat-item:nth-child(3) { animation-delay: 0.3s; }
+        .stat-item:nth-child(4) { animation-delay: 0.4s; }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            font-family: 'Syne', sans-serif;
             margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
         }
 
-        .command-header {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            align-items: center;
-        }
-
-        .command-name {
-            font-weight: 700;
-            color: var(--text-light);
-            font-size: 1.1rem;
-        }
-
-        .command-desc {
-            color: var(--text-dim);
-            font-size: 0.95rem;
-            text-align: right;
-        }
-
-        .command-item:hover {
-            background: rgba(255, 0, 0, 0.05);
-            border-radius: 5px;
-            padding-left: 1.5rem;
-        }
-
-        /* Command Details Dropdown/Tooltip */
-        .command-details {
-            display: none;
-            padding: 0.5rem 0;
-            color: var(--text-dim);
+        .stat-label {
             font-size: 0.9rem;
-            width: 100%;
-        }
-
-        .command-item.expanded {
-            flex-direction: column;
-            align-items: flex-start;
-            background: rgba(255, 0, 0, 0.05);
-            border-radius: 5px;
-            border-left: 3px solid var(--primary-red);
-        }
-
-        .command-item.expanded .command-details {
-            display: block;
-            margin-top: 0.5rem;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .command-header {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            align-items: center;
-        }
-
-        .commands-container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .command-section {
-            background: rgba(20, 20, 20, 0.9);
-            border-radius: 15px;
-            padding: 2.5rem;
-            margin-bottom: 3rem;
-            border: 1px solid rgba(255, 0, 0, 0.2);
-            transition: all 0.4s ease;
-            display: none;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .command-section.active {
-            display: block;
-            animation: fadeInUp 0.5s ease forwards;
-        }
-
-        .command-section:hover {
-            border-color: var(--primary-red);
-            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
-        }
-
-        .command-section h3 {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--primary-red);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .command-section h3 i {
-            background: linear-gradient(45deg, var(--primary-red), var(--neon-red));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .commands-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .command-category {
-            background: rgba(10, 10, 10, 0.7);
-            border-radius: 10px;
-            padding: 1.5rem;
-            border-left: 4px solid var(--primary-red);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-        }
-
-        .command-section.active .command-category {
-            animation: fadeInUp 0.5s ease forwards;
-        }
-
-        .command-category:nth-child(1) {
-            animation-delay: 0.1s;
-        }
-
-        .command-category:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .command-category:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        .command-category:nth-child(4) {
-            animation-delay: 0.4s;
-        }
-
-        .command-category:nth-child(5) {
-            animation-delay: 0.5s;
-        }
-
-        .command-category h4 {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-            color: var(--primary-red);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .command-list {
-            list-style: none;
-        }
-
-        .command-item {
-            padding: 0.7rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.2s ease;
-        }
-
-        .command-item:hover {
-            background: rgba(255, 0, 0, 0.05);
-            padding-left: 10px;
-            padding-right: 10px;
-            margin-left: -10px;
-            margin-right: -10px;
-            border-radius: 5px;
-        }
-
-        .command-name {
-            font-weight: 600;
-            color: var(--text-light);
-            font-family: 'Exo 2', sans-serif;
-        }
-
-        .command-desc {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            font-family: 'Exo 2', sans-serif;
+            color: var(--light-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 500;
         }
 
         /* Features Section */
         .features {
-            padding: 6rem 0;
-            background: rgba(5, 5, 5, 0.8);
+            padding: 6rem 5%;
+            background: var(--white);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--dark-gray);
+            line-height: 1.7;
         }
 
         .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
         }
 
         .feature-card {
-            background: rgba(20, 20, 20, 0.9);
-            border-radius: 15px;
+            background: var(--off-white);
             padding: 2.5rem;
-            border: 1px solid rgba(255, 0, 0, 0.2);
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
             transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .feature-card.animate {
-            animation: slideUp 0.6s ease forwards;
-        }
-
-        .feature-card:nth-child(1) {
-            animation-delay: 0.1s;
-        }
-
-        .feature-card:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .feature-card:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        .feature-card:nth-child(4) {
-            animation-delay: 0.4s;
-        }
-
-        .feature-card:nth-child(5) {
-            animation-delay: 0.5s;
-        }
-
-        .feature-card:nth-child(6) {
-            animation-delay: 0.6s;
         }
 
         .feature-card::before {
@@ -1365,376 +400,295 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 5px;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, var(--primary-red), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            width: 100%;
+            height: 4px;
+            background: var(--black);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
         }
 
         .feature-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary-red);
-            box-shadow: 0 15px 35px rgba(255, 0, 0, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px var(--shadow);
+            border-color: var(--black);
         }
 
         .feature-card:hover::before {
-            opacity: 1;
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
         }
 
         .feature-card h3 {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 1.5rem;
             font-size: 1.5rem;
-        }
-
-        .feature-card ul {
-            list-style: none;
-        }
-
-        .feature-card li {
-            padding: 0.8rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            position: relative;
-            padding-left: 25px;
-        }
-
-        .feature-card li:before {
-            content: '▸';
-            color: var(--primary-red);
-            font-size: 1.2rem;
-            position: absolute;
-            left: 0;
-            animation: pointMove 1s infinite alternate;
-        }
-
-        @keyframes pointMove {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(5px);
-            }
-        }
-
-        /* About & Reviews */
-        .about {
-            padding: 6rem 0;
-            position: relative;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .about-text h2 {
-            font-size: 3rem;
-            margin-bottom: 2rem;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 0.2s forwards;
-        }
-
-        .about-text p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            color: var(--text-dim);
-            line-height: 1.8;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 0.4s forwards;
-        }
-
-        .hacker-badge {
-            background: linear-gradient(45deg, #000, var(--dark-red));
-            border: 2px solid var(--primary-red);
-            border-radius: 10px;
-            padding: 2rem;
-            text-align: center;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 0.6s forwards;
-        }
-
-        .hacker-badge::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 0, 0, 0.1), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite linear;
-        }
-
-        @keyframes shine {
-            0% {
-                transform: translateX(-100%) translateY(-100%) rotate(45deg);
-            }
-
-            100% {
-                transform: translateX(100%) translateY(100%) rotate(45deg);
-            }
-        }
-
-        .hacker-badge h3 {
-            font-size: 2rem;
             margin-bottom: 1rem;
-            background: linear-gradient(45deg, var(--gold), var(--platinum));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-weight: 700;
         }
 
-        .hacker-badge p {
+        .feature-card p {
+            color: var(--dark-gray);
+            line-height: 1.7;
+        }
+
+        /* Commands Section */
+        .commands {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, #f8f8f8 0%, #ffffff 100%);
+        }
+
+        .commands-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-button {
+            padding: 0.8rem 1.8rem;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--black);
+        }
+
+        .tab-button:hover,
+        .tab-button.active {
+            background: var(--black);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .command-card {
+            background: var(--white);
+            padding: 1.8rem;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .command-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--shadow);
+            border-color: var(--black);
+        }
+
+        .command-name {
+            font-weight: 700;
             font-size: 1.1rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--black);
+            font-family: 'Space Mono', monospace;
         }
 
-        .hacker-badge .btn {
-            padding: 0.7rem 1.5rem;
-            font-size: 1rem;
+        .command-desc {
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
-        /* Reviews */
+        .command-section {
+            display: none;
+        }
+
+        .command-section.active {
+            display: block;
+        }
+
+        /* Reviews Section */
         .reviews {
-            padding: 6rem 0;
-            background: rgba(5, 5, 5, 0.8);
+            padding: 6rem 5%;
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .reviews .section-header h2,
+        .reviews .section-header p {
+            color: var(--white);
         }
 
         .reviews-grid {
+            max-width: 1200px;
+            margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
         }
 
         .review-card {
-            background: rgba(20, 20, 20, 0.9);
-            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
             padding: 2rem;
-            border: 1px solid rgba(255, 0, 0, 0.2);
-            transition: all 0.4s ease;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .review-card.animate {
-            animation: slideUp 0.6s ease forwards;
-        }
-
-        .review-card:nth-child(1) {
-            animation-delay: 0.1s;
-        }
-
-        .review-card:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .review-card:nth-child(3) {
-            animation-delay: 0.3s;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
         }
 
         .review-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary-red);
-            box-shadow: 0 15px 35px rgba(255, 0, 0, 0.2);
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--white);
         }
 
         .review-header {
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .review-avatar {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary-red), var(--dark-red));
+            background: var(--white);
+            color: var(--black);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 1.2rem;
         }
 
         .review-info h4 {
-            font-size: 1.3rem;
-            margin-bottom: 0.3rem;
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
         }
 
         .review-stars {
-            color: var(--gold);
-            font-size: 1rem;
+            color: var(--white);
+            font-size: 0.9rem;
         }
 
         .review-text {
-            font-style: italic;
-            color: var(--text-dim);
+            color: var(--light-gray);
             line-height: 1.7;
+            font-style: italic;
         }
 
         /* Footer */
         footer {
-            background: rgba(5, 5, 5, 0.95);
-            padding: 4rem 0 2rem;
-            border-top: 2px solid transparent;
-            border-image: linear-gradient(90deg, transparent, var(--primary-red), transparent) 1;
+            background: var(--darker-gray);
+            color: var(--light-gray);
+            padding: 4rem 5% 2rem;
         }
 
         .footer-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3rem;
-        }
-
-        .footer-logo {
-            text-align: center;
-        }
-
-        .footer-logo h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .footer-logo p {
-            color: var(--text-dim);
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
         }
 
         .social-links {
             display: flex;
-            gap: 2rem;
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
         .social-links a {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-light);
-            font-size: 1.5rem;
+            color: var(--white);
+            font-size: 1.2rem;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .social-links a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.3), transparent);
-            transition: left 0.7s ease;
-        }
-
-        .social-links a:hover::before {
-            left: 100%;
         }
 
         .social-links a:hover {
-            background: var(--primary-red);
-            color: white;
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+            background: var(--white);
+            color: var(--black);
+            transform: translateY(-3px);
         }
 
-        .copyright {
-            color: var(--text-dim);
-            font-size: 0.9rem;
+        .footer-bottom {
             text-align: center;
-            margin-top: 2rem;
             padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            width: 100%;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+            font-size: 0.9rem;
         }
 
-        /* Responsive Styles */
-        @media (max-width: 1200px) {
-            .hero h2 {
-                font-size: 3.2rem;
-            }
-
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .hero h2 {
-                font-size: 2.8rem;
-            }
-
-            nav ul {
-                gap: 1rem;
-            }
-
-            .onboarding-options {
-                grid-template-columns: 1fr;
-            }
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 3rem;
+                transition: left 0.3s ease;
+                gap: 2rem;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
             .mobile-menu-btn {
                 display: block;
             }
 
-            nav ul {
-                display: none;
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
                 flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: rgba(10, 10, 10, 0.98);
-                padding: 1.5rem;
-                border-top: 2px solid var(--primary-red);
-                border-bottom: 2px solid var(--primary-red);
-                box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
-                gap: 2rem;
-                align-items: center;
-            }
-
-            nav ul.active {
-                display: flex;
-            }
-
-            .hero h2 {
-                font-size: 2.2rem;
-            }
-
-            .hero p {
-                font-size: 1.2rem;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-                gap: 1.5rem;
-            }
-
-            .btn {
-                width: 100%;
-                max-width: 300px;
-                justify-content: center;
             }
 
             .features-grid,
@@ -1742,1322 +696,387 @@
                 grid-template-columns: 1fr;
             }
 
-            .commands-grid {
+            .category-tabs {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 1rem;
+            }
+
+            .command-grid {
                 grid-template-columns: 1fr;
             }
-
-            .onboarding-container {
-                padding: 2rem;
-            }
         }
 
-        @media (max-width: 576px) {
-            .hero h2 {
-                font-size: 1.8rem;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .section-title {
-                font-size: 2.2rem;
-            }
-
-            .stat-card h3 {
-                font-size: 2.5rem;
-            }
-
-            .onboarding-header h2 {
-                font-size: 2rem;
-            }
+        /* Scroll animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
         }
 
-        /* Scrollbar Styling */
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom scrollbar */
         ::-webkit-scrollbar {
-            width: 12px;
+            width: 10px;
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--darker-bg);
-            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+            background: var(--off-white);
         }
 
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(to bottom, var(--dark-red), var(--primary-red));
-            border-radius: 6px;
-            border: 2px solid var(--darker-bg);
+            background: var(--black);
+            border-radius: 5px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(to bottom, var(--primary-red), var(--neon-red));
+            background: var(--dark-gray);
+        }
+
+        /* Grid pattern background */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
         }
     </style>
 </head>
 
 <body>
-    <!-- Onboarding Questionnaire -->
-    <div id="onboarding-overlay">
-        <div id="onboarding-container">
-            <div class="skip-btn-container">
-                <button class="skip-btn" id="skip-onboarding">SKIP SETUP</button>
-            </div>
-            <div class="onboarding-header">
-                <h2>Welcome to ZenoX</h2>
-                <p>Help us customize your experience by answering a few questions</p>
-            </div>
-
-            <!-- Step 1: Server Size -->
-            <div class="onboarding-step active" id="step1">
-                <div class="onboarding-question">
-                    <h3>What is your server size?</h3>
-                    <p>This helps us recommend the right features for your community</p>
-                </div>
-                <div class="onboarding-options">
-                    <div class="onboarding-option" data-value="small">
-                        <i class="fas fa-user-friends"></i>
-                        <h4>Small (1-100)</h4>
-                        <p>Just starting out or a close-knit community</p>
-                    </div>
-                    <div class="onboarding-option" data-value="medium">
-                        <i class="fas fa-users"></i>
-                        <h4>Medium (100-1000)</h4>
-                        <p>Growing community with active members</p>
-                    </div>
-                    <div class="onboarding-option" data-value="large">
-                        <i class="fas fa-globe"></i>
-                        <h4>Large (1000+)</h4>
-                        <p>Established community needing advanced tools</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 2: Primary Need -->
-            <div class="onboarding-step" id="step2">
-                <div class="onboarding-question">
-                    <h3>What is your primary need?</h3>
-                    <p>What do you want to focus on most for your server?</p>
-                </div>
-                <div class="onboarding-options">
-                    <div class="onboarding-option" data-value="security">
-                        <i class="fas fa-shield-alt"></i>
-                        <h4>Security & Moderation</h4>
-                        <p>Protect your server from raids and manage members</p>
-                    </div>
-                    <div class="onboarding-option" data-value="entertainment">
-                        <i class="fas fa-gamepad"></i>
-                        <h4>Entertainment & Engagement</h4>
-                        <p>Keep members active with games and fun features</p>
-                    </div>
-                    <div class="onboarding-option" data-value="management">
-                        <i class="fas fa-cogs"></i>
-                        <h4>Server Management</h4>
-                        <p>Automate tasks and streamline administration</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 3: Experience Level -->
-            <div class="onboarding-step" id="step3">
-                <div class="onboarding-question">
-                    <h3>What is your experience level with Discord bots?</h3>
-                    <p>This helps us tailor the complexity of recommendations</p>
-                </div>
-                <div class="onboarding-options">
-                    <div class="onboarding-option" data-value="beginner">
-                        <i class="fas fa-rocket"></i>
-                        <h4>Beginner</h4>
-                        <p>New to Discord bots, need simple setup</p>
-                    </div>
-                    <div class="onboarding-option" data-value="intermediate">
-                        <i class="fas fa-chart-line"></i>
-                        <h4>Intermediate</i>
-                            <h4>Intermediate</h4>
-                            <p>Some experience, comfortable with configuration</p>
-                    </div>
-                    <div class="onboarding-option" data-value="advanced">
-                        <i class="fas fa-terminal"></i>
-                        <h4>Advanced</h4>
-                        <p>Experienced user, want advanced customization</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 4: Music Preference -->
-            <div class="onboarding-step" id="step4">
-                <div class="onboarding-question">
-                    <h3>Do you need music features?</h3>
-                    <p>High-quality music playback for voice channels</p>
-                </div>
-                <div class="onboarding-options">
-                    <div class="onboarding-option" data-value="yes">
-                        <i class="fas fa-music"></i>
-                        <h4>Yes, definitely</h4>
-                        <p>Music is important for my community</p>
-                    </div>
-                    <div class="onboarding-option" data-value="maybe">
-                        <i class="fas fa-headphones"></i>
-                        <h4>Maybe later</h4>
-                        <p>Might use it in the future</p>
-                    </div>
-                    <div class="onboarding-option" data-value="no">
-                        <i class="fas fa-volume-mute"></i>
-                        <h4>Not needed</h4>
-                        <p>Focus on other features</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 5: Budget -->
-            <div class="onboarding-step" id="step5">
-                <div class="onboarding-question">
-                    <h3>What's your budget for bot features?</h3>
-                    <p>ZenoX offers both free and premium features</p>
-                </div>
-                <div class="onboarding-options">
-                    <div class="onboarding-option" data-value="free">
-                        <i class="fas fa-gift"></i>
-                        <h4>Free Only</h4>
-                        <p>Stick to free features for now</p>
-                    </div>
-                    <div class="onboarding-option" data-value="premium">
-                        <i class="fas fa-crown"></i>
-                        <h4>Premium Features</h4>
-                        <p>Interested in paid premium features</p>
-                    </div>
-                    <div class="onboarding-option" data-value="both">
-                        <i class="fas fa-star"></i>
-                        <h4>Both Free & Premium</h4>
-                        <p>Use free features, consider premium later</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 6: Activity Type -->
-            <div class="onboarding-step" id="step6">
-                <div class="onboarding-question">
-                    <h3>What type of activities does your server host?</h3>
-                    <p>Select all that apply</p>
-                </div>
-                <div class="onboarding-options">
-                    <div class="onboarding-option" data-value="gaming">
-                        <i class="fas fa-gamepad"></i>
-                        <h4>Gaming</h4>
-                        <p>Video games, tournaments, LFG</p>
-                    </div>
-                    <div class="onboarding-option" data-value="community">
-                        <i class="fas fa-comments"></i>
-                        <h4>Community Hangout</h4>
-                        <p>General chat, socializing</p>
-                    </div>
-                    <div class="onboarding-option" data-value="business">
-                        <i class="fas fa-briefcase"></i>
-                        <h4>Business/Professional</h4>
-                        <p>Work, projects, collaborations</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 7: Results -->
-            <div class="onboarding-step" id="step7">
-                <div class="onboarding-results">
-                    <h3>Perfect! Here's your customized setup</h3>
-                    <p>Based on your answers, we recommend focusing on these features:</p>
-
-                    <div class="recommendation-card" id="recommendation-results">
-                        <h4>Recommended Features</h4>
-                        <ul>
-                            <li><i class="fas fa-check-circle"></i> Custom Appearence</li>
-                            <li><i class="fas fa-check-circle"></i> Auto Moderation</li>
-                            <li><i class="fas fa-check-circle"></i> Voice Channel Management</li>
-                            <li><i class="fas fa-check-circle"></i> Interactive Games</li>
-                            <li><i class="fas fa-check-circle"></i> Server Setup Wizard</li>
-                        </ul>
-
-                        <div style="margin-top: 2rem;">
-                            <button class="onboarding-btn" id="start-experience">
-                                <i class="fas fa-rocket"></i> Start Using ZenoX
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Progress Bar -->
-            <div class="onboarding-progress">
-                <button class="onboarding-btn onboarding-btn-secondary" id="prev-btn" disabled>
-                    <i class="fas fa-arrow-left"></i> Back
-                </button>
-
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-fill"></div>
-                </div>
-
-                <div class="progress-text" id="progress-text">1/7</div>
-
-                <button class="onboarding-btn" id="next-btn">
-                    Next <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Matrix Background -->
-    <canvas id="matrix-bg"></canvas>
-
-    <!-- Snowfall Animation -->
-    <div id="snowfall"></div>
-
     <!-- Header -->
     <header>
-        <div class="container nav-container">
-            <div class="logo">
-                <i class="fas fa-robot logo-icon"></i>
-                <h1 class="glitch" data-text="ZenoX">ZenoX</h1>
-                <div class="badge">PREMIUM</div>
-            </div>
-
+        <nav>
+            <a href="#" class="logo">
+                <img src="zenox.png" alt="ZenoX" class="logo-img" onerror="this.style.display='none'">
+                <span>ZenoX</span>
+            </a>
+            <ul class="nav-links" id="navMenu">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#commands">Commands</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#" class="cta-button">Invite Bot</a></li>
+            </ul>
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <i class="fas fa-bars"></i>
             </button>
-
-            <nav>
-                <ul id="navMenu">
-                    <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="#features"><i class="fas fa-star"></i> Features</a></li>
-                    <li><a href="#commands"><i class="fas fa-terminal"></i> Commands</a></li>
-                    <li><a href="#about"><i class="fas fa-user-secret"></i> About</a></li>
-                    <li><a href="#reviews"><i class="fas fa-comment-alt"></i> Reviews</a></li>
-                </ul>
-            </nav>
-        </div>
+        </nav>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="container">
-            <h2>ULTIMATE DISCORD BOT EXPERIENCE</h2>
-            <p>ZenoX is the most advanced, feature-rich Discord bot with 600+ commands, premium security systems,
-                high-quality music, interactive games, and complete server management tools. Engineered for power users
-                and elite communities.</p>
-
-            <div class="cta-buttons">
-                <a href="https://discord.com/oauth2/authorize?client_id=1462047381100036126&permissions=8&integration_type=0&scope=bot" class="btn btn-primary" target="_blank">
-                    <i class="fas fa-bolt"></i> INVITE NOW
+    <section class="hero">
+        <div class="grid-bg"></div>
+        <div class="hero-content">
+            <img src="zenox.png" alt="ZenoX Avatar" class="hero-avatar" onerror="this.style.display='none'">
+            <h1>The Ultimate<br>Discord Bot</h1>
+            <p>Elevate your Discord server with ZenoX - powerful moderation, entertainment, and utility features in one sophisticated package.</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Add to Discord
                 </a>
-                <a href="https://discord.gg/4WdpTb9cB4" class="btn btn-secondary" target="_blank">
-                    <i class="fab fa-discord"></i> SUPPORT SERVER
+                <a href="#features" class="btn-secondary">
+                    <i class="fas fa-arrow-down"></i>
+                    Explore Features
                 </a>
             </div>
         </div>
     </section>
 
     <!-- Stats Section -->
-    <section class="stats" id="stats">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <i class="fas fa-server"></i>
-                    <h3>45+</h3>
-                    <p>ACTIVE SERVERS</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-users"></i>
-                    <h3>4.8K+</h3>
-                    <p>TOTAL USERS</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-code"></i>
-                    <h3>585</h3>
-                    <p>TOTAL COMMANDS</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-slash"></i>
-                    <h3>78</h3>
-                    <p>SLASH COMMANDS</p>
-                </div>
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">50K+</div>
+                <div class="stat-label">Active Servers</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">2M+</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">99.9%</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">200+</div>
+                <div class="stat-label">Commands</div>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
     <section class="features" id="features">
-        <div class="container">
-            <h2 class="section-title">Premium Features</h2>
-
-            <div class="features-grid">
-                <div class="feature-card">
-                    <h3><i class="fas fa-shield-alt"></i> Custom Appearence</h3>
-                    <ul>
-                        <li>Custom Avatar</li>
-                        <li>Custom Banner</li>
-                        <li>Custom Nickname</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h3><i class="fas fa-headphones-alt"></i> Voice & Music</h3>
-                    <ul>
-                        <li>Premium Music Player</li>
-                        <li>24/7 Online In Vc</li>
-                        <li>No Queue</li>
-                        <li>Audio Effects & Filters</li>
-                        <li>Mass Voice Controls</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h3><i class="fas fa-gamepad"></i> Entertainment</h3>
-                    <ul>
-                        <li>15+ Interactive Games</li>
-                        <li>AI Image Generation</li>
-                        <li>Fun & Social Commands</li>
-                        <li>Economy System</li>
-                        <li>Custom Reactions</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h3><i class="fas fa-tools"></i> Server Management</h3>
-                    <ul>
-                        <li>Auto Setup Wizards</li>
-                        <li>Ticket System</li>
-                        <li>Welcome/Goodbye Messages</li>
-                        <li>Auto Role & Reaction</li>
-                        <li>Invite Tracking</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h3><i class="fas fa-chart-line"></i> Leveling & Stats</h3>
-                    <ul>
-                        <li>Custom Leveling System</li>
-                        <li>Role Rewards</li>
-                        <li>Leaderboards</li>
-                        <li>XP Boosts</li>
-                        <li>Activity Tracking</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h3><i class="fas fa-cogs"></i> Advanced Systems</h3>
-                    <ul>
-                        <li>AI Chat & Analysis</li>
-                        <li>Encryption Tools</li>
-                        <li>Verification Systems</li>
-                        <li>Counting Games</li>
-                        <li>Sticky Messages</li>
-                    </ul>
-                </div>
+        <div class="section-header">
+            <h2>Built for Excellence</h2>
+            <p>Everything you need to manage and engage your Discord community, crafted with precision and attention to detail.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card animate-on-scroll">
+                <span class="feature-icon">🛡️</span>
+                <h3>Advanced Moderation</h3>
+                <p>Comprehensive moderation tools with auto-mod, warnings, mutes, and detailed logging to keep your server safe.</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <span class="feature-icon">🎮</span>
+                <h3>Entertainment Hub</h3>
+                <p>15+ interactive games, music player, trivia, and fun commands to keep your community engaged.</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <span class="feature-icon">⚙️</span>
+                <h3>Powerful Utilities</h3>
+                <p>Server management, role automation, custom commands, polls, reminders, and extensive customization options.</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <span class="feature-icon">🔒</span>
+                <h3>Anti-Nuke Protection</h3>
+                <p>Advanced security system with whitelist management and real-time threat detection to protect your server.</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <span class="feature-icon">📊</span>
+                <h3>Analytics Dashboard</h3>
+                <p>Track server growth, user engagement, and command usage with detailed statistics and insights.</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <span class="feature-icon">🎨</span>
+                <h3>Full Customization</h3>
+                <p>Personalize every aspect with custom embeds, welcome messages, reaction roles, and command prefixes.</p>
             </div>
         </div>
     </section>
 
     <!-- Commands Section -->
     <section class="commands" id="commands">
-        <div class="container">
-            <h2 class="section-title">Command Database</h2>
+        <div class="commands-container">
+            <div class="section-header">
+                <h2>Command Library</h2>
+                <p>Explore our extensive collection of 200+ commands organized by category.</p>
+            </div>
+            
+            <div class="category-tabs">
+                <button class="tab-button active" data-category="moderation">Moderation</button>
+                <button class="tab-button" data-category="fun">Fun & Games</button>
+                <button class="tab-button" data-category="utility">Utility</button>
+                <button class="tab-button" data-category="music">Music</button>
+            </div>
 
-            <!-- Category Dropdown Switcher -->
-            <div class="custom-dropdown" id="categoryDropdown">
-                <div class="dropdown-selected" id="dropdownSelected">
-                    Main Commands <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="dropdown-options" id="dropdownOptions">
-                    <div class="dropdown-option active" data-category="security">Security</div>
-                    <div class="dropdown-option" data-category="utility">Utility</div>
-                    <div class="dropdown-option" data-category="media">Media</div>
-                    <div class="dropdown-option" data-category="general">General</div>
-                    <div class="dropdown-option" data-category="automod">Automod</div>
-                    <div class="dropdown-option" data-category="moderation">Moderation</div>
-                    <div class="dropdown-option" data-category="music">Music</div>
-                    <div class="dropdown-option" data-category="fun">Fun</div>
-                    <div class="dropdown-option" data-category="games">Games</div>
-                    <div class="dropdown-option" data-category="ignore">Ignore</div>
-                    <div class="dropdown-option" data-category="server">Server</div>
-                    <div class="dropdown-option" data-category="voice">Voice</div>
-                    <div class="dropdown-option" data-category="welcomer">Welcomer</div>
-                    <div class="dropdown-option" data-category="giveaway">Giveaway</div>
-                    <div class="dropdown-option" data-category="ticket">Ticket</div>
-                    <div class="dropdown-option" data-category="logging">Logging</div>
-                    <div class="dropdown-option" data-category="vanity">Vanity</div>
-                    <div class="dropdown-option" data-category="invites">Invite Tracker</div>
-                    <div class="dropdown-option" data-category="joindm">JoinDM</div>
-                    <div class="dropdown-option" data-category="eventvc">EventVC</div>
+            <div id="moderation-commands" class="command-section active">
+                <div class="command-grid">
+                    <div class="command-card">
+                        <div class="command-name">/ban</div>
+                        <div class="command-desc">Ban users from the server with reason and duration options.</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">/kick</div>
+                        <div class="command-desc">Remove users from the server immediately.</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">/mute</div>
+                        <div class="command-desc">Temporarily mute users with customizable duration.</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">/warn</div>
+                        <div class="command-desc">Issue warnings to users and track infractions.</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">/purge</div>
+                        <div class="command-desc">Bulk delete messages with advanced filtering.</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">/slowmode</div>
+                        <div class="command-desc">Set channel slowmode with time intervals.</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="commands-container">
-                <!-- Security Commands -->
-                <div class="command-section active" id="security-commands">
-                    <div class="command-category-accordion open">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-shield-alt"></i> Antinuke & Security</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">antinuke</span><span
-                                            class="command-desc">Enable/Disable antinuke</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">whitelist</span><span
-                                            class="command-desc">Manage whitelisted users</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">extraowner</span><span
-                                            class="command-desc">Manage extra owners</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">nightmode</span><span
-                                            class="command-desc">Toggle server nightmode</span></div>
-                                </li>
-                            </ul>
-                        </div>
+            <div id="fun-commands" class="command-section">
+                <div class="command-grid">
+                    <div class="command-card">
+                        <div class="command-name">/8ball</div>
+                        <div class="command-desc">Ask the magic 8-ball any yes/no question.</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">/meme</div>
+                        <div class="command-desc">Generate random memes from popular subreddits.</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">/trivia</div>
+                        <div class="command-desc">Start a trivia game with various difficulty levels.</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">/roll</div>
+                        <div class="command-desc">Roll dice with customizable sides and count.</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">/rps</div>
+                        <div class="command-desc">Play rock-paper-scissors with the bot.</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">/slots</div>
+                        <div class="command-desc">Try your luck at the slot machine.</div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Utility Commands -->
-                <div class="command-section" id="utility-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-wrench"></i> General Utility</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">botinfo</span><span
-                                            class="command-desc">Bot statistics</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">serverinfo</span><span
-                                            class="command-desc">Server information</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">userinfo</span><span
-                                            class="command-desc">User information</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">roleinfo</span><span
-                                            class="command-desc">Role information</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">unbanall</span><span
-                                            class="command-desc">Unban all users</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">ping</span><span
-                                            class="command-desc">Check bot latency</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">badges</span><span
-                                            class="command-desc">View profile badges</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">banner</span><span
-                                            class="command-desc">View user/server banner</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">reminder</span><span
-                                            class="command-desc">Set reminders</span></div>
-                                </li>
-                            </ul>
-                        </div>
+            <div id="utility-commands" class="command-section">
+                <div class="command-grid">
+                    <div class="command-card">
+                        <div class="command-name">/userinfo</div>
+                        <div class="command-desc">Display detailed information about a user.</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">/serverinfo</div>
+                        <div class="command-desc">Show comprehensive server statistics.</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">/poll</div>
+                        <div class="command-desc">Create polls with multiple options and reactions.</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">/remind</div>
+                        <div class="command-desc">Set reminders for yourself or others.</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">/avatar</div>
+                        <div class="command-desc">View user avatars in high resolution.</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">/translate</div>
+                        <div class="command-desc">Translate text between multiple languages.</div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Media Commands -->
-                <div class="command-section" id="media-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-photo-video"></i> Media Management</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">media setup</span><span
-                                            class="command-desc">Setup media channel</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">media config</span><span
-                                            class="command-desc">Configure media settings</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">media bypass</span><span
-                                            class="command-desc">Manage bypass roles</span></div>
-                                </li>
-                            </ul>
-                        </div>
+            <div id="music-commands" class="command-section">
+                <div class="command-grid">
+                    <div class="command-card">
+                        <div class="command-name">/play</div>
+                        <div class="command-desc">Play music from YouTube, Spotify, and more.</div>
                     </div>
-                </div>
-
-                <!-- General Commands -->
-                <div class="command-section" id="general-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-info-circle"></i> General Info</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">status</span><span
-                                            class="command-desc">Bot status</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">afk</span><span
-                                            class="command-desc">Set AFK status</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">avatar</span><span
-                                            class="command-desc">View avatar</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">membercount</span><span
-                                            class="command-desc">Server members</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">poll</span><span
-                                            class="command-desc">Create poll</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">urban</span><span
-                                            class="command-desc">Urban Dictionary</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">snipe</span><span
-                                            class="command-desc">Snipe deleted msg</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">list</span><span
-                                            class="command-desc">List roles/bots/etc</span></div>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="command-card">
+                        <div class="command-name">/skip</div>
+                        <div class="command-desc">Skip to the next song in the queue.</div>
                     </div>
-                </div>
-
-                <!-- Automod Commands -->
-                <div class="command-section" id="automod-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-robot"></i> Automod & Filters</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">automod</span><span
-                                            class="command-desc">Manage automod</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">blacklistword</span><span
-                                            class="command-desc">Block words</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">automod ignore</span><span
-                                            class="command-desc">Ignore channels/roles</span></div>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="command-card">
+                        <div class="command-name">/queue</div>
+                        <div class="command-desc">View the current music queue.</div>
                     </div>
-                </div>
-
-                <!-- Moderation Commands -->
-                <div class="command-section" id="moderation-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-gavel"></i> Moderation Tools</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">ban</span><span
-                                            class="command-desc">Ban user</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">kick</span><span
-                                            class="command-desc">Kick user</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">mute</span><span
-                                            class="command-desc">Mute user</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">warn</span><span
-                                            class="command-desc">Warn user</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">nuke</span><span
-                                            class="command-desc">Clear channel</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">lock</span><span
-                                            class="command-desc">Lock channel</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">slowmode</span><span
-                                            class="command-desc">Set slowmode</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">role</span><span
-                                            class="command-desc">Manage roles</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">clear</span><span
-                                            class="command-desc">Purge messages</span></div>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="command-card">
+                        <div class="command-name">/pause</div>
+                        <div class="command-desc">Pause or resume the current track.</div>
                     </div>
-                </div>
-
-                <!-- Music Commands -->
-                <div class="command-section" id="music-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-music"></i> Music Player</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">play</span><span
-                                            class="command-desc">Play song</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">pause</span><span
-                                            class="command-desc">Pause playback</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">skip</span><span
-                                            class="command-desc">Skip track</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">queue</span><span
-                                            class="command-desc">Show queue</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">filter</span><span
-                                            class="command-desc">Audio filters</span></div>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="command-card">
+                        <div class="command-name">/volume</div>
+                        <div class="command-desc">Adjust music player volume (0-100).</div>
                     </div>
-                </div>
-
-                <!-- Fun Commands -->
-                <div class="command-section" id="fun-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-smile-beam"></i> Fun & Social</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">imagine</span><span
-                                            class="command-desc">AI Image Gen</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">ship</span><span
-                                            class="command-desc">Matchmaking</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">chat</span><span
-                                            class="command-desc">AI Chat</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">meme</span><span
-                                            class="command-desc">Get meme</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">hug/kiss/slap</span><span
-                                            class="command-desc">Social interactions</span></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Games Commands -->
-                <div class="command-section" id="games-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-gamepad"></i> Mini Games</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">blackjack</span><span
-                                            class="command-desc">Play Blackjack</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">chess</span><span
-                                            class="command-desc">Play Chess</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">tictactoe</span><span
-                                            class="command-desc">Tic Tac Toe</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">wordle</span><span
-                                            class="command-desc">Play Wordle</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">rps</span><span
-                                            class="command-desc">Rock Paper Scissors</span></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Ignore Commands -->
-                <div class="command-section" id="ignore-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-ban"></i> Ignore Settings</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">ignore channel</span><span
-                                            class="command-desc">Ignore channels</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">ignore user</span><span
-                                            class="command-desc">Ignore users</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">ignore bypass</span><span
-                                            class="command-desc">Manage bypass</span></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Server Commands -->
-                <div class="command-section" id="server-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-server"></i> Server Setup</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">setup</span><span
-                                            class="command-desc">Auto server setup</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">autorole</span><span
-                                            class="command-desc">Configure autoroles</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">autoresponder</span><span
-                                            class="command-desc">Auto responses</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">react</span><span
-                                            class="command-desc">Auto reactions</span></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Voice Commands -->
-                <div class="command-section" id="voice-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-microphone"></i> Voice Management</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">voice kick</span><span
-                                            class="command-desc">Kick from VC</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">voice mute</span><span
-                                            class="command-desc">Mute in VC</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">voice move</span><span
-                                            class="command-desc">Move users</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">vcrole</span><span
-                                            class="command-desc">Voice channel roles</span></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Welcomer Commands -->
-                <div class="command-section" id="welcomer-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-door-open"></i> Welcomer</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">greet setup</span><span
-                                            class="command-desc">Setup welcomer</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">greet edit</span><span
-                                            class="command-desc">Edit messages</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">greet test</span><span
-                                            class="command-desc">Test greeting</span></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Giveaway Commands -->
-                <div class="command-section" id="giveaway-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-gift"></i> Giveaways</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">gstart</span><span
-                                            class="command-desc">Start giveaway</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">gend</span><span
-                                            class="command-desc">End giveaway</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">greroll</span><span
-                                            class="command-desc">Reroll winner</span></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Ticket Commands -->
-                <div class="command-section" id="ticket-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-ticket-alt"></i> Ticketing</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">ticket panel</span><span
-                                            class="command-desc">Create ticket panel</span></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Logging Commands -->
-                <div class="command-section" id="logging-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-clipboard-list"></i> Logging</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">loggingsetup</span><span
-                                            class="command-desc">Setup logs</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">removelogs</span><span
-                                            class="command-desc">Disable logs</span></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Vanity Commands -->
-                <div class="command-section" id="vanity-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-link"></i> Vanity URI</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">vanityroles</span><span
-                                            class="command-desc">Manage vanity roles</span></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Invite Tracker Commands -->
-                <div class="command-section" id="invites-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-user-plus"></i> Invite Tracker</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">invite enable</span><span
-                                            class="command-desc">Enable tracking</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">invites</span><span
-                                            class="command-desc">Check invites</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">addinvites</span><span
-                                            class="command-desc">Add fake invites</span></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- JoinDM Commands -->
-                <div class="command-section" id="joindm-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-envelope"></i> Join DM</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">joindm message</span><span
-                                            class="command-desc">Set DM message</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">joindm test</span><span
-                                            class="command-desc">Test DM</span></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- EventVC Commands -->
-                <div class="command-section" id="eventvc-commands">
-                    <div class="command-category-accordion">
-                        <div class="accordion-header">
-                            <h4><i class="fas fa-calendar-alt"></i> Event VC</h4>
-                            <i class="fas fa-chevron-down accordion-icon"></i>
-                        </div>
-                        <div class="accordion-content">
-                            <ul class="command-list">
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">eventvc setup</span><span
-                                            class="command-desc">Setup event VC</span></div>
-                                </li>
-                                <li class="command-item">
-                                    <div class="command-header"><span class="command-name">eventvc config</span><span
-                                            class="command-desc">Configure event VC</span></div>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="command-card">
+                        <div class="command-name">/shuffle</div>
+                        <div class="command-desc">Shuffle the music queue randomly.</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Reviews Section -->
+    <section class="reviews" id="reviews">
+        <div class="section-header">
+            <h2>What Users Say</h2>
+            <p>Join thousands of satisfied server owners who trust ZenoX.</p>
+        </div>
+        <div class="reviews-grid">
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="review-avatar">A</div>
+                    <div class="review-info">
+                        <h4>Alex Thompson</h4>
+                        <div class="review-stars">★★★★★</div>
+                    </div>
+                </div>
+                <p class="review-text">"ZenoX transformed our server. The moderation tools are incredibly powerful yet easy to use. Best bot we've ever used."</p>
+            </div>
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="review-avatar">S</div>
+                    <div class="review-info">
+                        <h4>Sarah Chen</h4>
+                        <div class="review-stars">★★★★★</div>
+                    </div>
+                </div>
+                <p class="review-text">"The entertainment features keep our community engaged. Games, music, and fun commands - all in one place. Highly recommend!"</p>
+            </div>
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="review-avatar">M</div>
+                    <div class="review-info">
+                        <h4>Mike Johnson</h4>
+                        <div class="review-stars">★★★★★</div>
+                    </div>
+                </div>
+                <p class="review-text">"Outstanding support and regular updates. The anti-nuke protection saved our server multiple times. Worth every penny."</p>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <h2>ZenoX</h2>
-                    <p>The ultimate Discord bot experience. Secure, powerful, and feature-rich.</p>
-                </div>
-
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>ZenoX</h3>
+                <p style="color: var(--gray); line-height: 1.7; margin-top: 1rem;">
+                    The ultimate Discord bot for moderation, entertainment, and server management.
+                </p>
                 <div class="social-links">
-                    <a href="https://discord.gg/4WdpTb9cB4" target="_blank" title="Invite Bot">
-                        <i class="fas fa-robot"></i>
-                    </a>
-                    <a href="https://discord.gg/4WdpTb9cB4" target="_blank" title="Support Server">
-                        <i class="fab fa-discord"></i>
-                    </a>
-                    <a href="#" title="GitHub">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="#" title="Twitter">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                </div>
-
-                <div class="cta-buttons">
-                    <a href="https://discord.com/oauth2/authorize?client_id=1462047381100036126&permissions=8&integration_type=0&scope=bot" class="btn btn-primary" target="_blank">
-                        <i class="fas fa-rocket"></i> INVITE ZENOX NOW
-                    </a>
-                </div>
-
-                <div class="copyright">
-                    <p>&copy; 2025 ZenoX Discord Bot. All rights reserved.</p>
-                    <p>This website is for demonstration purposes only. ZenoX is a fictional product.</p>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
                 </div>
             </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#commands">Commands</a></li>
+                    <li><a href="#reviews">Reviews</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">API</a></li>
+                    <li><a href="#">Support</a></li>
+                    <li><a href="#">Status</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 ZenoX. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
-        // Onboarding System
-        const onboardingOverlay = document.getElementById('onboarding-overlay');
-        const steps = document.querySelectorAll('.onboarding-step');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const progressFill = document.getElementById('progress-fill');
-        const progressText = document.getElementById('progress-text');
-        const startBtn = document.getElementById('start-experience');
-        let currentStep = 0;
-        const totalSteps = steps.length;
-        const answers = {};
-
-        // Initialize progress
-        updateProgress();
-
-        // Option selection
-        document.querySelectorAll('.onboarding-option').forEach(option => {
-            option.addEventListener('click', function () {
-                const step = this.closest('.onboarding-step');
-                const options = step.querySelectorAll('.onboarding-option');
-
-                options.forEach(opt => opt.classList.remove('selected'));
-                this.classList.add('selected');
-
-                // Enable next button
-                nextBtn.disabled = false;
-
-                // Store answer
-                const stepId = step.id.replace('step', '');
-                answers[stepId] = this.getAttribute('data-value');
-            });
-        });
-
-        // Next button
-        nextBtn.addEventListener('click', function () {
-            if (currentStep < totalSteps - 1) {
-                // Validate current step has selection
-                const currentStepEl = steps[currentStep];
-                const hasSelection = currentStepEl.querySelector('.onboarding-option.selected');
-
-                if (!hasSelection && currentStep !== totalSteps - 1) {
-                    // Show error animation
-                    currentStepEl.style.animation = 'shake 0.5s ease';
-                    setTimeout(() => {
-                        currentStepEl.style.animation = '';
-                    }, 500);
-                    return;
-                }
-
-                // Move to next step
-                steps[currentStep].classList.remove('active');
-                currentStep++;
-                steps[currentStep].classList.add('active');
-                updateProgress();
-
-                // Update button states
-                prevBtn.disabled = currentStep === 0;
-                nextBtn.disabled = currentStep === totalSteps - 1 ||
-                    !steps[currentStep].querySelector('.onboarding-option.selected');
-
-                // If last step, show recommendations
-                if (currentStep === totalSteps - 1) {
-                    showRecommendations();
-                }
-            }
-        });
-
-        // Previous button
-        prevBtn.addEventListener('click', function () {
-            if (currentStep > 0) {
-                steps[currentStep].classList.remove('active');
-                currentStep--;
-                steps[currentStep].classList.add('active');
-                updateProgress();
-
-                // Update button states
-                prevBtn.disabled = currentStep === 0;
-                nextBtn.disabled = false;
-            }
-        });
-
-        // Skip button
-        document.getElementById('skip-onboarding').addEventListener('click', function () {
-            closeOnboarding();
-        });
-
-        // Start experience button
-        startBtn.addEventListener('click', function () {
-            // Save preferences to localStorage
-            localStorage.setItem('axonx_onboarding_completed', 'true');
-            localStorage.setItem('axonx_preferences', JSON.stringify(answers));
-
-            closeOnboarding();
-        });
-
-        function closeOnboarding() {
-            // Hide onboarding with animation
-            onboardingOverlay.style.opacity = '0';
-            setTimeout(() => {
-                onboardingOverlay.style.display = 'none';
-
-                // Show main content with animations
-                document.querySelectorAll('.stat-card, .feature-card, .review-card').forEach(card => {
-                    card.classList.add('animate');
-                });
-
-                // Smooth scroll to top
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }, 500);
-        }
-
-        // Skip onboarding if already completed
-        if (localStorage.getItem('axonx_onboarding_completed') === 'true') {
-            onboardingOverlay.style.display = 'none';
-            document.querySelectorAll('.stat-card, .feature-card, .review-card').forEach(card => {
-                card.classList.add('animate');
-            });
-        }
-
-        // Update progress bar and text
-        function updateProgress() {
-            const progress = ((currentStep + 1) / totalSteps) * 100;
-            progressFill.style.width = `${progress}%`;
-            progressText.textContent = `${currentStep + 1}/${totalSteps}`;
-        }
-
-        // Generate recommendations based on answers
-        function showRecommendations() {
-            const recommendations = document.getElementById('recommendation-results');
-            const ul = recommendations.querySelector('ul');
-            ul.innerHTML = '';
-
-            // Base recommendations
-            let features = [
-                '<li><i class="fas fa-check-circle"></i> Advanced Security System</li>',
-                '<li><i class="fas fa-check-circle"></i> Auto Moderation</li>'
-            ];
-
-            // Customize based on answers
-            if (answers['1'] === 'large') {
-                features.push('<li><i class="fas fa-check-circle"></i> Advanced Logging System</li>');
-                features.push('<li><i class="fas fa-check-circle"></i> Mass Management Tools</li>');
-            }
-
-            if (answers['2'] === 'security') {
-                features.push('<li><i class="fas fa-check-circle"></i> Antinuke Protection</li>');
-                features.push('<li><i class="fas fa-check-circle"></i> Whitelist Management</li>');
-            } else if (answers['2'] === 'entertainment') {
-                features.push('<li><i class="fas fa-check-circle"></i> Interactive Games (15+)</li>');
-                features.push('<li><i class="fas fa-check-circle"></i> Music System</li>');
-            } else {
-                features.push('<li><i class="fas fa-check-circle"></i> Auto Setup Wizard</li>');
-                features.push('<li><i class="fas fa-check-circle"></i> Ticket System</li>');
-            }
-
-            if (answers['4'] === 'yes') {
-                features.push('<li><i class="fas fa-check-circle"></i> Premium Music Player</li>');
-            }
-
-            if (answers['5'] === 'premium' || answers['5'] === 'both') {
-                features.push('<li><i class="fas fa-check-circle"></i> Premium Features Unlocked</li>');
-            }
-
-            // Limit to 6 features
-            features = features.slice(0, 6);
-            ul.innerHTML = features.join('');
-        }
-
-        // Matrix Rain Background
-        const canvas = document.getElementById('matrix-bg');
-        const ctx = canvas.getContext('2d');
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const letters = '01';
-        const fontSize = 14;
-        const columns = canvas.width / fontSize;
-
-        const drops = [];
-        for (let i = 0; i < columns; i++) {
-            drops[i] = 1;
-        }
-
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#0F0';
-            ctx.font = fontSize + 'px monospace';
-
-            for (let i = 0; i < drops.length; i++) {
-                const text = letters[Math.floor(Math.random() * letters.length)];
-                ctx.fillStyle = i % 5 === 0 ? '#0F0' : '#00FF00';
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-
-                drops[i]++;
-            }
-        }
-
-        setInterval(drawMatrix, 35);
-
-        // Snowfall Animation
-        function createSnowfall() {
-            const snowfall = document.getElementById('snowfall');
-            const snowflakeCount = 150;
-
-            for (let i = 0; i < snowflakeCount; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.classList.add('snowflake');
-
-                const size = Math.random() * 5 + 2;
-                snowflake.style.width = `${size}px`;
-                snowflake.style.height = `${size}px`;
-
-                snowflake.style.left = `${Math.random() * 100}vw`;
-
-                const duration = Math.random() * 10 + 5;
-                snowflake.style.animationDuration = `${duration}s`;
-
-                snowflake.style.animationDelay = `${Math.random() * 5}s`;
-
-                snowflake.style.opacity = Math.random() * 0.5 + 0.3;
-
-                snowfall.appendChild(snowflake);
-            }
-        }
-
         // Mobile Menu Toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navMenu = document.getElementById('navMenu');
@@ -3069,68 +1088,72 @@
                 : '<i class="fas fa-bars"></i>';
         });
 
-        // Dropdown Logic
-        const dropdownSelected = document.getElementById('dropdownSelected');
-        const dropdownOptions = document.getElementById('dropdownOptions');
-        const options = document.querySelectorAll('.dropdown-option');
-        const commandSections = document.querySelectorAll('.command-section');
-
-        dropdownSelected.addEventListener('click', (e) => {
-            e.stopPropagation();
-            dropdownOptions.classList.toggle('show');
-        });
-
-        document.addEventListener('click', () => {
-            dropdownOptions.classList.remove('show');
-        });
-
-        options.forEach(option => {
-            option.addEventListener('click', () => {
-                // Update selected text
-                dropdownSelected.innerHTML = `${option.textContent} <i class="fas fa-chevron-down"></i>`;
-
-                // Update active option style
-                options.forEach(opt => opt.classList.remove('active'));
-                option.classList.add('active');
-
-                // Filter sections
-                const category = option.getAttribute('data-category');
-                commandSections.forEach(section => {
-                    section.classList.remove('active');
-                    if (section.id === `${category}-commands`) {
-                        section.classList.add('active');
-                    }
-                });
-            });
-        });
-
-        // Accordion Logic
-        const accHeaders = document.querySelectorAll('.accordion-header');
-
-        accHeaders.forEach(header => {
-            header.addEventListener('click', () => {
-                const parent = header.parentElement;
-                parent.classList.toggle('open');
-            });
-        });
-
-        // Command Item Details Expansion
-        const commandItems = document.querySelectorAll('.command-item');
-
-        commandItems.forEach(item => {
-            item.addEventListener('click', () => {
-                item.classList.toggle('expanded');
-            });
-        });
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                if (navMenu.classList.contains('active')) {
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
                     navMenu.classList.remove('active');
                     mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
                 }
+            });
+        });
 
+        // Header hide/show on scroll
+        let lastScrollTop = 0;
+        const header = document.querySelector('header');
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                header.classList.add('hidden');
+            } else {
+                header.classList.remove('hidden');
+            }
+
+            lastScrollTop = scrollTop;
+        });
+
+        // Category tabs
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const commandSections = document.querySelectorAll('.command-section');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and sections
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                commandSections.forEach(section => section.classList.remove('active'));
+
+                // Add active class to clicked button
+                button.classList.add('active');
+
+                // Show corresponding section
+                const category = button.getAttribute('data-category');
+                document.getElementById(`${category}-commands`).classList.add('active');
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
 
@@ -3144,63 +1167,6 @@
                 }
             });
         });
-
-        // Initialize animations
-        createSnowfall();
-
-        // Header hide/show on scroll
-        let lastScrollTop = 0;
-        const header = document.querySelector('header');
-
-        window.addEventListener('scroll', () => {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-            if (scrollTop > lastScrollTop && scrollTop > 100) {
-                // Scrolling down
-                header.classList.add('hidden');
-            } else {
-                // Scrolling up
-                header.classList.remove('hidden');
-            }
-
-            lastScrollTop = scrollTop;
-        });
-
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
-                }
-            });
-        }, observerOptions);
-
-        // Observe elements for animation
-        document.querySelectorAll('.stat-card, .feature-card, .review-card').forEach(card => {
-            observer.observe(card);
-        });
-
-        // Window resize handler
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // Shake animation for validation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-                20%, 40%, 60%, 80% { transform: translateX(5px); }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 
