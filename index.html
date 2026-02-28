@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -488,6 +488,81 @@
             border-radius: 6px;
             color: var(--text-secondary);
             font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .command-count:hover {
+            border-color: var(--text-primary);
+            color: var(--text-primary);
+        }
+
+        .command-count::after {
+            content: ' ▼';
+            font-size: 0.7rem;
+            margin-left: 6px;
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+
+        .command-count.expanded::after {
+            transform: rotate(180deg);
+        }
+
+        .commands-list {
+            margin-top: 2rem;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .commands-list.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .command-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .command-item:hover {
+            border-color: var(--text-primary);
+            transform: translateX(4px);
+        }
+
+        .command-item-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .command-item-name::before {
+            content: '$ ';
+            color: var(--text-secondary);
+            margin-right: 6px;
+        }
+
+        .command-item-desc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
         }
 
         /* Process Section */
@@ -826,7 +901,57 @@
                     <div class="command-description">
                         <h3>Antinuke</h3>
                         <p>Protect your server from mass destruction</p>
-                        <span class="command-count">12 active commands</span>
+                        <span class="command-count" onclick="toggleCommands('antinuke-list', this)">12 active commands</span>
+                    </div>
+                    <div class="commands-list" id="antinuke-list">
+                        <div class="command-item">
+                            <span class="command-item-name">antinuke enable</span>
+                            <span class="command-item-desc">Enable anti-nuke protection</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">antinuke disable</span>
+                            <span class="command-item-desc">Disable anti-nuke protection</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">whitelist add</span>
+                            <span class="command-item-desc">Add user to whitelist</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">whitelist remove</span>
+                            <span class="command-item-desc">Remove user from whitelist</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">whitelist show</span>
+                            <span class="command-item-desc">View whitelisted users</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">extraowner add</span>
+                            <span class="command-item-desc">Add extra owner</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">extraowner remove</span>
+                            <span class="command-item-desc">Remove extra owner</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">extraowner list</span>
+                            <span class="command-item-desc">List extra owners</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">nightmode enable</span>
+                            <span class="command-item-desc">Enable night mode protection</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">nightmode disable</span>
+                            <span class="command-item-desc">Disable night mode protection</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">antinuke config</span>
+                            <span class="command-item-desc">View security configuration</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">security settings</span>
+                            <span class="command-item-desc">Manage security settings</span>
+                        </div>
                     </div>
                 </div>
 
@@ -835,7 +960,109 @@
                     <div class="command-description">
                         <h3>Moderation</h3>
                         <p>Complete moderation toolkit for server management</p>
-                        <span class="command-count">25 active commands</span>
+                        <span class="command-count" onclick="toggleCommands('moderation-list', this)">25 active commands</span>
+                    </div>
+                    <div class="commands-list" id="moderation-list">
+                        <div class="command-item">
+                            <span class="command-item-name">ban</span>
+                            <span class="command-item-desc">Ban a user from server</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">unban</span>
+                            <span class="command-item-desc">Unban a user</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">kick</span>
+                            <span class="command-item-desc">Kick a user from server</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">mute</span>
+                            <span class="command-item-desc">Mute a user</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">unmute</span>
+                            <span class="command-item-desc">Unmute a user</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">warn</span>
+                            <span class="command-item-desc">Warn a user</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">warnings</span>
+                            <span class="command-item-desc">View user warnings</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">clear</span>
+                            <span class="command-item-desc">Purge messages</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">lock</span>
+                            <span class="command-item-desc">Lock a channel</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">unlock</span>
+                            <span class="command-item-desc">Unlock a channel</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">slowmode</span>
+                            <span class="command-item-desc">Set channel slowmode</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">nuke</span>
+                            <span class="command-item-desc">Clone and delete channel</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">role add</span>
+                            <span class="command-item-desc">Add role to user</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">role remove</span>
+                            <span class="command-item-desc">Remove role from user</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">nick</span>
+                            <span class="command-item-desc">Change user nickname</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">lockdown</span>
+                            <span class="command-item-desc">Lock entire server</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">unlockdown</span>
+                            <span class="command-item-desc">Unlock entire server</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">hideall</span>
+                            <span class="command-item-desc">Hide all channels</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">showall</span>
+                            <span class="command-item-desc">Show all channels</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">massban</span>
+                            <span class="command-item-desc">Ban multiple users</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">masskick</span>
+                            <span class="command-item-desc">Kick multiple users</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">unbanall</span>
+                            <span class="command-item-desc">Unban all users</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">purge bots</span>
+                            <span class="command-item-desc">Remove bot messages</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">timeout</span>
+                            <span class="command-item-desc">Timeout a user</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">untimeout</span>
+                            <span class="command-item-desc">Remove timeout</span>
+                        </div>
                     </div>
                 </div>
 
@@ -844,7 +1071,81 @@
                     <div class="command-description">
                         <h3>Music</h3>
                         <p>High-quality music playback for your voice channels</p>
-                        <span class="command-count">18 active commands</span>
+                        <span class="command-count" onclick="toggleCommands('music-list', this)">18 active commands</span>
+                    </div>
+                    <div class="commands-list" id="music-list">
+                        <div class="command-item">
+                            <span class="command-item-name">play</span>
+                            <span class="command-item-desc">Play a song</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">pause</span>
+                            <span class="command-item-desc">Pause playback</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">resume</span>
+                            <span class="command-item-desc">Resume playback</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">skip</span>
+                            <span class="command-item-desc">Skip current track</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">stop</span>
+                            <span class="command-item-desc">Stop music and clear queue</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">queue</span>
+                            <span class="command-item-desc">View music queue</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">nowplaying</span>
+                            <span class="command-item-desc">Current track info</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">volume</span>
+                            <span class="command-item-desc">Adjust volume</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">loop</span>
+                            <span class="command-item-desc">Toggle loop mode</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">shuffle</span>
+                            <span class="command-item-desc">Shuffle queue</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">seek</span>
+                            <span class="command-item-desc">Seek to timestamp</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">filter</span>
+                            <span class="command-item-desc">Apply audio filters</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">bassboost</span>
+                            <span class="command-item-desc">Toggle bass boost</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">nightcore</span>
+                            <span class="command-item-desc">Toggle nightcore mode</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">vaporwave</span>
+                            <span class="command-item-desc">Toggle vaporwave effect</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">lyrics</span>
+                            <span class="command-item-desc">Get song lyrics</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">join</span>
+                            <span class="command-item-desc">Join voice channel</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">leave</span>
+                            <span class="command-item-desc">Leave voice channel</span>
+                        </div>
                     </div>
                 </div>
 
@@ -853,7 +1154,69 @@
                     <div class="command-description">
                         <h3>Games</h3>
                         <p>Interactive entertainment and mini-games</p>
-                        <span class="command-count">15 active commands</span>
+                        <span class="command-count" onclick="toggleCommands('games-list', this)">15 active commands</span>
+                    </div>
+                    <div class="commands-list" id="games-list">
+                        <div class="command-item">
+                            <span class="command-item-name">blackjack</span>
+                            <span class="command-item-desc">Play blackjack</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">chess</span>
+                            <span class="command-item-desc">Play chess</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">tictactoe</span>
+                            <span class="command-item-desc">Play tic-tac-toe</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">wordle</span>
+                            <span class="command-item-desc">Play wordle</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">rps</span>
+                            <span class="command-item-desc">Rock paper scissors</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">hangman</span>
+                            <span class="command-item-desc">Play hangman</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">trivia</span>
+                            <span class="command-item-desc">Trivia questions</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">akinator</span>
+                            <span class="command-item-desc">Play akinator</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">snake</span>
+                            <span class="command-item-desc">Play snake game</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">2048</span>
+                            <span class="command-item-desc">Play 2048 puzzle</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">connect4</span>
+                            <span class="command-item-desc">Play connect four</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">minesweeper</span>
+                            <span class="command-item-desc">Play minesweeper</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">slots</span>
+                            <span class="command-item-desc">Slot machine</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">coinflip</span>
+                            <span class="command-item-desc">Flip a coin</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">dice</span>
+                            <span class="command-item-desc">Roll dice</span>
+                        </div>
                     </div>
                 </div>
 
@@ -862,7 +1225,129 @@
                     <div class="command-description">
                         <h3>Utility</h3>
                         <p>Essential tools and information commands</p>
-                        <span class="command-count">30 active commands</span>
+                        <span class="command-count" onclick="toggleCommands('utility-list', this)">30 active commands</span>
+                    </div>
+                    <div class="commands-list" id="utility-list">
+                        <div class="command-item">
+                            <span class="command-item-name">serverinfo</span>
+                            <span class="command-item-desc">View server information</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">userinfo</span>
+                            <span class="command-item-desc">View user information</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">botinfo</span>
+                            <span class="command-item-desc">Bot statistics</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">avatar</span>
+                            <span class="command-item-desc">View user avatar</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">banner</span>
+                            <span class="command-item-desc">View user/server banner</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">roleinfo</span>
+                            <span class="command-item-desc">View role information</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">channelinfo</span>
+                            <span class="command-item-desc">View channel information</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">ping</span>
+                            <span class="command-item-desc">Check bot latency</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">uptime</span>
+                            <span class="command-item-desc">Bot uptime</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">membercount</span>
+                            <span class="command-item-desc">Server member count</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">badges</span>
+                            <span class="command-item-desc">View profile badges</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">afk</span>
+                            <span class="command-item-desc">Set AFK status</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">reminder</span>
+                            <span class="command-item-desc">Set reminders</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">poll</span>
+                            <span class="command-item-desc">Create poll</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">suggest</span>
+                            <span class="command-item-desc">Submit suggestion</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">translate</span>
+                            <span class="command-item-desc">Translate text</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">weather</span>
+                            <span class="command-item-desc">Get weather info</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">urban</span>
+                            <span class="command-item-desc">Urban dictionary</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">wikipedia</span>
+                            <span class="command-item-desc">Search Wikipedia</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">calculate</span>
+                            <span class="command-item-desc">Calculate expression</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">snipe</span>
+                            <span class="command-item-desc">View deleted messages</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">editsnipe</span>
+                            <span class="command-item-desc">View edited messages</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">enlarge</span>
+                            <span class="command-item-desc">Enlarge emoji</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">steal</span>
+                            <span class="command-item-desc">Steal emoji</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">boosters</span>
+                            <span class="command-item-desc">List server boosters</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">bots</span>
+                            <span class="command-item-desc">List server bots</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">roles</span>
+                            <span class="command-item-desc">List server roles</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">emojis</span>
+                            <span class="command-item-desc">List server emojis</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">permissions</span>
+                            <span class="command-item-desc">Check permissions</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">invite</span>
+                            <span class="command-item-desc">Get bot invite link</span>
+                        </div>
                     </div>
                 </div>
 
@@ -871,7 +1356,49 @@
                     <div class="command-description">
                         <h3>Voice</h3>
                         <p>Advanced voice channel management and controls</p>
-                        <span class="command-count">10 active commands</span>
+                        <span class="command-count" onclick="toggleCommands('voice-list', this)">10 active commands</span>
+                    </div>
+                    <div class="commands-list" id="voice-list">
+                        <div class="command-item">
+                            <span class="command-item-name">voice kick</span>
+                            <span class="command-item-desc">Kick from voice channel</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">voice mute</span>
+                            <span class="command-item-desc">Mute in voice channel</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">voice unmute</span>
+                            <span class="command-item-desc">Unmute in voice channel</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">voice deafen</span>
+                            <span class="command-item-desc">Deafen in voice channel</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">voice undeafen</span>
+                            <span class="command-item-desc">Undeafen in voice channel</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">voice move</span>
+                            <span class="command-item-desc">Move users between channels</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">voice moveall</span>
+                            <span class="command-item-desc">Move all users</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">voice lock</span>
+                            <span class="command-item-desc">Lock voice channel</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">voice unlock</span>
+                            <span class="command-item-desc">Unlock voice channel</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">vcrole</span>
+                            <span class="command-item-desc">Voice channel roles</span>
+                        </div>
                     </div>
                 </div>
 
@@ -880,7 +1407,89 @@
                     <div class="command-description">
                         <h3>Server</h3>
                         <p>Automated server setup and configuration tools</p>
-                        <span class="command-count">20 active commands</span>
+                        <span class="command-count" onclick="toggleCommands('server-list', this)">20 active commands</span>
+                    </div>
+                    <div class="commands-list" id="server-list">
+                        <div class="command-item">
+                            <span class="command-item-name">setup</span>
+                            <span class="command-item-desc">Auto server setup wizard</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">autorole add</span>
+                            <span class="command-item-desc">Add autorole</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">autorole remove</span>
+                            <span class="command-item-desc">Remove autorole</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">welcome setup</span>
+                            <span class="command-item-desc">Setup welcome messages</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">welcome test</span>
+                            <span class="command-item-desc">Test welcome message</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">goodbye setup</span>
+                            <span class="command-item-desc">Setup goodbye messages</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">ticket setup</span>
+                            <span class="command-item-desc">Setup ticket system</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">ticket panel</span>
+                            <span class="command-item-desc">Create ticket panel</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">logging setup</span>
+                            <span class="command-item-desc">Configure server logs</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">logging disable</span>
+                            <span class="command-item-desc">Disable logging</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">reactionrole</span>
+                            <span class="command-item-desc">Setup reaction roles</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">giveaway start</span>
+                            <span class="command-item-desc">Start giveaway</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">giveaway end</span>
+                            <span class="command-item-desc">End giveaway</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">giveaway reroll</span>
+                            <span class="command-item-desc">Reroll winner</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">autoresponder</span>
+                            <span class="command-item-desc">Setup auto responses</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">sticky</span>
+                            <span class="command-item-desc">Setup sticky messages</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">joindm</span>
+                            <span class="command-item-desc">Setup join DM</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">invitetracker</span>
+                            <span class="command-item-desc">Track invites</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">vanity</span>
+                            <span class="command-item-desc">Manage vanity URL</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-item-name">media setup</span>
+                            <span class="command-item-desc">Setup media channel</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1001,6 +1610,28 @@
                 document.getElementById(targetId).classList.add('active');
             });
         });
+
+        // Toggle Commands List
+        function toggleCommands(listId, element) {
+            const commandsList = document.getElementById(listId);
+            const isShowing = commandsList.classList.contains('show');
+            
+            // Hide all other command lists
+            document.querySelectorAll('.commands-list').forEach(list => {
+                list.classList.remove('show');
+            });
+            
+            // Remove expanded class from all command counts
+            document.querySelectorAll('.command-count').forEach(count => {
+                count.classList.remove('expanded');
+            });
+            
+            // Toggle current list
+            if (!isShowing) {
+                commandsList.classList.add('show');
+                element.classList.add('expanded');
+            }
+        }
 
         // Smooth Scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
