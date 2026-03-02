@@ -189,6 +189,118 @@
             opacity: 1;
         }
 
+        /* Particles Container */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Individual Particle */
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat linear infinite;
+        }
+
+        /* Geometric particles */
+        .particle.square {
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .particle.diamond {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 0;
+            transform: rotate(45deg);
+        }
+
+        .particle.triangle {
+            width: 0;
+            height: 0;
+            background: transparent;
+            border-left: 2px solid transparent;
+            border-right: 2px solid transparent;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(var(--x-offset)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes particleFloatHorizontal {
+            0% {
+                transform: translateX(-100px) translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateX(calc(100vw + 100px)) translateY(var(--y-offset)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Particle variants for visual variety */
+        .particle.small {
+            width: 2px;
+            height: 2px;
+        }
+
+        .particle.medium {
+            width: 3px;
+            height: 3px;
+        }
+
+        .particle.large {
+            width: 4px;
+            height: 4px;
+        }
+
+        /* Connection lines between particles */
+        .particle-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            height: 1px;
+            pointer-events: none;
+            opacity: 0;
+            animation: lineAppear 2s ease-in-out infinite;
+        }
+
+        @keyframes lineAppear {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
         /* Skip to content */
         .skip-link {
             position: absolute;
@@ -1011,6 +1123,7 @@
     <div class="noise-overlay"></div>
     <div class="scanline"></div>
     <div class="spotlight" id="spotlight"></div>
+    <div class="particles-container" id="particles-container"></div>
 
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
@@ -1916,6 +2029,136 @@
             spotlight.classList.remove('active');
             spotlightActive = false;
         });
+
+        // Particle System
+        const particlesContainer = document.getElementById('particles-container');
+        const particleCount = 50; // Number of particles
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Random size
+            const sizes = ['small', 'medium', 'large'];
+            const randomSize = sizes[Math.floor(Math.random() * sizes.length)];
+            particle.classList.add(randomSize);
+            
+            // Random shape (80% circles, 20% other shapes for variety)
+            const shapes = ['circle', 'circle', 'circle', 'circle', 'square', 'diamond'];
+            const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
+            if (randomShape !== 'circle') {
+                particle.classList.add(randomShape);
+            }
+            
+            // 20% chance for horizontal movement
+            const isHorizontal = Math.random() < 0.2;
+            
+            if (isHorizontal) {
+                // Horizontal particle
+                particle.style.left = '-100px';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationName = 'particleFloatHorizontal';
+                
+                const duration = Math.random() * 20 + 15; // 15-35 seconds (slower for horizontal)
+                particle.style.animationDuration = duration + 's';
+                
+                const delay = Math.random() * 5;
+                particle.style.animationDelay = delay + 's';
+                
+                // Random vertical offset
+                const yOffset = (Math.random() - 0.5) * 50;
+                particle.style.setProperty('--y-offset', yOffset + 'px');
+                
+                particlesContainer.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                    createParticle();
+                }, (duration + delay) * 1000);
+            } else {
+                // Vertical particle (original)
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.bottom = '-10px';
+                
+                const duration = Math.random() * 15 + 10; // 10-25 seconds
+                particle.style.animationDuration = duration + 's';
+                
+                const delay = Math.random() * 5;
+                particle.style.animationDelay = delay + 's';
+                
+                // Random horizontal offset
+                const xOffset = (Math.random() - 0.5) * 100;
+                particle.style.setProperty('--x-offset', xOffset + 'px');
+                
+                particlesContainer.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                    createParticle();
+                }, (duration + delay) * 1000);
+            }
+        }
+
+        // Initialize particles
+        function initParticles() {
+            for (let i = 0; i < particleCount; i++) {
+                // Stagger initial creation
+                setTimeout(() => {
+                    createParticle();
+                }, i * 100);
+            }
+        }
+
+        // Start particle system
+        initParticles();
+
+        // Optional: Create connection lines between nearby particles
+        function createParticleConnections() {
+            const particles = document.querySelectorAll('.particle');
+            const connections = [];
+            
+            particles.forEach((p1, i) => {
+                particles.forEach((p2, j) => {
+                    if (i < j) {
+                        const rect1 = p1.getBoundingClientRect();
+                        const rect2 = p2.getBoundingClientRect();
+                        
+                        const x1 = rect1.left + rect1.width / 2;
+                        const y1 = rect1.top + rect1.height / 2;
+                        const x2 = rect2.left + rect2.width / 2;
+                        const y2 = rect2.top + rect2.height / 2;
+                        
+                        const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                        
+                        // Only connect if particles are close enough
+                        if (distance < 150) {
+                            const line = document.createElement('div');
+                            line.classList.add('particle-line');
+                            
+                            const length = distance;
+                            const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                            
+                            line.style.width = length + 'px';
+                            line.style.left = x1 + 'px';
+                            line.style.top = y1 + 'px';
+                            line.style.transform = `rotate(${angle}deg)`;
+                            line.style.transformOrigin = '0 0';
+                            
+                            connections.push(line);
+                        }
+                    }
+                });
+            });
+            
+            return connections;
+        }
+
+        // Update connections periodically (optional, can be performance intensive)
+        // setInterval(() => {
+        //     document.querySelectorAll('.particle-line').forEach(line => line.remove());
+        //     const connections = createParticleConnections();
+        //     connections.forEach(line => particlesContainer.appendChild(line));
+        // }, 2000);
     </script>
 </body>
 
