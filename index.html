@@ -1,1561 +1,1483 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenoX | Advanced Discord Security Bot</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZenoX — Advanced Discord Security</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,300&family=Geist+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ════════════════════════════════════════
+   ROOT & RESET
+════════════════════════════════════════ */
+:root{
+  --bg:#020108; --bg1:#06040f; --bg2:#0a0718; --bg3:#100d22;
+  --glass:rgba(255,255,255,.035); --glass2:rgba(255,255,255,.06);
+  --glass3:rgba(255,255,255,.09);
+  --b:rgba(255,255,255,.06); --b2:rgba(255,255,255,.12); --b3:rgba(255,255,255,.2);
+  --t:#f0ecff; --t2:#9490b8; --t3:#524e70; --t4:#2e2a48;
+  --v:#7c3aed; --v1:#8b5cf6; --v2:#a78bfa; --v3:#c4b5fd; --v4:#ede9fe;
+  --pk:#db2777; --pk2:#ec4899; --pk3:#f472b6;
+  --cy:#0891b2; --cy2:#22d3ee; --cy3:#67e8f9;
+  --gv:linear-gradient(135deg,#7c3aed,#ec4899);
+  --gv2:linear-gradient(135deg,#4c1d95,#7c3aed,#a78bfa);
+  --gv3:linear-gradient(135deg,#7c3aed,#0891b2);
+  --sh-v:0 0 80px rgba(124,58,237,.3);
+  --sh-pk:0 0 80px rgba(236,72,153,.2);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  background:var(--bg);color:var(--t);
+  overflow-x:hidden;cursor:none;
+  -webkit-font-smoothing:antialiased;
+}
 
-        :root {
-            --bg: #050507;
-            --bg-1: #0c0c10;
-            --bg-2: #111116;
-            --surface: rgba(255,255,255,0.04);
-            --surface-hover: rgba(255,255,255,0.07);
-            --border: rgba(255,255,255,0.08);
-            --border-hover: rgba(255,255,255,0.2);
-            --text: #f0f0f5;
-            --text-2: #8888a0;
-            --text-3: #55556a;
-            --accent: #7c6fff;
-            --accent-2: #a78fff;
-            --glow: rgba(124,111,255,0.15);
-        }
+/* ════════════════════════════════════════
+   GRAIN
+════════════════════════════════════════ */
+.grain{
+  position:fixed;inset:0;z-index:9997;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.028;
+}
 
-        html { scroll-behavior: smooth; }
+/* ════════════════════════════════════════
+   CUSTOM CURSOR
+════════════════════════════════════════ */
+#cur{position:fixed;z-index:99999;pointer-events:none;}
+.c-dot{
+  width:6px;height:6px;background:#fff;border-radius:50%;
+  position:absolute;transform:translate(-50%,-50%);
+  transition:width .15s,height .15s,background .15s;
+  box-shadow:0 0 8px rgba(167,139,250,.8);
+}
+.c-ring{
+  width:32px;height:32px;
+  border:1px solid rgba(167,139,250,.5);
+  border-radius:50%;position:absolute;
+  transform:translate(-50%,-50%);
+  transition:all .08s cubic-bezier(.4,0,.2,1);
+}
+.c-trail{
+  width:80px;height:80px;
+  border-radius:50%;position:absolute;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(124,58,237,.06),transparent 70%);
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+}
+body.hov .c-dot{width:10px;height:10px;background:var(--v2);}
+body.hov .c-ring{width:50px;height:50px;border-color:rgba(167,139,250,.8);box-shadow:0 0 20px rgba(124,58,237,.3);}
 
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+/* ════════════════════════════════════════
+   CANVAS STARFIELD
+════════════════════════════════════════ */
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
-        /* ── GRAIN ── */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-            opacity: 0.025;
-            pointer-events: none;
-            z-index: 9999;
-        }
+/* ════════════════════════════════════════
+   MESH BLOBS
+════════════════════════════════════════ */
+.mesh{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
+.mb{position:absolute;border-radius:50%;filter:blur(120px);animation:md var(--d,30s) var(--dl,0s) ease-in-out infinite alternate;}
+.mb1{width:800px;height:800px;background:rgba(109,40,217,.22);top:-25%;left:-20%;--d:32s;}
+.mb2{width:600px;height:600px;background:rgba(219,39,119,.16);bottom:-20%;right:-15%;--d:38s;--dl:-12s;}
+.mb3{width:450px;height:450px;background:rgba(8,145,178,.12);top:35%;left:55%;--d:25s;--dl:-8s;}
+.mb4{width:350px;height:350px;background:rgba(124,58,237,.14);top:15%;right:20%;--d:44s;--dl:-20s;}
+.mb5{width:250px;height:250px;background:rgba(236,72,153,.1);top:60%;left:20%;--d:36s;--dl:-6s;}
+@keyframes md{0%{transform:translate(0,0) scale(1)}100%{transform:translate(80px,50px) scale(1.1)}}
 
-        /* ── AURORA ── */
-        .aurora {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-        .aurora-blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.18;
-            animation: drift 30s ease-in-out infinite;
-        }
-        .aurora-blob:nth-child(1) {
-            width: 700px; height: 700px;
-            background: radial-gradient(circle, #7c6fff, #4a3fff);
-            top: -20%; left: -15%;
-            animation-duration: 35s;
-        }
-        .aurora-blob:nth-child(2) {
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, #a78fff, #6040ff);
-            bottom: -15%; right: -10%;
-            animation-duration: 28s;
-            animation-delay: -12s;
-        }
-        .aurora-blob:nth-child(3) {
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, #5566ff, #3322aa);
-            top: 40%; left: 55%;
-            animation-duration: 40s;
-            animation-delay: -20s;
-            opacity: 0.1;
-        }
+/* ════════════════════════════════════════
+   HEADER
+════════════════════════════════════════ */
+header{
+  position:fixed;top:0;width:100%;z-index:1000;
+  padding:1.2rem 3rem;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:all .4s cubic-bezier(.4,0,.2,1);
+}
+header.sc{
+  background:rgba(2,1,8,.82);
+  backdrop-filter:blur(28px) saturate(200%);
+  border-bottom:1px solid var(--b);
+  padding:.8rem 3rem;
+  box-shadow:0 4px 40px rgba(0,0,0,.5);
+}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--t);}
+.logo-img{
+  width:40px;height:40px;border-radius:50%;
+  border:1.5px solid rgba(167,139,250,.35);
+  box-shadow:0 0 20px rgba(124,58,237,.4),0 0 0 4px rgba(124,58,237,.06);
+  transition:box-shadow .3s;
+}
+.logo:hover .logo-img{box-shadow:0 0 30px rgba(167,139,250,.6),0 0 0 6px rgba(124,58,237,.1);}
+.logo-word{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.7rem;letter-spacing:.15em;
+  background:var(--gv);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.logo-ver{
+  font-family:'Geist Mono',monospace;font-size:.65rem;
+  color:var(--v2);background:rgba(124,58,237,.12);
+  border:1px solid rgba(124,58,237,.2);padding:2px 7px;border-radius:4px;
+  letter-spacing:.06em;margin-top:2px;
+}
+nav{display:flex;align-items:center;gap:2rem;}
+nav a{
+  color:var(--t3);font-size:.875rem;font-weight:500;text-decoration:none;
+  transition:color .2s;letter-spacing:.02em;position:relative;padding:.3rem 0;
+}
+nav a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--gv);transition:width .3s cubic-bezier(.4,0,.2,1);}
+nav a:hover{color:var(--t);}
+nav a:hover::after{width:100%;}
+.npill{
+  display:flex;align-items:center;gap:8px;
+  padding:.6rem 1.5rem;
+  background:var(--gv);
+  border-radius:100px;
+  color:#fff!important;font-weight:600!important;font-size:.85rem;
+  box-shadow:0 4px 20px rgba(124,58,237,.4),inset 0 1px 0 rgba(255,255,255,.15);
+  transition:all .25s!important;
+}
+.npill::after{display:none!important;}
+.npill:hover{box-shadow:0 8px 32px rgba(124,58,237,.6);transform:translateY(-2px)!important;}
+.mbtn{display:none;background:none;border:1px solid var(--b2);color:var(--t);padding:.5rem .9rem;border-radius:10px;cursor:pointer;font-size:1rem;transition:border-color .2s;}
 
-        @keyframes drift {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33%       { transform: translate(40px, -30px) scale(1.05); }
-            66%       { transform: translate(-30px, 50px) scale(0.97); }
-        }
+/* ════════════════════════════════════════
+   HERO
+════════════════════════════════════════ */
+.hero{
+  position:relative;z-index:10;
+  min-height:100svh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:8rem 2rem 5rem;
+  overflow:hidden;
+}
 
-        /* ── PARTICLES ── */
-        .particles {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 1;
-        }
-        .p {
-            position: absolute;
-            width: 2px; height: 2px;
-            background: rgba(180,170,255,0.5);
-            border-radius: 50%;
-            animation: rise var(--d, 20s) var(--delay, 0s) linear infinite;
-            bottom: -4px;
-        }
-        @keyframes rise {
-            0%   { transform: translateY(0) translateX(0); opacity: 0; }
-            5%   { opacity: 1; }
-            95%  { opacity: 0.6; }
-            100% { transform: translateY(-100vh) translateX(var(--tx, 30px)); opacity: 0; }
-        }
+/* Animated diagonal lines */
+.hero-lines{
+  position:absolute;inset:0;pointer-events:none;overflow:hidden;
+}
+.hero-lines::before,.hero-lines::after{
+  content:'';position:absolute;
+  background:linear-gradient(90deg,transparent,rgba(124,58,237,.08),transparent);
+  height:1px;width:200%;
+  animation:sweep 8s ease-in-out infinite;
+}
+.hero-lines::before{top:30%;animation-delay:0s;}
+.hero-lines::after{top:65%;animation-delay:4s;}
+@keyframes sweep{0%{transform:translateX(-100%)}100%{transform:translateX(50%)}}
 
-        /* ── HEADER ── */
-        header {
-            position: fixed;
-            top: 0; width: 100%;
-            z-index: 100;
-            padding: 0 2.5rem;
-            height: 68px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(5,5,7,0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid var(--border);
-            transition: background 0.3s;
-        }
+/* Grid */
+.hgrid{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(124,58,237,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,.05) 1px,transparent 1px);
+  background-size:70px 70px;
+  mask-image:radial-gradient(ellipse 90% 80% at 50% 50%,black 10%,transparent 80%);
+}
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 11px;
-            text-decoration: none;
-            color: var(--text);
-        }
-        .logo img {
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            border: 1.5px solid rgba(124,111,255,0.4);
-            box-shadow: 0 0 12px rgba(124,111,255,0.3);
-        }
-        .logo-name {
-            font-family: 'Syne', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: -0.01em;
-        }
-        .logo-tag {
-            font-size: 0.7rem;
-            color: var(--accent-2);
-            font-family: 'DM Mono', monospace;
-            background: rgba(124,111,255,0.12);
-            padding: 2px 7px;
-            border-radius: 20px;
-            border: 1px solid rgba(124,111,255,0.2);
-        }
+/* Floating code snippets */
+.code-float{
+  position:absolute;font-family:'Geist Mono',monospace;font-size:.72rem;
+  color:rgba(167,139,250,.25);pointer-events:none;user-select:none;
+  animation:cfloat var(--cd,20s) var(--cdl,0s) ease-in-out infinite;
+  white-space:nowrap;
+}
+@keyframes cfloat{0%,100%{transform:translateY(0) rotate(var(--cr,0deg));opacity:.2}50%{transform:translateY(-20px) rotate(var(--cr,0deg));opacity:.4}}
 
-        nav { display: flex; gap: 2.5rem; align-items: center; }
-        nav a {
-            color: var(--text-2);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 0.01em;
-            transition: color 0.25s;
-            position: relative;
-        }
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -2px; left: 0;
-            width: 0; height: 1px;
-            background: var(--accent);
-            transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
-        }
-        nav a:hover { color: var(--text); }
-        nav a:hover::after { width: 100%; }
+.hero-top-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:6px 20px 6px 8px;
+  background:rgba(124,58,237,.08);
+  border:1px solid rgba(124,58,237,.2);
+  border-radius:100px;font-size:.78rem;font-weight:500;color:var(--v3);
+  margin-bottom:2.5rem;
+  animation:fu .9s cubic-bezier(.4,0,.2,1) both;
+  backdrop-filter:blur(12px);
+  box-shadow:0 0 20px rgba(124,58,237,.08),inset 0 1px 0 rgba(255,255,255,.05);
+}
+.badge-ic{
+  width:26px;height:26px;background:var(--gv);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:.65rem;
+  box-shadow:0 0 10px rgba(124,58,237,.5);
+}
+.ldot{width:6px;height:6px;background:#4ade80;border-radius:50%;box-shadow:0 0 8px #4ade80;animation:lp 2s ease-in-out infinite;flex-shrink:0;}
+@keyframes lp{0%,100%{opacity:1;box-shadow:0 0 8px #4ade80}50%{opacity:.5;box-shadow:0 0 16px #4ade80}}
 
-        .nav-cta {
-            padding: 0.5rem 1.25rem;
-            background: var(--accent);
-            color: #fff !important;
-            border-radius: 8px;
-            font-weight: 500 !important;
-            transition: all 0.25s !important;
-            box-shadow: 0 0 20px rgba(124,111,255,0.3);
-        }
-        .nav-cta::after { display: none !important; }
-        .nav-cta:hover {
-            background: var(--accent-2) !important;
-            box-shadow: 0 0 30px rgba(124,111,255,0.5) !important;
-            transform: translateY(-1px);
-        }
+/* Avatar with holographic border */
+.hav-wrap{
+  position:relative;margin-bottom:2.5rem;
+  animation:fu .9s .1s cubic-bezier(.4,0,.2,1) both;
+}
+.hav-glow{
+  position:absolute;inset:-20px;border-radius:50%;
+  background:radial-gradient(circle,rgba(124,58,237,.25),transparent 70%);
+  animation:pulse-g 3s ease-in-out infinite;
+}
+@keyframes pulse-g{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.15);opacity:1}}
+.hav-ring{
+  position:absolute;inset:-6px;border-radius:50%;
+  background:conic-gradient(from 0deg,#7c3aed,#ec4899,#22d3ee,#7c3aed);
+  animation:spin-r 4s linear infinite;
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),black calc(100% - 2px));
+  mask:radial-gradient(farthest-side,transparent calc(100% - 2px),black calc(100% - 2px));
+}
+@keyframes spin-r{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.hav{
+  width:120px;height:120px;border-radius:50%;display:block;position:relative;
+  border:2px solid rgba(124,58,237,.1);
+  box-shadow:0 0 0 6px rgba(124,58,237,.06);
+  animation:fl 5s 1s ease-in-out infinite;
+}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
 
-        .mobile-menu {
-            display: none;
-            background: none;
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 0.5rem 0.8rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: border-color 0.2s;
-        }
-        .mobile-menu:hover { border-color: var(--border-hover); }
+.hkick{
+  font-family:'Geist Mono',monospace;
+  font-size:.8rem;font-weight:400;color:var(--t3);
+  letter-spacing:.2em;text-transform:uppercase;
+  margin-bottom:.8rem;
+  animation:fu .9s .18s cubic-bezier(.4,0,.2,1) both;
+}
 
-        /* ── MAIN ── */
-        main { padding-top: 68px; position: relative; z-index: 10; }
+.htitle{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(5.5rem,15vw,11rem);
+  line-height:.88;letter-spacing:.03em;
+  margin-bottom:1.8rem;
+  animation:fu .9s .25s cubic-bezier(.4,0,.2,1) both;
+}
+.htitle .line1{
+  display:block;
+  background:var(--gv);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 60px rgba(124,58,237,.5));
+}
+.htitle .line2{
+  display:block;
+  -webkit-text-stroke:1.5px rgba(255,255,255,.12);
+  -webkit-text-fill-color:transparent;
+  letter-spacing:.06em;
+}
+.htitle .line3{
+  display:block;font-size:clamp(1.8rem,4vw,3rem);
+  letter-spacing:.35em;
+  background:linear-gradient(135deg,var(--v2),var(--cy2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-top:.3rem;
+}
 
-        /* ── HERO ── */
-        .hero {
-            min-height: calc(100vh - 68px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 6rem 2rem 4rem;
-        }
+.hsub{
+  font-size:1.1rem;color:var(--t2);max-width:560px;
+  margin:0 auto 3rem;font-weight:300;line-height:1.85;
+  animation:fu .9s .35s cubic-bezier(.4,0,.2,1) both;
+}
+.hsub strong{color:var(--v3);font-weight:500;}
 
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 16px;
-            background: rgba(124,111,255,0.1);
-            border: 1px solid rgba(124,111,255,0.25);
-            border-radius: 100px;
-            font-size: 0.8rem;
-            color: var(--accent-2);
-            margin-bottom: 2rem;
-            font-family: 'DM Mono', monospace;
-            animation: fadeSlideUp 0.8s cubic-bezier(0.4,0,0.2,1) both;
-        }
-        .hero-badge i { font-size: 0.65rem; animation: pulse-dot 2s ease-in-out infinite; }
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
+.ctag{
+  display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
+  animation:fu .9s .45s cubic-bezier(.4,0,.2,1) both;
+}
 
-        .hero-avatar {
-            width: 100px; height: 100px;
-            border-radius: 50%;
-            border: 2px solid rgba(124,111,255,0.3);
-            box-shadow: 0 0 60px rgba(124,111,255,0.25), 0 0 0 8px rgba(124,111,255,0.06);
-            margin-bottom: 2rem;
-            animation: fadeSlideUp 0.8s 0.1s cubic-bezier(0.4,0,0.2,1) both, float 4s ease-in-out 1s infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+/* Magnetic buttons */
+.btn-mag{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:1rem 2.2rem;border-radius:16px;
+  font-size:.95rem;font-weight:600;text-decoration:none;
+  position:relative;overflow:hidden;transition:all .3s cubic-bezier(.4,0,.2,1);
+}
+.btn-primary-mag{
+  background:var(--gv);color:#fff;
+  box-shadow:0 6px 40px rgba(124,58,237,.5),0 0 0 1px rgba(124,58,237,.3),inset 0 1px 0 rgba(255,255,255,.2);
+}
+.btn-primary-mag::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.2),transparent 50%,rgba(255,255,255,.05));
+  opacity:0;transition:opacity .3s;
+}
+.btn-primary-mag:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 16px 50px rgba(124,58,237,.65),0 0 0 1px rgba(167,139,250,.5);}
+.btn-primary-mag:hover::before{opacity:1;}
+.btn-secondary-mag{
+  background:rgba(255,255,255,.04);color:var(--t);
+  border:1px solid var(--b2);backdrop-filter:blur(12px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+}
+.btn-secondary-mag:hover{background:rgba(255,255,255,.08);border-color:var(--b3);transform:translateY(-3px);}
 
-        .hero-title {
-            font-family: 'Syne', sans-serif;
-            font-size: clamp(3.2rem, 9vw, 6rem);
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            line-height: 1;
-            margin-bottom: 1.5rem;
-            animation: fadeSlideUp 0.8s 0.2s cubic-bezier(0.4,0,0.2,1) both;
-        }
-        .hero-title span {
-            background: linear-gradient(135deg, #fff 0%, var(--accent-2) 60%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+/* Chips row */
+.hchips{
+  display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;
+  margin-top:4rem;
+  animation:fu .9s .6s cubic-bezier(.4,0,.2,1) both;
+}
+.chip{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:.5rem 1.1rem;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:100px;font-size:.8rem;color:var(--t2);
+  backdrop-filter:blur(10px);
+  transition:all .25s;
+}
+.chip:hover{background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.3);color:var(--v3);}
+.chip i{font-size:.75rem;color:var(--v2);}
 
-        .hero-desc {
-            font-size: 1.1rem;
-            color: var(--text-2);
-            max-width: 560px;
-            margin: 0 auto 2.5rem;
-            font-weight: 300;
-            line-height: 1.75;
-            animation: fadeSlideUp 0.8s 0.3s cubic-bezier(0.4,0,0.2,1) both;
-        }
+/* Live counter */
+.hero-counter{
+  display:flex;align-items:center;gap:1.5rem;
+  margin-top:3.5rem;
+  padding:1rem 2rem;
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--b);
+  border-radius:16px;backdrop-filter:blur(12px);
+  animation:fu .9s .7s cubic-bezier(.4,0,.2,1) both;
+}
+.ctr-item{text-align:center;}
+.ctr-num{
+  font-family:'Geist Mono',monospace;font-size:1.1rem;font-weight:600;
+  background:var(--gv);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;
+}
+.ctr-lbl{font-size:.7rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-top:3px;font-family:'Geist Mono',monospace;}
+.ctr-div{width:1px;height:32px;background:var(--b2);}
+.ctr-live{
+  display:flex;align-items:center;gap:6px;
+  font-family:'Geist Mono',monospace;font-size:.72rem;color:var(--t3);
+}
+.ctr-live::before{content:'';width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80;animation:lp 2s ease-in-out infinite;}
 
-        .cta-row {
-            display: flex;
-            gap: 0.85rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeSlideUp 0.8s 0.4s cubic-bezier(0.4,0,0.2,1) both;
-        }
+/* Scroll */
+.scrl{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:var(--t4);font-family:'Geist Mono',monospace;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;
+  animation:fu 1s 1.1s cubic-bezier(.4,0,.2,1) both;
+}
+.scrl-mouse{
+  width:22px;height:34px;border:1.5px solid var(--t4);border-radius:11px;
+  display:flex;align-items:flex-start;justify-content:center;padding-top:5px;
+}
+.scrl-wheel{width:2px;height:6px;background:var(--v2);border-radius:1px;animation:wheel 2s ease-in-out infinite;}
+@keyframes wheel{0%{transform:translateY(0);opacity:1}100%{transform:translateY(10px);opacity:0}}
 
-        .btn {
-            padding: 0.85rem 1.9rem;
-            border-radius: 10px;
-            font-size: 0.92rem;
-            font-weight: 500;
-            font-family: 'DM Sans', sans-serif;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-            cursor: pointer;
-            border: none;
-        }
-        .btn-primary {
-            background: var(--accent);
-            color: #fff;
-            box-shadow: 0 4px 24px rgba(124,111,255,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
-        }
-        .btn-primary:hover {
-            background: var(--accent-2);
-            box-shadow: 0 8px 32px rgba(124,111,255,0.5);
-            transform: translateY(-2px);
-        }
-        .btn-secondary {
-            background: var(--surface);
-            color: var(--text);
-            border: 1px solid var(--border);
-            backdrop-filter: blur(8px);
-        }
-        .btn-secondary:hover {
-            background: var(--surface-hover);
-            border-color: var(--border-hover);
-            transform: translateY(-2px);
-        }
+@keyframes fu{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 
-        .hero-stats {
-            display: flex;
-            gap: 3rem;
-            margin-top: 4rem;
-            animation: fadeSlideUp 0.8s 0.5s cubic-bezier(0.4,0,0.2,1) both;
-        }
-        .stat-item { text-align: center; }
-        .stat-num {
-            font-family: 'Syne', sans-serif;
-            font-weight: 700;
-            font-size: 1.6rem;
-            color: var(--text);
-            letter-spacing: -0.02em;
-        }
-        .stat-label {
-            font-size: 0.78rem;
-            color: var(--text-3);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-top: 2px;
-        }
-        .stat-divider {
-            width: 1px;
-            background: var(--border);
-            align-self: stretch;
-        }
+/* ════════════════════════════════════════
+   MARQUEE
+════════════════════════════════════════ */
+.mqs{
+  position:relative;z-index:10;
+  border-top:1px solid var(--b);border-bottom:1px solid var(--b);
+  overflow:hidden;padding:.8rem 0;
+  background:linear-gradient(135deg,rgba(124,58,237,.04),rgba(219,39,119,.03));
+}
+.mqs::before,.mqs::after{
+  content:'';position:absolute;top:0;bottom:0;width:120px;z-index:1;pointer-events:none;
+}
+.mqs::before{left:0;background:linear-gradient(90deg,var(--bg1),transparent);}
+.mqs::after{right:0;background:linear-gradient(-90deg,var(--bg1),transparent);}
+.mqt{display:flex;animation:mq 25s linear infinite;white-space:nowrap;}
+.mqt2{display:flex;animation:mq 18s linear infinite reverse;white-space:nowrap;margin-top:0;}
+.mqi{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:0 2rem;font-family:'Geist Mono',monospace;
+  font-size:.76rem;color:var(--t3);letter-spacing:.06em;flex-shrink:0;
+}
+.mqi .dot{color:var(--v2);font-size:.6rem;}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-        @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+/* ════════════════════════════════════════
+   SECTIONS
+════════════════════════════════════════ */
+.s{padding:9rem 0;position:relative;z-index:10;}
+.sa{background:var(--bg1);border-top:1px solid var(--b);border-bottom:1px solid var(--b);}
+.w{max-width:1200px;margin:0 auto;padding:0 2.5rem;}
 
-        /* ── SECTIONS ── */
-        section {
-            padding: 7rem 0;
-            position: relative;
-            z-index: 10;
-        }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+.tag-line{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Geist Mono',monospace;font-size:.72rem;
+  color:var(--v2);letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:1.1rem;
+}
+.tag-line::before{content:'';width:24px;height:1px;background:linear-gradient(90deg,var(--v),var(--pk2));}
+.tag-line::after{content:'';width:12px;height:1px;background:var(--b2);}
 
-        .section-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-family: 'DM Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--accent-2);
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            margin-bottom: 1rem;
-        }
-        .section-label::before {
-            content: '';
-            width: 20px; height: 1px;
-            background: var(--accent);
-        }
+.sec-h{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.8rem,6vw,4.5rem);
+  letter-spacing:.04em;line-height:.95;margin-bottom:.8rem;
+}
+.sec-h .g{background:var(--gv);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sec-h .o{-webkit-text-stroke:1px var(--t4);-webkit-text-fill-color:transparent;}
+.sec-p{color:var(--t2);font-weight:300;font-size:1.02rem;line-height:1.85;max-width:540px;}
 
-        .section-title {
-            font-family: 'Syne', sans-serif;
-            font-size: clamp(2rem, 5vw, 2.8rem);
-            font-weight: 700;
-            letter-spacing: -0.025em;
-            margin-bottom: 1rem;
-        }
-        .section-title span {
-            color: var(--text-2);
-        }
+/* ════════════════════════════════════════
+   HOLOGRAPHIC BENTO
+════════════════════════════════════════ */
+.bento{
+  display:grid;grid-template-columns:repeat(12,1fr);
+  gap:1.5px;background:var(--b);
+  border:1px solid var(--b);border-radius:24px;overflow:hidden;
+  margin-top:4.5rem;
+}
+.bc{
+  background:var(--bg1);padding:2.4rem;
+  position:relative;overflow:hidden;
+  transition:background .35s;
+}
+/* Holographic shimmer */
+.bc::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.025) 50%,transparent 60%);
+  transform:translateX(-100%);transition:transform .6s cubic-bezier(.4,0,.2,1);
+}
+.bc:hover::after{transform:translateX(100%);}
+.bc::before{
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity .4s;
+  background:radial-gradient(circle at var(--cx,50%) var(--cy,50%),rgba(124,58,237,.12),transparent 60%);
+}
+.bc:hover{background:var(--bg2);}
+.bc:hover::before{opacity:1;}
 
-        /* ── FEATURES ── */
-        .features-section { background: var(--bg-1); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.bc1{grid-column:span 7;} .bc2{grid-column:span 5;}
+.bc3{grid-column:span 4;} .bc4{grid-column:span 4;} .bc5{grid-column:span 4;}
+.bc6{grid-column:span 8;} .bc7{grid-column:span 4;}
+.bc8{grid-column:span 12;}
 
-        .features-intro {
-            max-width: 500px;
-            margin-bottom: 4rem;
-        }
-        .features-intro p { color: var(--text-2); font-weight: 300; line-height: 1.75; margin-top: 0.75rem; }
+.bico{
+  width:48px;height:48px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;margin-bottom:1.5rem;border:1px solid;
+  position:relative;
+}
+.bico::before{
+  content:'';position:absolute;inset:-1px;border-radius:15px;
+  background:var(--gv);opacity:0;transition:opacity .3s;
+  z-index:-1;filter:blur(8px);
+}
+.bc:hover .bico::before{opacity:.5;}
+.bv{background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.2);color:var(--v2);}
+.bp{background:rgba(219,39,119,.08);border-color:rgba(219,39,119,.18);color:#f472b6;}
+.bc2i{background:rgba(34,211,238,.08);border-color:rgba(34,211,238,.18);color:#67e8f9;}
+.bg2i{background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.18);color:#86efac;}
+.bor{background:rgba(251,146,60,.08);border-color:rgba(251,146,60,.18);color:#fdba74;}
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5px;
-            background: var(--border);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-        }
+.bc h3{font-size:1.18rem;font-weight:700;margin-bottom:.6rem;letter-spacing:-.015em;}
+.bc p{color:var(--t2);font-size:.88rem;line-height:1.72;font-weight:300;}
 
-        .feature-card {
-            background: var(--bg-1);
-            padding: 2.2rem;
-            transition: background 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(124,111,255,0.08) 0%, transparent 60%);
-            opacity: 0;
-            transition: opacity 0.4s;
-        }
-        .feature-card:hover { background: var(--bg-2); }
-        .feature-card:hover::before { opacity: 1; }
+.bbn{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:5.5rem;letter-spacing:.04em;
+  background:var(--gv);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:.9;margin-bottom:.4rem;
+  filter:drop-shadow(0 0 30px rgba(124,58,237,.3));
+}
+.bbl{font-family:'Geist Mono',monospace;font-size:.72rem;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;}
+.bbars{margin-top:1.5rem;display:flex;flex-direction:column;gap:.9rem;}
+.bbar{cursor:default;}
+.bbar-l{display:flex;justify-content:space-between;font-size:.76rem;color:var(--t2);margin-bottom:.35rem;}
+.bbar-t{height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;}
+.bbar-f{height:100%;border-radius:2px;background:var(--gv);animation:bg 2s cubic-bezier(.4,0,.2,1) both;}
+.bbar-f.c2{background:linear-gradient(135deg,var(--v1),var(--cy2));}
+.bbar-f.c3{background:linear-gradient(135deg,var(--pk2),var(--v2));}
+@keyframes bg{from{width:0}}
 
-        .feature-icon {
-            width: 40px; height: 40px;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(124,111,255,0.12);
-            border-radius: 10px;
-            color: var(--accent-2);
-            font-size: 1rem;
-            margin-bottom: 1.2rem;
-            border: 1px solid rgba(124,111,255,0.2);
-        }
+.btags{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.3rem;}
+.bta{
+  padding:.28rem .7rem;border-radius:5px;font-size:.73rem;
+  font-family:'Geist Mono',monospace;
+  background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.15);color:var(--v3);
+  transition:all .2s;
+}
+.bc:hover .bta{background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.3);}
 
-        .feature-card h3 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.05rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        .feature-card p { color: var(--text-2); font-size: 0.88rem; line-height: 1.65; font-weight: 300; }
+/* Shield SVG card */
+.shield-card{
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.5rem;
+  background:linear-gradient(135deg,rgba(124,58,237,.07),rgba(219,39,119,.05));
+}
+.shield-svg{
+  width:80px;height:80px;position:relative;
+}
+.shield-path{
+  fill:none;stroke:url(#sg);stroke-width:2;
+  stroke-dasharray:250;stroke-dashoffset:250;
+  animation:draw 2s 1s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes draw{to{stroke-dashoffset:0}}
+.shield-pulse{
+  position:absolute;inset:-10px;border-radius:50%;
+  background:radial-gradient(circle,rgba(124,58,237,.15),transparent 70%);
+  animation:sp3 2.5s ease-in-out infinite;
+}
+@keyframes sp3{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.2);opacity:1}}
 
-        /* ── ABOUT ── */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6rem;
-            align-items: center;
-        }
-        .about-content .section-title { margin-bottom: 1.2rem; }
-        .about-content p { color: var(--text-2); font-weight: 300; line-height: 1.8; margin-bottom: 1.25rem; font-size: 1rem; }
+/* Terminal card */
+.term-card{
+  background:rgba(6,4,15,.8);
+  border-radius:12px;padding:1.2rem;font-family:'Geist Mono',monospace;
+  border:1px solid var(--b);margin-top:1.2rem;
+  font-size:.76rem;line-height:1.8;
+}
+.term-bar{display:flex;gap:6px;margin-bottom:.75rem;}
+.tb{width:10px;height:10px;border-radius:50%;}
+.tb1{background:#ff5f56;}.tb2{background:#ffbd2e;}.tb3{background:#27c93f;}
+.term-line{color:var(--t3);}
+.term-line .cmd{color:var(--v2);}
+.term-line .ok{color:#4ade80;}
+.term-line .warn{color:#fbbf24;}
+.term-line .info{color:var(--cy2);}
+.term-cursor{display:inline-block;width:8px;height:14px;background:var(--v2);animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-left:2px;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 
-        .about-list {
-            list-style: none;
-            margin: 2rem 0;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        .about-list li {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--text-2);
-            font-size: 0.92rem;
-            font-weight: 300;
-        }
-        .about-list li::before {
-            content: '';
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: var(--accent);
-            flex-shrink: 0;
-            box-shadow: 0 0 6px rgba(124,111,255,0.5);
-        }
+/* ════════════════════════════════════════
+   ABOUT — 3D TILT
+════════════════════════════════════════ */
+.abl{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:center;}
+.abw{position:relative;display:flex;align-items:center;justify-content:center;}
 
-        .about-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--accent-2);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: gap 0.25s;
-        }
-        .about-link:hover { gap: 12px; }
+/* Orbit system */
+.orbit-sys{position:relative;width:320px;height:320px;}
+.orbit-center{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;
+}
+.orbit-av{
+  width:160px;height:160px;border-radius:50%;
+  border:2px solid transparent;
+  background:linear-gradient(var(--bg2),var(--bg2)) padding-box,
+             conic-gradient(from 0deg,var(--v),var(--pk2),var(--cy2),var(--v)) border-box;
+  box-shadow:0 0 60px rgba(124,58,237,.3),0 0 120px rgba(124,58,237,.1);
+  animation:fl 5s ease-in-out infinite;
+}
 
-        .about-visual {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .about-visual::before {
-            content: '';
-            position: absolute;
-            width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(124,111,255,0.15) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-        .about-visual img {
-            width: 220px; height: 220px;
-            border-radius: 50%;
-            border: 2px solid rgba(124,111,255,0.25);
-            box-shadow: 0 0 80px rgba(124,111,255,0.2), 0 0 0 16px rgba(124,111,255,0.04);
-            position: relative;
-            z-index: 1;
-        }
+.orbit{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(0deg);}
+.orbit-1{width:220px;height:220px;border-radius:50%;border:1px solid rgba(124,58,237,.12);animation:oa 18s linear infinite;}
+.orbit-2{width:300px;height:300px;border-radius:50%;border:1px solid rgba(219,39,119,.1);animation:oa 28s linear infinite reverse;}
+.orbit-3{width:320px;height:320px;border-radius:50%;border:1px dashed rgba(34,211,238,.07);animation:oa 40s linear infinite;}
+@keyframes oa{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
 
-        /* ── COMMANDS ── */
-        .commands-section { background: var(--bg-1); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.orb-dot{
+  position:absolute;border-radius:50%;
+  top:0;left:50%;transform:translate(-50%,-50%);
+}
+.od1{width:10px;height:10px;background:var(--v2);box-shadow:0 0 12px var(--v2);}
+.od2{width:8px;height:8px;background:var(--pk3);box-shadow:0 0 10px var(--pk3);}
+.od3{width:6px;height:6px;background:var(--cy2);box-shadow:0 0 8px var(--cy2);}
 
-        .commands-tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 3rem;
-            overflow-x: auto;
-            padding-bottom: 1px;
-            scrollbar-width: none;
-        }
-        .commands-tabs::-webkit-scrollbar { display: none; }
+.about-stat-chips{
+  display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:1.2rem;
+}
+.asc{
+  padding:.9rem 1rem;background:var(--glass);
+  border:1px solid var(--b);border-radius:12px;text-align:center;
+  transition:all .25s;
+}
+.asc:hover{background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.2);}
+.asc-n{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.04em;background:var(--gv);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.asc-l{font-size:.72rem;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;font-family:'Geist Mono',monospace;}
 
-        .cmd-tab {
-            padding: 0.55rem 1.1rem;
-            background: transparent;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-3);
-            font-size: 0.83rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            white-space: nowrap;
-            font-family: 'DM Sans', sans-serif;
-        }
-        .cmd-tab:hover {
-            border-color: var(--border-hover);
-            color: var(--text-2);
-            background: var(--surface);
-        }
-        .cmd-tab.active {
-            background: rgba(124,111,255,0.12);
-            border-color: rgba(124,111,255,0.35);
-            color: var(--accent-2);
-        }
+.ckl{list-style:none;margin:1.5rem 0;display:flex;flex-direction:column;gap:.8rem;}
+.ckl li{
+  display:flex;align-items:flex-start;gap:12px;
+  color:var(--t2);font-size:.92rem;font-weight:300;line-height:1.5;
+}
+.ck-ic{
+  width:22px;height:22px;border-radius:7px;flex-shrink:0;
+  background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);
+  color:var(--v2);font-size:.7rem;
+  display:flex;align-items:center;justify-content:center;
+  margin-top:1px;transition:all .2s;
+}
+.ckl li:hover .ck-ic{background:rgba(124,58,237,.2);box-shadow:0 0 10px rgba(124,58,237,.3);}
 
-        .command-panel { display: none; }
-        .command-panel.active {
-            display: block;
-            animation: fadeSlideUp 0.35s cubic-bezier(0.4,0,0.2,1) both;
-        }
+.lar{
+  display:inline-flex;align-items:center;gap:8px;
+  color:var(--v2);text-decoration:none;font-size:.9rem;font-weight:500;
+  transition:gap .25s,color .2s;margin-top:.75rem;
+}
+.lar:hover{gap:14px;color:var(--v3);}
 
-        .panel-header { margin-bottom: 2rem; }
-        .panel-header h3 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.4rem;
-        }
-        .panel-header p { color: var(--text-2); font-size: 0.9rem; font-weight: 300; }
+/* ════════════════════════════════════════
+   TESTIMONIALS
+════════════════════════════════════════ */
+.tgrid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;margin-top:4rem;
+}
+.tcard{
+  padding:1.8rem;
+  background:var(--glass);
+  border:1px solid var(--b);
+  border-radius:18px;
+  backdrop-filter:blur(12px);
+  transition:all .3s;
+  position:relative;overflow:hidden;
+}
+.tcard::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--v2),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.tcard:hover{transform:translateY(-4px);border-color:rgba(124,58,237,.2);background:rgba(124,58,237,.04);}
+.tcard:hover::before{opacity:1;}
+.tcard-stars{display:flex;gap:3px;margin-bottom:1rem;color:#f59e0b;font-size:.8rem;}
+.tcard-text{color:var(--t2);font-size:.88rem;line-height:1.75;font-weight:300;font-style:italic;margin-bottom:1.2rem;}
+.tcard-text::before{content:'"';color:var(--v2);font-size:1.5rem;font-style:normal;line-height:0;vertical-align:-.3em;margin-right:3px;}
+.tcard-author{display:flex;align-items:center;gap:10px;}
+.tcard-av{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--gv);display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;font-weight:700;color:#fff;flex-shrink:0;
+}
+.tcard-name{font-size:.85rem;font-weight:600;}
+.tcard-role{font-size:.75rem;color:var(--t3);}
 
-        .toggle-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 1rem;
-            padding: 0.45rem 0.9rem;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-2);
-            font-size: 0.82rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: 'DM Sans', sans-serif;
-            user-select: none;
-        }
-        .toggle-btn:hover { border-color: var(--border-hover); color: var(--text); }
-        .toggle-btn .arrow {
-            display: inline-block;
-            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-            font-size: 0.7rem;
-        }
-        .toggle-btn.open .arrow { transform: rotate(180deg); }
+/* ════════════════════════════════════════
+   COMMANDS — PREMIUM
+════════════════════════════════════════ */
+.cmdlay{display:grid;grid-template-columns:260px 1fr;gap:2rem;margin-top:4.5rem;}
+.cmdside{display:flex;flex-direction:column;gap:.3rem;position:sticky;top:90px;max-height:calc(100vh - 120px);overflow-y:auto;scrollbar-width:none;}
+.cmdside::-webkit-scrollbar{display:none;}
+.csb{
+  display:flex;align-items:center;gap:10px;
+  padding:.65rem .95rem;border-radius:10px;
+  background:transparent;border:1px solid transparent;
+  color:var(--t3);font-size:.85rem;font-weight:500;
+  cursor:pointer;font-family:inherit;text-align:left;
+  transition:all .2s;
+}
+.csb:hover{background:var(--glass);border-color:var(--b);color:var(--t2);}
+.csb.ac{background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.25);color:var(--v2);}
+.csb .cc{margin-left:auto;font-family:'Geist Mono',monospace;font-size:.7rem;color:var(--t4);flex-shrink:0;}
+.csb.ac .cc{color:var(--v2);opacity:.7;}
 
-        .cmd-list {
-            display: none;
-            margin-top: 1.5rem;
-        }
-        .cmd-list.show {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 0.6rem;
-            animation: fadeSlideUp 0.3s cubic-bezier(0.4,0,0.2,1) both;
-        }
+.cmdpanel{display:none;}
+.cmdpanel.ac{display:block;animation:fu .3s cubic-bezier(.4,0,.2,1) both;}
 
-        .cmd-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.85rem 1.1rem;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            transition: all 0.2s;
-            gap: 1rem;
-        }
-        .cmd-item:hover {
-            border-color: rgba(124,111,255,0.3);
-            background: var(--bg-2);
-            transform: translateX(3px);
-        }
-        .cmd-item-name {
-            font-family: 'DM Mono', monospace;
-            font-size: 0.82rem;
-            color: var(--accent-2);
-        }
-        .cmd-item-desc {
-            font-size: 0.8rem;
-            color: var(--text-3);
-            text-align: right;
-            flex-shrink: 0;
-        }
+.cph{
+  padding:1.8rem 2rem;
+  background:rgba(255,255,255,.02);
+  border:1px solid var(--b);
+  border-radius:16px 16px 0 0;border-bottom:none;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;
+}
+.cph-left{}
+.cph h3{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:.05em;}
+.cph p{color:var(--t2);font-size:.83rem;font-weight:300;margin-top:3px;}
+.cph-badge{
+  padding:.35rem .8rem;border-radius:6px;
+  background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);
+  color:var(--v2);font-family:'Geist Mono',monospace;font-size:.75rem;
+  white-space:nowrap;flex-shrink:0;
+}
+.scb{
+  display:flex;align-items:center;gap:7px;
+  padding:.5rem 1.1rem;border-radius:8px;
+  background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.2);
+  color:var(--v2);font-size:.8rem;cursor:pointer;font-family:inherit;
+  transition:all .2s;white-space:nowrap;
+}
+.scb:hover{background:rgba(124,58,237,.15);}
+.scb .ar{transition:transform .3s cubic-bezier(.4,0,.2,1);display:inline-block;}
+.scb.op .ar{transform:rotate(180deg);}
+.cgrid{
+  display:none;
+  border:1px solid var(--b);border-radius:0 0 16px 16px;overflow:hidden;
+}
+.cgrid.sh{display:block;animation:fu .3s cubic-bezier(.4,0,.2,1) both;}
+.cr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.82rem 2rem;border-bottom:1px solid rgba(255,255,255,.04);
+  background:var(--bg);transition:all .2s;gap:1rem;
+}
+.cr:last-child{border-bottom:none;}
+.cr:hover{background:rgba(124,58,237,.04);padding-left:2.4rem;}
+.cn{font-family:'Geist Mono',monospace;font-size:.82rem;color:var(--v2);}
+.cd{font-size:.8rem;color:var(--t4);text-align:right;}
 
-        /* ── PROCESS ── */
-        .process-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1px;
-            background: var(--border);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-        }
+/* ════════════════════════════════════════
+   PROCESS — CONNECTED TIMELINE
+════════════════════════════════════════ */
+.proc-wrap{margin-top:5rem;position:relative;}
+.proc-line{
+  position:absolute;top:3rem;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 5%,var(--v1),var(--pk2),var(--cy2),transparent 95%);
+  opacity:.25;
+}
+.proc{display:grid;grid-template-columns:repeat(4,1fr);gap:0;}
+.ps{
+  text-align:center;padding:0 2rem;
+  position:relative;
+}
+.pn-wrap{
+  position:relative;width:60px;height:60px;
+  margin:0 auto 2rem;z-index:1;
+}
+.pn-glow{
+  position:absolute;inset:-8px;border-radius:50%;
+  background:radial-gradient(circle,rgba(124,58,237,.2),transparent 70%);
+  opacity:0;transition:opacity .3s;
+  animation:pulse-g 3s ease-in-out infinite;
+  animation-play-state:paused;
+}
+.ps:hover .pn-glow{opacity:1;animation-play-state:running;}
+.pn{
+  width:60px;height:60px;border-radius:18px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.06em;
+  border:1px solid rgba(124,58,237,.25);
+  background:var(--bg1);color:var(--v2);
+  transition:all .3s;box-shadow:0 0 0 4px rgba(124,58,237,.04);
+}
+.ps:hover .pn{background:rgba(124,58,237,.15);box-shadow:0 0 24px rgba(124,58,237,.35),0 0 0 6px rgba(124,58,237,.08);border-color:rgba(124,58,237,.5);}
+.ps-icon{font-size:1.2rem;margin-bottom:.8rem;color:var(--v2);transition:transform .3s;}
+.ps:hover .ps-icon{transform:scale(1.2);}
+.ps h3{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.06em;margin-bottom:.5rem;}
+.ps p{color:var(--t2);font-size:.85rem;font-weight:300;line-height:1.6;}
 
-        .process-step {
-            background: var(--bg);
-            padding: 2.5rem 2rem;
-            text-align: center;
-            transition: background 0.3s;
-            position: relative;
-        }
-        .process-step:hover { background: var(--bg-2); }
+/* ════════════════════════════════════════
+   STATS
+════════════════════════════════════════ */
+.srow{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1.5px;background:var(--b);
+  border:1px solid var(--b);border-radius:20px;overflow:hidden;
+}
+.sc2{
+  background:var(--bg1);padding:2.8rem 2rem;text-align:center;
+  transition:background .3s;position:relative;overflow:hidden;
+}
+.sc2::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--gv);transform:scaleX(0);transform-origin:left;
+  transition:transform .4s cubic-bezier(.4,0,.2,1);
+}
+.sc2:hover::before{transform:scaleX(1);}
+.sc2:hover{background:var(--bg2);}
+.sbig{
+  font-family:'Bebas Neue',sans-serif;font-size:3.8rem;letter-spacing:.04em;
+  background:var(--gv);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;margin-bottom:.5rem;
+}
+.slbl{color:var(--t3);font-size:.82rem;font-weight:300;letter-spacing:.06em;}
+.slbl2{color:var(--t4);font-size:.7rem;margin-top:.25rem;font-family:'Geist Mono',monospace;}
 
-        .step-num {
-            font-family: 'DM Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--accent);
-            letter-spacing: 0.1em;
-            margin-bottom: 1.2rem;
-        }
-        .step-icon {
-            width: 48px; height: 48px;
-            background: rgba(124,111,255,0.1);
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 1.2rem;
-            font-size: 1.1rem;
-            color: var(--accent-2);
-            border: 1px solid rgba(124,111,255,0.2);
-        }
-        .process-step h3 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        .process-step p { color: var(--text-2); font-size: 0.85rem; font-weight: 300; }
+/* ════════════════════════════════════════
+   CTA BANNER
+════════════════════════════════════════ */
+.ctab{
+  position:relative;z-index:10;
+  margin:0 2.5rem 9rem;
+  border-radius:28px;overflow:hidden;
+}
+.ctab-border{
+  padding:1px;
+  background:linear-gradient(135deg,rgba(124,58,237,.4),rgba(219,39,119,.3),rgba(34,211,238,.2));
+  border-radius:28px;
+}
+.ctai{
+  padding:5.5rem 5rem;
+  background:linear-gradient(135deg,rgba(124,58,237,.12),rgba(219,39,119,.08),rgba(6,4,15,.95));
+  backdrop-filter:blur(30px);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:4rem;position:relative;border-radius:27px;
+}
+.ctai::before{
+  content:'';position:absolute;inset:0;border-radius:27px;
+  background:radial-gradient(ellipse 60% 80% at 20% 50%,rgba(124,58,237,.18),transparent 70%);
+}
+.ctai::after{
+  content:'';position:absolute;top:-50%;right:-5%;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(219,39,119,.1),transparent 70%);
+  pointer-events:none;
+}
+.ctt{position:relative;z-index:1;}
+.ctt h2{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3rem,5.5vw,4.2rem);
+  letter-spacing:.04em;margin-bottom:.8rem;line-height:.95;
+}
+.ctt h2 span{background:var(--gv);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ctt p{color:var(--t2);font-size:1rem;font-weight:300;max-width:440px;line-height:1.7;}
+.ctbs{display:flex;gap:1rem;flex-wrap:wrap;position:relative;z-index:1;flex-shrink:0;}
 
-        /* ── FOOTER ── */
-        footer {
-            border-top: 1px solid var(--border);
-            background: var(--bg-1);
-            padding: 4rem 0 2rem;
-        }
+/* ════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════ */
+footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5rem;position:relative;z-index:10;}
+.fg{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;gap:4rem;margin-bottom:3rem;}
+.fb p{color:var(--t2);font-size:.875rem;font-weight:300;line-height:1.75;margin-top:.85rem;max-width:240px;}
+.fc h5{font-family:'Geist Mono',monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:1.3rem;}
+.fl{list-style:none;display:flex;flex-direction:column;gap:.7rem;}
+.fl a{color:var(--t2);text-decoration:none;font-size:.875rem;font-weight:300;transition:color .2s;}
+.fl a:hover{color:var(--t);}
+.socs{display:flex;gap:.65rem;margin-top:1.3rem;}
+.soc{
+  width:38px;height:38px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--glass);border:1px solid var(--b);
+  color:var(--t2);text-decoration:none;font-size:.9rem;
+  transition:all .25s;
+}
+.soc:hover{background:rgba(124,58,237,.12);border-color:rgba(124,58,237,.3);color:var(--v2);transform:translateY(-2px);}
+.fbot{
+  padding-top:2rem;border-top:1px solid var(--b);
+  display:flex;justify-content:space-between;align-items:center;
+  color:var(--t4);font-size:.8rem;
+}
+.fbot span{font-family:'Geist Mono',monospace;}
+.fbot-right{display:flex;gap:1.5rem;}
+.fbot-right a{color:var(--t4);text-decoration:none;transition:color .2s;}
+.fbot-right a:hover{color:var(--t2);}
 
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 4rem;
-            margin-bottom: 3rem;
-        }
+/* ════════════════════════════════════════
+   REVEAL
+════════════════════════════════════════ */
+.rv{opacity:0;transform:translateY(36px);transition:opacity .8s cubic-bezier(.4,0,.2,1),transform .8s cubic-bezier(.4,0,.2,1);}
+.rv.d1{transition-delay:.12s}.rv.d2{transition-delay:.22s}.rv.d3{transition-delay:.32s}.rv.d4{transition-delay:.42s}
+.rv.vi{opacity:1;transform:translateY(0);}
 
-        .footer-brand p {
-            color: var(--text-2);
-            font-size: 0.88rem;
-            font-weight: 300;
-            line-height: 1.7;
-            margin-top: 0.75rem;
-            max-width: 240px;
-        }
-        .footer-brand .logo { margin-bottom: 0.75rem; }
-
-        .footer-col h5 {
-            font-family: 'Syne', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: var(--text-3);
-            margin-bottom: 1.2rem;
-        }
-        .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
-        .footer-links a {
-            color: var(--text-2);
-            text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 300;
-            transition: color 0.2s;
-        }
-        .footer-links a:hover { color: var(--text); }
-
-        .social-row { display: flex; gap: 0.65rem; }
-        .social-btn {
-            width: 36px; height: 36px;
-            display: flex; align-items: center; justify-content: center;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            color: var(--text-2);
-            text-decoration: none;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-        }
-        .social-btn:hover {
-            border-color: rgba(124,111,255,0.4);
-            color: var(--accent-2);
-            background: rgba(124,111,255,0.1);
-        }
-
-        .footer-bottom {
-            padding-top: 2rem;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--text-3);
-            font-size: 0.82rem;
-        }
-        .footer-bottom span { font-family: 'DM Mono', monospace; }
-
-        /* ── SCROLL REVEAL ── */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
-        }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
-        .reveal-delay-1 { transition-delay: 0.1s; }
-        .reveal-delay-2 { transition-delay: 0.2s; }
-        .reveal-delay-3 { transition-delay: 0.3s; }
-
-        /* ── RESPONSIVE ── */
-        @media (max-width: 1024px) {
-            .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-            .about-visual { order: -1; }
-            .process-grid { grid-template-columns: 1fr 1fr; }
-            .footer-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
-            .footer-brand { grid-column: span 2; }
-        }
-        @media (max-width: 768px) {
-            header { padding: 0 1.25rem; }
-            nav { display: none; position: absolute; top: 68px; left: 0; right: 0; background: rgba(5,5,7,0.97); backdrop-filter: blur(20px); flex-direction: column; padding: 1.5rem; gap: 1rem; border-bottom: 1px solid var(--border); }
-            nav.open { display: flex; }
-            .mobile-menu { display: block; }
-            .hero { padding: 4rem 1.25rem 3rem; }
-            .hero-stats { gap: 1.5rem; }
-            .process-grid { grid-template-columns: 1fr 1fr; }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-            .footer-brand { grid-column: span 2; }
-            .container { padding: 0 1.25rem; }
-        }
-        @media (max-width: 480px) {
-            .hero-stats { gap: 1rem; flex-wrap: wrap; justify-content: center; }
-            .process-grid { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: 1fr; }
-            .footer-brand { grid-column: span 1; }
-            .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
-        }
-    </style>
+/* ════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════ */
+@media(max-width:1100px){
+  .cmdlay{grid-template-columns:1fr;}
+  .cmdside{position:static;max-height:none;flex-direction:row;flex-wrap:wrap;gap:.35rem;}
+  .csb{padding:.45rem .8rem;font-size:.8rem;}
+  .abl{grid-template-columns:1fr;gap:4rem;}
+  .abw{order:-1;}
+  .bc1,.bc2{grid-column:span 12;}
+  .bc3,.bc4,.bc5{grid-column:span 6;}
+  .bc6{grid-column:span 8;}.bc7{grid-column:span 4;}
+  .tgrid{grid-template-columns:1fr 1fr;}
+  .srow{grid-template-columns:1fr 1fr;}
+  .proc{grid-template-columns:1fr 1fr;}
+  .proc-line{display:none;}
+  .fg{grid-template-columns:1fr 1fr;gap:2.5rem;}
+  .fb{grid-column:span 2;}
+}
+@media(max-width:768px){
+  header{padding:.9rem 1.5rem;}header.sc{padding:.7rem 1.5rem;}
+  nav{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(2,1,8,.97);backdrop-filter:blur(24px);flex-direction:column;padding:2rem;gap:1.5rem;border-bottom:1px solid var(--b);}
+  nav.op{display:flex;}
+  .mbtn{display:block;}
+  .htitle{font-size:clamp(4.5rem,20vw,8rem);}
+  .bento{grid-template-columns:1fr;}
+  .bc1,.bc2,.bc3,.bc4,.bc5,.bc6,.bc7,.bc8{grid-column:span 1;}
+  .tgrid{grid-template-columns:1fr;}
+  .w{padding:0 1.5rem;}
+  .ctab{margin:0 1.5rem 6rem;}
+  .ctai{flex-direction:column;padding:3rem 2rem;text-align:center;}
+  .ctt p{margin:0 auto;}
+  .ctbs{justify-content:center;}
+  .srow{grid-template-columns:1fr 1fr;}
+  .proc{grid-template-columns:1fr;}
+  .fg{grid-template-columns:1fr;}
+  .fb{grid-column:auto;}
+  .fbot{flex-direction:column;gap:1rem;text-align:center;}
+  .fbot-right{flex-wrap:wrap;justify-content:center;}
+  body{cursor:auto;}#cur{display:none;}
+  .hero-counter{flex-direction:column;gap:1rem;}
+  .ctr-div{width:60px;height:1px;}
+  .code-float{display:none;}
+}
+</style>
 </head>
 <body>
 
-<!-- Aurora background -->
-<div class="aurora">
-    <div class="aurora-blob"></div>
-    <div class="aurora-blob"></div>
-    <div class="aurora-blob"></div>
+<div class="grain"></div>
+<div id="cur"><div class="c-trail"></div><div class="c-dot"></div><div class="c-ring"></div></div>
+<canvas id="stars"></canvas>
+<div class="mesh">
+  <div class="mb mb1"></div><div class="mb mb2"></div><div class="mb mb3"></div>
+  <div class="mb mb4"></div><div class="mb mb5"></div>
 </div>
 
-<!-- Particles -->
-<div class="particles" id="particles"></div>
-
-<!-- Header -->
-<header id="header">
-    <a href="/" class="logo">
-        <img src="zenox.png" alt="ZenoX">
-        <span class="logo-name">ZenoX</span>
-        <span class="logo-tag">v2.0</span>
+<!-- HEADER -->
+<header id="hdr">
+  <a class="logo" href="/">
+    <img src="zenox.png" alt="ZenoX" class="logo-img">
+    <span class="logo-word">ZENOX</span>
+    <span class="logo-ver">v2.0</span>
+  </a>
+  <button class="mbtn" id="mBtn"><i class="fas fa-bars"></i></button>
+  <nav id="nav">
+    <a href="#features">Features</a>
+    <a href="#about">About</a>
+    <a href="#commands">Commands</a>
+    <a href="#testimonials">Reviews</a>
+    <a href="#process">Process</a>
+    <a href="https://discord.com/oauth2/authorize?client_id=1462047381100036126&permissions=8&integration_type=0&scope=bot" class="npill" target="_blank">
+      <i class="fas fa-shield-halved"></i> Add to Discord
     </a>
-    <button class="mobile-menu" id="mobileBtn" aria-label="Menu">
-        <i class="fas fa-bars"></i>
-    </button>
-    <nav id="nav">
-        <a href="#features">Features</a>
-        <a href="#commands">Commands</a>
-        <a href="#about">About</a>
-        <a href="#process">Process</a>
-        <a href="https://discord.com/oauth2/authorize?client_id=1462047381100036126&permissions=8&integration_type=0&scope=bot" class="nav-cta" target="_blank">Add Bot</a>
-    </nav>
+  </nav>
 </header>
 
-<main>
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-badge">
-            <i class="fas fa-circle"></i>
-            Online &amp; protecting servers
+<!-- HERO -->
+<section class="hero">
+  <div class="hgrid"></div>
+  <div class="hero-lines"></div>
+
+  <!-- Floating code snippets -->
+  <div class="code-float" style="top:15%;left:5%;--cd:18s;--cdl:0s;--cr:-4deg">antinuke.enable()</div>
+  <div class="code-float" style="top:25%;right:7%;--cd:22s;--cdl:-6s;--cr:3deg">threat.neutralize()</div>
+  <div class="code-float" style="top:55%;left:3%;--cd:16s;--cdl:-3s;--cr:-2deg">server.protect()</div>
+  <div class="code-float" style="top:70%;right:5%;--cd:20s;--cdl:-9s;--cr:4deg">guard.active = true</div>
+  <div class="code-float" style="top:40%;left:8%;--cd:24s;--cdl:-12s;--cr:-6deg">/* 0ms response */</div>
+  <div class="code-float" style="top:80%;right:12%;--cd:19s;--cdl:-4s;--cr:2deg">whitelist.add(user)</div>
+
+  <div class="hero-top-badge">
+    <div class="badge-ic"><i class="fas fa-shield-halved" style="color:#fff;font-size:.65rem"></i></div>
+    <div class="ldot"></div>
+    Now protecting Discord servers worldwide
+  </div>
+
+  <div class="hav-wrap">
+    <div class="hav-glow"></div>
+    <div class="hav-ring"></div>
+    <img src="zenox.png" alt="ZenoX" class="hav">
+  </div>
+
+  <p class="hkick">Discord Security Bot</p>
+
+  <h1 class="htitle">
+    <span class="line1">ZENOX</span>
+    <span class="line2">SECURITY</span>
+    <span class="line3">PROTECTION SYSTEM</span>
+  </h1>
+
+  <p class="hsub">
+    <strong>Real-time anti-nuke</strong>, advanced moderation, AI features, music playback,
+    and 24/7 monitoring — all inside one <strong>impossibly powerful</strong> Discord bot.
+  </p>
+
+  <div class="ctag">
+    <a href="https://discord.com/oauth2/authorize?client_id=1462047381100036126&permissions=8&integration_type=0&scope=bot" class="btn-mag btn-primary-mag" target="_blank">
+      <i class="fas fa-plus"></i> Add ZenoX — It's Free
+    </a>
+    <a href="https://discord.gg/4WdpTb9cB4" class="btn-mag btn-secondary-mag" target="_blank">
+      <i class="fab fa-discord"></i> Support Server
+    </a>
+  </div>
+
+  <div class="hchips">
+    <div class="chip"><i class="fas fa-bolt"></i> Instant Setup</div>
+    <div class="chip"><i class="fas fa-shield-halved"></i> Anti-Nuke</div>
+    <div class="chip"><i class="fas fa-music"></i> Music Bot</div>
+    <div class="chip"><i class="fas fa-robot"></i> AI Features</div>
+    <div class="chip"><i class="fas fa-gamepad"></i> 13 Games</div>
+    <div class="chip"><i class="fas fa-ticket"></i> Ticket System</div>
+    <div class="chip"><i class="fas fa-user-check"></i> Verification</div>
+  </div>
+
+  <div class="hero-counter">
+    <div class="ctr-item">
+      <div class="ctr-num" id="cnt-threats">0</div>
+      <div class="ctr-lbl">Threats Blocked Today</div>
+    </div>
+    <div class="ctr-div"></div>
+    <div class="ctr-item">
+      <div class="ctr-num">500+</div>
+      <div class="ctr-lbl">Commands</div>
+    </div>
+    <div class="ctr-div"></div>
+    <div class="ctr-item">
+      <div class="ctr-num">24/7</div>
+      <div class="ctr-lbl">Uptime</div>
+    </div>
+    <div class="ctr-div"></div>
+    <div class="ctr-live">LIVE</div>
+  </div>
+
+  <div class="scrl">
+    <div class="scrl-mouse"><div class="scrl-wheel"></div></div>
+    scroll
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mqs">
+  <div class="mqt" id="mqt"></div>
+</div>
+
+<!-- FEATURES BENTO -->
+<section class="s" id="features">
+  <div class="w">
+    <div class="rv">
+      <div class="tag-line">Capabilities</div>
+      <h2 class="sec-h">BUILT TO <span class="o">DEFEND.</span><br><span class="g">MADE TO LAST.</span></h2>
+      <p class="sec-p">Every tool your server needs — security, entertainment, and automation — engineered to perfection.</p>
+    </div>
+    <div class="bento rv d1">
+      <!-- Big feature -->
+      <div class="bc bc1">
+        <div class="bico bv"><i class="fas fa-shield-halved"></i></div>
+        <h3>Real-Time Anti-Nuke Engine</h3>
+        <p>Millisecond threat detection neutralizes mass bans, channel deletions, webhook attacks, and role escalation the moment they're detected — before any damage reaches your community.</p>
+        <div class="btags">
+          <span class="bta">Mass Ban Guard</span>
+          <span class="bta">Channel Protect</span>
+          <span class="bta">Role Guard</span>
+          <span class="bta">Night Mode</span>
+          <span class="bta">Vanity Guard</span>
+          <span class="bta">Emergency Mode</span>
         </div>
-        <img src="zenox.png" alt="ZenoX" class="hero-avatar">
-        <h1 class="hero-title"><span>ZenoX Bot</span></h1>
-        <p class="hero-desc">Advanced Discord security &amp; moderation. Real-time anti-nuke protection, customizable tools, and 24/7 vigilance for your community.</p>
-        <div class="cta-row">
-            <a href="https://discord.com/oauth2/authorize?client_id=1462047381100036126&permissions=8&integration_type=0&scope=bot" class="btn btn-primary" target="_blank">
-                <i class="fas fa-plus"></i> Add to Server
-            </a>
-            <a href="https://discord.gg/4WdpTb9cB4" class="btn btn-secondary" target="_blank">
-                <i class="fab fa-discord"></i> Support Server
-            </a>
+        <div class="term-card">
+          <div class="term-bar"><div class="tb tb1"></div><div class="tb tb2"></div><div class="tb tb3"></div></div>
+          <div class="term-line"><span class="info">[ ZenoX ]</span> <span class="cmd">antinuke.enable</span></div>
+          <div class="term-line"><span class="ok">✓</span> Anti-nuke protection activated</div>
+          <div class="term-line"><span class="ok">✓</span> Monitoring all server events</div>
+          <div class="term-line"><span class="warn">⚠</span> Threat detected: mass channel delete</div>
+          <div class="term-line"><span class="ok">✓</span> Attacker neutralized in 47ms</div>
+          <div class="term-line"><span class="info">></span> <span class="term-cursor"></span></div>
         </div>
-        <div class="hero-stats">
-            <div class="stat-item">
-                <div class="stat-num">571+</div>
-                <div class="stat-label">Commands</div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-                <div class="stat-num">24/7</div>
-                <div class="stat-label">Uptime</div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-                <div class="stat-num">Free</div>
-                <div class="stat-label">To Use</div>
-            </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="bc bc2" style="display:flex;flex-direction:column;justify-content:space-between;">
+        <div>
+          <div class="bbl">Total Commands</div>
+          <div class="bbn">571</div>
         </div>
-    </section>
-
-    <!-- FEATURES -->
-    <section class="features-section" id="features">
-        <div class="container">
-            <div class="features-intro reveal">
-                <div class="section-label">capabilities</div>
-                <h2 class="section-title">Built for<br><span>serious servers.</span></h2>
-                <p>Everything you need to keep your community safe, engaged, and running smoothly — in a single bot.</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card reveal">
-                    <div class="feature-icon"><i class="fas fa-shield-halved"></i></div>
-                    <h3>Real-Time Protection</h3>
-                    <p>Continuous monitoring and instant threat neutralization around the clock, every day.</p>
-                </div>
-                <div class="feature-card reveal reveal-delay-1">
-                    <div class="feature-icon"><i class="fas fa-sliders"></i></div>
-                    <h3>Fully Customizable</h3>
-                    <p>Tailor every feature to your server's exact needs with granular settings and controls.</p>
-                </div>
-                <div class="feature-card reveal reveal-delay-2">
-                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
-                    <h3>Quick Setup</h3>
-                    <p>Deploy in minutes with smart defaults that work out of the box, no configuration required.</p>
-                </div>
-                <div class="feature-card reveal reveal-delay-3">
-                    <div class="feature-icon"><i class="fas fa-eye"></i></div>
-                    <h3>24/7 Monitoring</h3>
-                    <p>Round-the-clock vigilance with intelligent logging so nothing ever slips through the cracks.</p>
-                </div>
-            </div>
+        <div class="bbars">
+          <div class="bbar">
+            <div class="bbar-l"><span>Antinuke</span><span>22 cmds</span></div>
+            <div class="bbar-t"><div class="bbar-f" style="width:65%"></div></div>
+          </div>
+          <div class="bbar">
+            <div class="bbar-l"><span>Moderation</span><span>38 cmds</span></div>
+            <div class="bbar-t"><div class="bbar-f c2" style="width:95%;animation-delay:.3s"></div></div>
+          </div>
+          <div class="bbar">
+            <div class="bbar-l"><span>Music</span><span>27 cmds</span></div>
+            <div class="bbar-t"><div class="bbar-f c3" style="width:68%;animation-delay:.6s"></div></div>
+          </div>
+          <div class="bbar">
+            <div class="bbar-l"><span>Utility</span><span>26 cmds</span></div>
+            <div class="bbar-t"><div class="bbar-f" style="width:65%;animation-delay:.9s"></div></div>
+          </div>
+          <div class="bbar">
+            <div class="bbar-l"><span>Fun</span><span>26 cmds</span></div>
+            <div class="bbar-t"><div class="bbar-f c2" style="width:65%;animation-delay:1.2s"></div></div>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <!-- ABOUT -->
-    <section id="about">
-        <div class="container">
-            <div class="about-grid">
-                <div class="about-content reveal">
-                    <div class="section-label">about zenox</div>
-                    <h2 class="section-title">Security that<br><span>works for you.</span></h2>
-                    <p>Advanced Discord security ensuring your community stays safe. Real-time protection, customizable settings, and 24/7 monitoring — all in one powerful bot.</p>
-                    <p>Built by server admins who know what real threats look like, ZenoX responds in milliseconds to keep your server intact.</p>
-                    <ul class="about-list">
-                        <li>Real-time threat detection and neutralization</li>
-                        <li>Fully customizable security rules per server</li>
-                        <li>24/7 vigilant protection that never sleeps</li>
-                        <li>Detailed audit logging for every action</li>
-                    </ul>
-                    <a href="#" class="about-link">
-                        Learn more <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-                <div class="about-visual reveal reveal-delay-1">
-                    <img src="zenox.png" alt="ZenoX Bot">
-                </div>
-            </div>
+      <!-- Music -->
+      <div class="bc bc3">
+        <div class="bico bp"><i class="fas fa-music"></i></div>
+        <h3>High-Quality Music</h3>
+        <p>YouTube, Spotify, SoundCloud with queue, 24/7 mode, lyrics, and favorites.</p>
+        <div class="btags" style="margin-top:1rem"><span class="bta">YouTube</span><span class="bta">Spotify</span><span class="bta">SoundCloud</span></div>
+      </div>
+
+      <!-- AI -->
+      <div class="bc bc4">
+        <div class="bico bc2i"><i class="fas fa-robot"></i></div>
+        <h3>AI Powered</h3>
+        <p>Generate images, chat with AI, intelligent automod, and auto profile pictures.</p>
+        <div class="btags" style="margin-top:1rem"><span class="bta">Genimage</span><span class="bta">AI Chat</span><span class="bta">AutoPFP</span></div>
+      </div>
+
+      <!-- Games -->
+      <div class="bc bc5">
+        <div class="bico bg2i"><i class="fas fa-gamepad"></i></div>
+        <h3>13 Games</h3>
+        <p>Chess, Battleship, Blackjack, Wordle, 2048 and more to keep members hooked.</p>
+        <div class="btags" style="margin-top:1rem"><span class="bta">Chess</span><span class="bta">Wordle</span><span class="bta">2048</span></div>
+      </div>
+
+      <!-- Customizable -->
+      <div class="bc bc6">
+        <div class="bico bv" style="margin-bottom:1rem"><i class="fas fa-gears"></i></div>
+        <h3>Infinitely Customizable</h3>
+        <p>Every single module is fully configurable for your server. Set custom whitelists, bypass roles, punishment types, log channels, thresholds, and more. ZenoX adapts completely to how you run your community.</p>
+      </div>
+
+      <!-- Shield card -->
+      <div class="bc bc7 shield-card">
+        <svg class="shield-svg" viewBox="0 0 80 80" fill="none">
+          <defs>
+            <linearGradient id="sg" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnBox">
+              <stop offset="0%" stop-color="#7c3aed"/>
+              <stop offset="50%" stop-color="#ec4899"/>
+              <stop offset="100%" stop-color="#22d3ee"/>
+            </linearGradient>
+          </defs>
+          <path class="shield-path" d="M40 8 L68 18 L68 40 C68 56 54 68 40 72 C26 68 12 56 12 40 L12 18 Z"/>
+          <path class="shield-path" style="animation-delay:.5s;stroke-dasharray:20" d="M30 40 L37 47 L52 32"/>
+        </svg>
+        <div class="shield-pulse"></div>
+        <div style="text-align:center">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.06em;margin-bottom:.3rem">Always On Guard</div>
+          <div style="font-size:.82rem;color:var(--t2);font-weight:300">Deploy in minutes, protected forever</div>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- COMMANDS -->
-    <section class="commands-section" id="commands">
-        <div class="container">
-            <div class="reveal" style="margin-bottom:3rem">
-                <div class="section-label">core modules</div>
-                <h2 class="section-title">Essential <span>tools.</span></h2>
-            </div>
+<!-- STATS -->
+<section class="s sa">
+  <div class="w">
+    <div class="srow rv">
+      <div class="sc2"><div class="sbig">24/7</div><div class="slbl">Always Online</div><div class="slbl2">Zero downtime guarantee</div></div>
+      <div class="sc2"><div class="sbig">500+</div><div class="slbl">Commands</div><div class="slbl2">Across 24 modules</div></div>
+      <div class="sc2"><div class="sbig">13</div><div class="slbl">Mini Games</div><div class="slbl2">Keep your community active</div></div>
+      <div class="sc2"><div class="sbig">FREE</div><div class="slbl">Forever</div><div class="slbl2">No premium paywalls</div></div>
+    </div>
+  </div>
+</section>
 
-            <div class="commands-tabs reveal">
-                <button class="cmd-tab active" data-tab="antinuke">Antinuke</button>
-                <button class="cmd-tab" data-tab="moderation">Moderation</button>
-                <button class="cmd-tab" data-tab="automod">Automod</button>
-                <button class="cmd-tab" data-tab="music">Music</button>
-                <button class="cmd-tab" data-tab="voice">Voice</button>
-                <button class="cmd-tab" data-tab="server">Server</button>
-                <button class="cmd-tab" data-tab="welcomer">Welcomer</button>
-                <button class="cmd-tab" data-tab="reactionrole">Reaction Role</button>
-                <button class="cmd-tab" data-tab="ticket">Ticket</button>
-                <button class="cmd-tab" data-tab="invitetracker">Invite Tracker</button>
-                <button class="cmd-tab" data-tab="verification">Verification</button>
-                <button class="cmd-tab" data-tab="sticky">Sticky</button>
-                <button class="cmd-tab" data-tab="logging">Logging</button>
-                <button class="cmd-tab" data-tab="ignore">Ignore</button>
-                <button class="cmd-tab" data-tab="customrole">Custom Role</button>
-                <button class="cmd-tab" data-tab="ai">AI</button>
-                <button class="cmd-tab" data-tab="giveaway">Giveaway</button>
-                <button class="cmd-tab" data-tab="fun">Fun</button>
-                <button class="cmd-tab" data-tab="general">General</button>
-                <button class="cmd-tab" data-tab="boost">Booster</button>
-                <button class="cmd-tab" data-tab="j2c">JoinToCreate</button>
-                <button class="cmd-tab" data-tab="vanityrole">VanityRole</button>
-                <button class="cmd-tab" data-tab="games">Games</button>
-                <button class="cmd-tab" data-tab="utility">Utility</button>
-            </div>
-
-            <!-- Antinuke -->
-            <div class="command-panel active" id="tab-antinuke">
-                <div class="panel-header">
-                    <h3>Antinuke</h3>
-                    <p>Protect your server from mass destruction</p>
-                    <button class="toggle-btn" onclick="toggleList('list-antinuke', this)">27 commands <span class="arrow">▾</span></button>
-                </div>
-                <div class="cmd-list" id="list-antinuke">
-                    <div class="cmd-item"><span class="cmd-item-name">antinuke enable</span><span class="cmd-item-desc">Enable anti-nuke protection</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">antinuke disable</span><span class="cmd-item-desc">Disable anti-nuke protection</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">whitelist</span><span class="cmd-item-desc">Add user to whitelist</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">whitelist reset</span><span class="cmd-item-desc">Reset whitelist</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">unwhitelist</span><span class="cmd-item-desc">Remove from whitelist</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">whitelisted</span><span class="cmd-item-desc">View whitelisted users</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">extraowner set</span><span class="cmd-item-desc">Set extra owner</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">extraowner view</span><span class="cmd-item-desc">View extra owners</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">extraowner reset</span><span class="cmd-item-desc">Reset extra owners</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">nightmode enable</span><span class="cmd-item-desc">Enable night mode</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">nightmode disable</span><span class="cmd-item-desc">Disable night mode</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">vanityguard enable</span><span class="cmd-item-desc">Enable vanity guard</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">vanityguard disable</span><span class="cmd-item-desc">Disable vanity guard</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">vanityguard wl</span><span class="cmd-item-desc">Vanity guard whitelist</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">emergency enable</span><span class="cmd-item-desc">Enable emergency mode</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">emergency disable</span><span class="cmd-item-desc">Disable emergency mode</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">emergency role add</span><span class="cmd-item-desc">Add emergency role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">emergency role remove</span><span class="cmd-item-desc">Remove emergency role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">emergency role list</span><span class="cmd-item-desc">List emergency roles</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">emergency authorise add</span><span class="cmd-item-desc">Authorize emergency user</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">emergency authorise remove</span><span class="cmd-item-desc">Remove authorization</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">emgs</span><span class="cmd-item-desc">Emergency settings</span></div>
-                </div>
-            </div>
-
-            <!-- Moderation -->
-            <div class="command-panel" id="tab-moderation">
-                <div class="panel-header">
-                    <h3>Moderation</h3>
-                    <p>Complete moderation toolkit for server management</p>
-                    <button class="toggle-btn" onclick="toggleList('list-moderation', this)">38 commands <span class="arrow">▾</span></button>
-                </div>
-                <div class="cmd-list" id="list-moderation">
-                    <div class="cmd-item"><span class="cmd-item-name">ban</span><span class="cmd-item-desc">Ban a user</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">unban</span><span class="cmd-item-desc">Unban a user</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">kick</span><span class="cmd-item-desc">Kick a user</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">mute</span><span class="cmd-item-desc">Mute a user</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">warn</span><span class="cmd-item-desc">Warn a user</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">clearwarns</span><span class="cmd-item-desc">Clear user warnings</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">nick</span><span class="cmd-item-desc">Change user nickname</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">slowmode</span><span class="cmd-item-desc">Set channel slowmode</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">unslowmode</span><span class="cmd-item-desc">Remove slowmode</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">audit</span><span class="cmd-item-desc">View audit logs</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">kickrole</span><span class="cmd-item-desc">Kick all with role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">banrole</span><span class="cmd-item-desc">Ban all with role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">lock</span><span class="cmd-item-desc">Lock a channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">unlock</span><span class="cmd-item-desc">Unlock a channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">lockall</span><span class="cmd-item-desc">Lock all channels</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">unlockall</span><span class="cmd-item-desc">Unlock all channels</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">hide</span><span class="cmd-item-desc">Hide a channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">unhide</span><span class="cmd-item-desc">Unhide a channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">hideall</span><span class="cmd-item-desc">Hide all channels</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">unhideall</span><span class="cmd-item-desc">Unhide all channels</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">clear</span><span class="cmd-item-desc">Purge messages</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">nuke</span><span class="cmd-item-desc">Clone and delete channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">snipe</span><span class="cmd-item-desc">View deleted messages</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">role</span><span class="cmd-item-desc">Manage user roles</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">role create</span><span class="cmd-item-desc">Create new role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">role delete</span><span class="cmd-item-desc">Delete role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">role rename</span><span class="cmd-item-desc">Rename role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">role temp</span><span class="cmd-item-desc">Temporary role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">steal</span><span class="cmd-item-desc">Steal emoji/sticker</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">enlarge</span><span class="cmd-item-desc">Enlarge emoji</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">clone</span><span class="cmd-item-desc">Clone channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">deleteemoji</span><span class="cmd-item-desc">Delete emoji</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">deletesticker</span><span class="cmd-item-desc">Delete sticker</span></div>
-                </div>
-            </div>
-
-            <!-- Automod -->
-            <div class="command-panel" id="tab-automod">
-                <div class="panel-header"><h3>Automod</h3><p>Automated moderation system</p>
-                    <button class="toggle-btn" onclick="toggleList('list-automod', this)">17 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-automod">
-                    <div class="cmd-item"><span class="cmd-item-name">automod enable</span><span class="cmd-item-desc">Enable automod</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">automod disable</span><span class="cmd-item-desc">Disable automod</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">automod punishment</span><span class="cmd-item-desc">Set punishment type</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">automod config</span><span class="cmd-item-desc">View automod config</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">automod logging</span><span class="cmd-item-desc">Set logging channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">automod ignore channel</span><span class="cmd-item-desc">Ignore channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">automod ignore role</span><span class="cmd-item-desc">Ignore role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">blacklistword add</span><span class="cmd-item-desc">Add blacklisted word</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">blacklistword remove</span><span class="cmd-item-desc">Remove blacklisted word</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">blacklistword reset</span><span class="cmd-item-desc">Reset blacklist</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">blacklistword config</span><span class="cmd-item-desc">View blacklist config</span></div>
-                </div>
-            </div>
-
-            <!-- Music -->
-            <div class="command-panel" id="tab-music">
-                <div class="panel-header"><h3>Music</h3><p>High-quality music playback for your voice channels</p>
-                    <button class="toggle-btn" onclick="toggleList('list-music', this)">27 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-music">
-                    <div class="cmd-item"><span class="cmd-item-name">play</span><span class="cmd-item-desc">Play a song</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">playnext</span><span class="cmd-item-desc">Add to front of queue</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">pause</span><span class="cmd-item-desc">Pause playback</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">resume</span><span class="cmd-item-desc">Resume playback</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">skip</span><span class="cmd-item-desc">Skip current track</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">previous</span><span class="cmd-item-desc">Play previous track</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">stop</span><span class="cmd-item-desc">Stop and clear queue</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">seek</span><span class="cmd-item-desc">Seek to timestamp</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">volume</span><span class="cmd-item-desc">Adjust volume</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">loop</span><span class="cmd-item-desc">Toggle loop mode</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">queue</span><span class="cmd-item-desc">View music queue</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">nowplaying</span><span class="cmd-item-desc">Current track info</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">shuffle</span><span class="cmd-item-desc">Shuffle queue</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">lyrics</span><span class="cmd-item-desc">Get song lyrics</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">youtube</span><span class="cmd-item-desc">Search YouTube</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">soundcloud</span><span class="cmd-item-desc">Search SoundCloud</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">spotify</span><span class="cmd-item-desc">Play from Spotify</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">247</span><span class="cmd-item-desc">24/7 mode toggle</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">favorite</span><span class="cmd-item-desc">Add to favorites</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">favorites</span><span class="cmd-item-desc">View favorites</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">playfavorite</span><span class="cmd-item-desc">Play from favorites</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">musicstats</span><span class="cmd-item-desc">Music statistics</span></div>
-                </div>
-            </div>
-
-            <!-- Voice -->
-            <div class="command-panel" id="tab-voice">
-                <div class="panel-header"><h3>Voice</h3><p>Advanced voice channel management</p>
-                    <button class="toggle-btn" onclick="toggleList('list-voice', this)">12 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-voice">
-                    <div class="cmd-item"><span class="cmd-item-name">voice mute</span><span class="cmd-item-desc">Mute in voice</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">voice unmute</span><span class="cmd-item-desc">Unmute in voice</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">voice deafen</span><span class="cmd-item-desc">Deafen in voice</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">voice undeafen</span><span class="cmd-item-desc">Undeafen in voice</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">voice kick</span><span class="cmd-item-desc">Kick from voice</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">voice move</span><span class="cmd-item-desc">Move users</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">voice pull</span><span class="cmd-item-desc">Pull to your channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">voice lock</span><span class="cmd-item-desc">Lock voice channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">voice unlock</span><span class="cmd-item-desc">Unlock voice channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">voice private</span><span class="cmd-item-desc">Make private</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">voice unprivate</span><span class="cmd-item-desc">Make public</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">vcrole</span><span class="cmd-item-desc">Voice channel roles</span></div>
-                </div>
-            </div>
-
-            <!-- Server -->
-            <div class="command-panel" id="tab-server">
-                <div class="panel-header"><h3>Server</h3><p>Automated server setup and configuration</p>
-                    <button class="toggle-btn" onclick="toggleList('list-server', this)">17 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-server">
-                    <div class="cmd-item"><span class="cmd-item-name">autorole</span><span class="cmd-item-desc">Setup auto roles</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">autorole config</span><span class="cmd-item-desc">Configure autorole</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">autorole reset all</span><span class="cmd-item-desc">Reset all autoroles</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">autorole humans</span><span class="cmd-item-desc">Autorole for humans</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">autorole bots</span><span class="cmd-item-desc">Autorole for bots</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">autoresponder</span><span class="cmd-item-desc">Setup auto responses</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">autoresponder create</span><span class="cmd-item-desc">Create autoresponder</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">autoresponder edit</span><span class="cmd-item-desc">Edit autoresponder</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">autoresponder delete</span><span class="cmd-item-desc">Delete autoresponder</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">react add</span><span class="cmd-item-desc">Add auto reaction</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">react remove</span><span class="cmd-item-desc">Remove auto reaction</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">react list</span><span class="cmd-item-desc">List auto reactions</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">fastgreet_add</span><span class="cmd-item-desc">Add fast greet</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">fastgreet_remove</span><span class="cmd-item-desc">Remove fast greet</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">fastgreet_list</span><span class="cmd-item-desc">List fast greets</span></div>
-                </div>
-            </div>
-
-            <!-- Welcomer -->
-            <div class="command-panel" id="tab-welcomer">
-                <div class="panel-header"><h3>Welcomer</h3><p>Greeting and welcome message management</p>
-                    <button class="toggle-btn" onclick="toggleList('list-welcomer', this)">7 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-welcomer">
-                    <div class="cmd-item"><span class="cmd-item-name">greet setup</span><span class="cmd-item-desc">Setup welcome system</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">greet reset</span><span class="cmd-item-desc">Reset configuration</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">greet channel</span><span class="cmd-item-desc">Set welcome channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">greet config</span><span class="cmd-item-desc">View welcome config</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">greet autodelete</span><span class="cmd-item-desc">Auto delete messages</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">greet edit</span><span class="cmd-item-desc">Edit welcome message</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">greet test</span><span class="cmd-item-desc">Test welcome message</span></div>
-                </div>
-            </div>
-
-            <!-- Reaction Role -->
-            <div class="command-panel" id="tab-reactionrole">
-                <div class="panel-header"><h3>Reaction Role</h3><p>Reaction role management system</p>
-                    <button class="toggle-btn" onclick="toggleList('list-reactionrole', this)">4 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-reactionrole">
-                    <div class="cmd-item"><span class="cmd-item-name">reactionrole add</span><span class="cmd-item-desc">Add reaction role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">reactionrole remove</span><span class="cmd-item-desc">Remove reaction role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">reactionrole list</span><span class="cmd-item-desc">List all reaction roles</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">reactionrole reset</span><span class="cmd-item-desc">Reset all reaction roles</span></div>
-                </div>
-            </div>
-
-            <!-- Ticket -->
-            <div class="command-panel" id="tab-ticket">
-                <div class="panel-header"><h3>Ticket</h3><p>Ticket and support system</p>
-                    <button class="toggle-btn" onclick="toggleList('list-ticket', this)">6 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-ticket">
-                    <div class="cmd-item"><span class="cmd-item-name">ticket setup</span><span class="cmd-item-desc">Setup ticket system</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">ticket close</span><span class="cmd-item-desc">Close a ticket</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">ticket claim</span><span class="cmd-item-desc">Claim a ticket</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">ticket lock</span><span class="cmd-item-desc">Lock a ticket</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">ticket unlock</span><span class="cmd-item-desc">Unlock a ticket</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">ticket transcript</span><span class="cmd-item-desc">Get ticket transcript</span></div>
-                </div>
-            </div>
-
-            <!-- Invite Tracker -->
-            <div class="command-panel" id="tab-invitetracker">
-                <div class="panel-header"><h3>Invite Tracker</h3><p>Track and manage server invites</p>
-                    <button class="toggle-btn" onclick="toggleList('list-invitetracker', this)">4 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-invitetracker">
-                    <div class="cmd-item"><span class="cmd-item-name">invites</span><span class="cmd-item-desc">Check user invites</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">inviteleaderboard</span><span class="cmd-item-desc">Invite leaderboard</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">addinvites</span><span class="cmd-item-desc">Add fake invites</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">invitelogging</span><span class="cmd-item-desc">Configure invite logging</span></div>
-                </div>
-            </div>
-
-            <!-- Verification -->
-            <div class="command-panel" id="tab-verification">
-                <div class="panel-header"><h3>Verification</h3><p>User verification system</p>
-                    <button class="toggle-btn" onclick="toggleList('list-verification', this)">7 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-verification">
-                    <div class="cmd-item"><span class="cmd-item-name">verification setup</span><span class="cmd-item-desc">Setup verification</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">verification reset</span><span class="cmd-item-desc">Reset verification</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">verification enable</span><span class="cmd-item-desc">Enable verification</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">verification disable</span><span class="cmd-item-desc">Disable verification</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">verification logs</span><span class="cmd-item-desc">View verification logs</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">verification status</span><span class="cmd-item-desc">Check status</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">verification verify</span><span class="cmd-item-desc">Manually verify user</span></div>
-                </div>
-            </div>
-
-            <!-- Sticky -->
-            <div class="command-panel" id="tab-sticky">
-                <div class="panel-header"><h3>Sticky</h3><p>Advanced sticky message system</p>
-                    <button class="toggle-btn" onclick="toggleList('list-sticky', this)">6 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-sticky">
-                    <div class="cmd-item"><span class="cmd-item-name">stickymessage setup</span><span class="cmd-item-desc">Setup sticky message</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">stickymessage remove</span><span class="cmd-item-desc">Remove sticky message</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">stickymessage edit</span><span class="cmd-item-desc">Edit sticky message</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">stickymessage toggle</span><span class="cmd-item-desc">Toggle sticky message</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">stickymessage list</span><span class="cmd-item-desc">List sticky messages</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">stickymessage config</span><span class="cmd-item-desc">View sticky config</span></div>
-                </div>
-            </div>
-
-            <!-- Logging -->
-            <div class="command-panel" id="tab-logging">
-                <div class="panel-header"><h3>Logging</h3><p>Advanced logging and audit system</p>
-                    <button class="toggle-btn" onclick="toggleList('list-logging', this)">2 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-logging">
-                    <div class="cmd-item"><span class="cmd-item-name">loggingsetup</span><span class="cmd-item-desc">Setup server logging</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">removelogs</span><span class="cmd-item-desc">Remove logging config</span></div>
-                </div>
-            </div>
-
-            <!-- Ignore -->
-            <div class="command-panel" id="tab-ignore">
-                <div class="panel-header"><h3>Ignore</h3><p>Bot ignore and exemption system</p>
-                    <button class="toggle-btn" onclick="toggleList('list-ignore', this)">4 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-ignore">
-                    <div class="cmd-item"><span class="cmd-item-name">ignore command</span><span class="cmd-item-desc">Ignore specific commands</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">ignore channel</span><span class="cmd-item-desc">Ignore specific channels</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">ignore user</span><span class="cmd-item-desc">Ignore specific users</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">ignore bypass</span><span class="cmd-item-desc">Manage ignore bypass</span></div>
-                </div>
-            </div>
-
-            <!-- Custom Role -->
-            <div class="command-panel" id="tab-customrole">
-                <div class="panel-header"><h3>Custom Role</h3><p>Custom role setup and management</p>
-                    <button class="toggle-btn" onclick="toggleList('list-customrole', this)">10 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-customrole">
-                    <div class="cmd-item"><span class="cmd-item-name">setup</span><span class="cmd-item-desc">Setup custom roles</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">setup create</span><span class="cmd-item-desc">Create custom role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">setup delete</span><span class="cmd-item-desc">Delete custom role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">setup list</span><span class="cmd-item-desc">List custom roles</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">setup config</span><span class="cmd-item-desc">View custom role config</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">setup reset</span><span class="cmd-item-desc">Reset custom roles</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">staff</span><span class="cmd-item-desc">Staff custom role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">vip</span><span class="cmd-item-desc">VIP custom role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">friend</span><span class="cmd-item-desc">Friend custom role</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">guest</span><span class="cmd-item-desc">Guest custom role</span></div>
-                </div>
-            </div>
-
-            <!-- AI -->
-            <div class="command-panel" id="tab-ai">
-                <div class="panel-header"><h3>AI</h3><p>Advanced AI and automation features</p>
-                    <button class="toggle-btn" onclick="toggleList('list-ai', this)">4 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-ai">
-                    <div class="cmd-item"><span class="cmd-item-name">ai activate</span><span class="cmd-item-desc">Activate AI features</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">ai deactivate</span><span class="cmd-item-desc">Deactivate AI features</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">genimage</span><span class="cmd-item-desc">Generate AI images</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">autopfp setup</span><span class="cmd-item-desc">Setup auto profile picture</span></div>
-                </div>
-            </div>
-
-            <!-- Giveaway -->
-            <div class="command-panel" id="tab-giveaway">
-                <div class="panel-header"><h3>Giveaway</h3><p>Giveaway management system</p>
-                    <button class="toggle-btn" onclick="toggleList('list-giveaway', this)">4 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-giveaway">
-                    <div class="cmd-item"><span class="cmd-item-name">gstart</span><span class="cmd-item-desc">Start a giveaway</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">gend</span><span class="cmd-item-desc">End giveaway</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">greroll</span><span class="cmd-item-desc">Reroll winner</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">glist</span><span class="cmd-item-desc">List active giveaways</span></div>
-                </div>
-            </div>
-
-            <!-- Fun -->
-            <div class="command-panel" id="tab-fun">
-                <div class="panel-header"><h3>Fun</h3><p>Fun and entertainment features</p>
-                    <button class="toggle-btn" onclick="toggleList('list-fun', this)">26 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-fun">
-                    <div class="cmd-item"><span class="cmd-item-name">/imagine</span><span class="cmd-item-desc">AI image generation</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">chat</span><span class="cmd-item-desc">Chat with AI</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">translate</span><span class="cmd-item-desc">Translate text</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">gif</span><span class="cmd-item-desc">Search GIFs</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">weather</span><span class="cmd-item-desc">Get weather info</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">8ball</span><span class="cmd-item-desc">Magic 8ball</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">truth</span><span class="cmd-item-desc">Truth or dare truth</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">dare</span><span class="cmd-item-desc">Truth or dare dare</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">ship</span><span class="cmd-item-desc">Ship two users</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">counting enable</span><span class="cmd-item-desc">Enable counting game</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">counting disable</span><span class="cmd-item-desc">Disable counting game</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">counting channel</span><span class="cmd-item-desc">Set counting channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">counting stats</span><span class="cmd-item-desc">Counting statistics</span></div>
-                </div>
-            </div>
-
-            <!-- General -->
-            <div class="command-panel" id="tab-general">
-                <div class="panel-header"><h3>General</h3><p>General and social commands</p>
-                    <button class="toggle-btn" onclick="toggleList('list-general', this)">25+ commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-general">
-                    <div class="cmd-item"><span class="cmd-item-name">status</span><span class="cmd-item-desc">Check status</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">afk</span><span class="cmd-item-desc">Set AFK status</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">poll</span><span class="cmd-item-desc">Create poll</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">snipe</span><span class="cmd-item-desc">Snipe deleted messages</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">avatar</span><span class="cmd-item-desc">View avatar</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">banner</span><span class="cmd-item-desc">View banner</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">servericon</span><span class="cmd-item-desc">View server icon</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">membercount</span><span class="cmd-item-desc">Member count</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">urban</span><span class="cmd-item-desc">Urban dictionary</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">list roles</span><span class="cmd-item-desc">List all roles</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">password</span><span class="cmd-item-desc">Generate password</span></div>
-                </div>
-            </div>
-
-            <!-- Booster -->
-            <div class="command-panel" id="tab-boost">
-                <div class="panel-header"><h3>Booster</h3><p>Server booster features and rewards</p>
-                    <button class="toggle-btn" onclick="toggleList('list-boost', this)">11 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-boost">
-                    <div class="cmd-item"><span class="cmd-item-name">boost channel add</span><span class="cmd-item-desc">Add boost channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">boost channel remove</span><span class="cmd-item-desc">Remove boost channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">boost message</span><span class="cmd-item-desc">Set boost message</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">boost image</span><span class="cmd-item-desc">Set boost image</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">boost autodel</span><span class="cmd-item-desc">Auto delete boost msgs</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">boost test</span><span class="cmd-item-desc">Test boost message</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">boost config</span><span class="cmd-item-desc">View boost config</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">boost reset</span><span class="cmd-item-desc">Reset boost settings</span></div>
-                </div>
-            </div>
-
-            <!-- JoinToCreate -->
-            <div class="command-panel" id="tab-j2c">
-                <div class="panel-header"><h3>JoinToCreate</h3><p>Voice channel automation system</p>
-                    <button class="toggle-btn" onclick="toggleList('list-j2c', this)">2 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-j2c">
-                    <div class="cmd-item"><span class="cmd-item-name">j2c setup</span><span class="cmd-item-desc">Setup join to create</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">j2c reset</span><span class="cmd-item-desc">Reset join to create</span></div>
-                </div>
-            </div>
-
-            <!-- VanityRole -->
-            <div class="command-panel" id="tab-vanityrole">
-                <div class="panel-header"><h3>VanityRole</h3><p>Vanity role requirements system</p>
-                    <button class="toggle-btn" onclick="toggleList('list-vanityrole', this)">3 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-vanityrole">
-                    <div class="cmd-item"><span class="cmd-item-name">vanityroles setup</span><span class="cmd-item-desc">Setup vanity roles</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">vanityroles show</span><span class="cmd-item-desc">Show vanity roles</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">vanityroles reset</span><span class="cmd-item-desc">Reset vanity roles</span></div>
-                </div>
-            </div>
-
-            <!-- Games -->
-            <div class="command-panel" id="tab-games">
-                <div class="panel-header"><h3>Games</h3><p>Interactive entertainment and mini-games</p>
-                    <button class="toggle-btn" onclick="toggleList('list-games', this)">13 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-games">
-                    <div class="cmd-item"><span class="cmd-item-name">chess</span><span class="cmd-item-desc">Play chess</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">battleship</span><span class="cmd-item-desc">Play battleship</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">connect-four</span><span class="cmd-item-desc">Play connect four</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">tic-tac-toe</span><span class="cmd-item-desc">Play tic-tac-toe</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">rps</span><span class="cmd-item-desc">Rock paper scissors</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">blackjack</span><span class="cmd-item-desc">Play blackjack</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">slots</span><span class="cmd-item-desc">Slot machine</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">wordle</span><span class="cmd-item-desc">Play wordle</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">2048</span><span class="cmd-item-desc">Play 2048 puzzle</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">memory-game</span><span class="cmd-item-desc">Memory matching game</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">number-slider</span><span class="cmd-item-desc">Number sliding puzzle</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">lights-out</span><span class="cmd-item-desc">Lights out puzzle</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">country-guesser</span><span class="cmd-item-desc">Guess the country</span></div>
-                </div>
-            </div>
-
-            <!-- Utility -->
-            <div class="command-panel" id="tab-utility">
-                <div class="panel-header"><h3>Utility</h3><p>Essential tools and information commands</p>
-                    <button class="toggle-btn" onclick="toggleList('list-utility', this)">26 commands <span class="arrow">▾</span></button></div>
-                <div class="cmd-list" id="list-utility">
-                    <div class="cmd-item"><span class="cmd-item-name">botinfo</span><span class="cmd-item-desc">Bot information</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">stats</span><span class="cmd-item-desc">Bot statistics</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">ping</span><span class="cmd-item-desc">Check bot latency</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">invite</span><span class="cmd-item-desc">Get bot invite link</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">serverinfo</span><span class="cmd-item-desc">Server information</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">userinfo</span><span class="cmd-item-desc">User information</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">roleinfo</span><span class="cmd-item-desc">Role information</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">channelinfo</span><span class="cmd-item-desc">Channel information</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">badges</span><span class="cmd-item-desc">View profile badges</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">permissions</span><span class="cmd-item-desc">Check permissions</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">reminder</span><span class="cmd-item-desc">Set reminders</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">timer</span><span class="cmd-item-desc">Set timer</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">unbanall</span><span class="cmd-item-desc">Unban all users</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">media setup</span><span class="cmd-item-desc">Setup media channel</span></div>
-                    <div class="cmd-item"><span class="cmd-item-name">media config</span><span class="cmd-item-desc">Media configuration</span></div>
-                </div>
-            </div>
+<!-- ABOUT -->
+<section class="s" id="about">
+  <div class="w">
+    <div class="abl">
+      <div class="abw rv">
+        <div class="orbit-sys">
+          <div class="orbit orbit-1"><div class="orb-dot od1"></div></div>
+          <div class="orbit orbit-2"><div class="orb-dot od2"></div></div>
+          <div class="orbit orbit-3"><div class="orb-dot od3"></div></div>
+          <div class="orbit-center">
+            <img src="zenox.png" alt="ZenoX" class="orbit-av">
+          </div>
         </div>
-    </section>
-
-    <!-- PROCESS -->
-    <section id="process">
-        <div class="container">
-            <div class="reveal" style="text-align:center;margin-bottom:3.5rem">
-                <div class="section-label" style="justify-content:center">execution flow</div>
-                <h2 class="section-title">How it <span>works.</span></h2>
-            </div>
-            <div class="process-grid reveal">
-                <div class="process-step">
-                    <div class="step-num">01</div>
-                    <div class="step-icon"><i class="fas fa-radar" style="font-size:0.9rem">&#x25CE;</i></div>
-                    <h3>Monitor</h3>
-                    <p>Continuously scans all server activity in real-time</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-num">02</div>
-                    <div class="step-icon"><i class="fas fa-brain"></i></div>
-                    <h3>Analyze</h3>
-                    <p>Assesses threats against configured thresholds</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-num">03</div>
-                    <div class="step-icon"><i class="fas fa-bolt"></i></div>
-                    <h3>Act</h3>
-                    <p>Neutralizes threats instantly with precision</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-num">04</div>
-                    <div class="step-icon"><i class="fas fa-file-lines"></i></div>
-                    <h3>Log</h3>
-                    <p>Records every event for full audit transparency</p>
-                </div>
-            </div>
+        <div class="about-stat-chips" style="position:absolute;bottom:-60px;left:0;right:0;max-width:300px;margin:0 auto;">
+          <div class="asc"><div class="asc-n">22+</div><div class="asc-l">Commands Modules</div></div>
+          <div class="asc"><div class="asc-n">0ms</div><div class="asc-l">Threat Response</div></div>
+          <div class="asc"><div class="asc-n">100%</div><div class="asc-l">Open Access</div></div>
+          <div class="asc"><div class="asc-n">∞</div><div class="asc-l">Customizable</div></div>
         </div>
-    </section>
-</main>
+      </div>
+      <div class="abco rv d1" style="padding-top:2rem;">
+        <div class="tag-line">About ZenoX</div>
+        <h2 class="sec-h">SECURITY THAT<br><span class="g">WORKS FOR YOU.</span></h2>
+        <p class="sec-p" style="max-width:100%">ZenoX was built by server admins who've experienced nukes firsthand. We understand what real threats look like, and we engineered a bot that stops them before any damage is done.</p>
+        <p class="sec-p" style="max-width:100%;margin-top:.75rem">From advanced antinuke and intelligent automod to music playback, AI features, and 13 mini-games — ZenoX does it all, so you can focus on what matters: your community.</p>
+        <ul class="ckl">
+          <li><div class="ck-ic"><i class="fas fa-check"></i></div>Sub-millisecond threat detection and response</li>
+          <li><div class="ck-ic"><i class="fas fa-check"></i></div>Granular whitelists, bypass roles & emergency lockdown</li>
+          <li><div class="ck-ic"><i class="fas fa-check"></i></div>Full audit logging for every moderation action</li>
+          <li><div class="ck-ic"><i class="fas fa-check"></i></div>Music, AI, games, giveaways, and 20+ more modules</li>
+          <li><div class="ck-ic"><i class="fas fa-check"></i></div>Free forever — no paywalls, no premium tiers</li>
+        </ul>
+        <a href="#" class="lar">Explore all features <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="s sa" id="testimonials">
+  <div class="w">
+    <div class="rv" style="text-align:center;margin-bottom:1rem">
+      <div class="tag-line" style="justify-content:center">Community Reviews</div>
+      <h2 class="sec-h" style="text-align:center">TRUSTED BY <span class="g">THOUSANDS.</span></h2>
+    </div>
+    <div class="tgrid rv d1">
+      <div class="tcard">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-text">ZenoX saved our server from a nuke attempt in under a second. The attacker didn't even get to the second channel. Absolutely incredible response time.</p>
+        <div class="tcard-author">
+          <div class="tcard-av">R</div>
+          <div><div class="tcard-name">Raven</div><div class="tcard-role">Server Owner — 12k members</div></div>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-text">I've tried dozens of bots. ZenoX is the only one that actually feels like it was built by people who understand how Discord works. The music module alone is worth it.</p>
+        <div class="tcard-author">
+          <div class="tcard-av" style="background:linear-gradient(135deg,#ec4899,#f472b6)">K</div>
+          <div><div class="tcard-name">Kira</div><div class="tcard-role">Community Admin — 25k members</div></div>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-text">The emergency mode feature is genius. We can instantly lock everything down with one command. ZenoX has become absolutely essential for our server.</p>
+        <div class="tcard-author">
+          <div class="tcard-av" style="background:linear-gradient(135deg,#22d3ee,#67e8f9)">Z</div>
+          <div><div class="tcard-name">Zero</div><div class="tcard-role">Discord Moderator — 8k members</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMANDS -->
+<section class="s" id="commands">
+  <div class="w">
+    <div class="rv">
+      <div class="tag-line">Core Modules</div>
+      <h2 class="sec-h">ALL THE <span class="g">TOOLS.</span><br><span class="o">NONE OF THE BLOAT.</span></h2>
+      <p class="sec-p">Browse every command category. Click any module to see every command inside.</p>
+    </div>
+    <div class="cmdlay">
+      <div class="cmdside" id="cmdSide"></div>
+      <div id="cmdMain"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="s sa" id="process">
+  <div class="w" style="text-align:center">
+    <div class="rv">
+      <div class="tag-line" style="justify-content:center">How It Works</div>
+      <h2 class="sec-h" style="text-align:center">EXECUTION <span class="g">FLOW.</span></h2>
+      <p class="sec-p" style="margin:0 auto;text-align:center">From event to neutralization in under 50 milliseconds. Every time.</p>
+    </div>
+    <div class="proc-wrap rv d1">
+      <div class="proc-line"></div>
+      <div class="proc">
+        <div class="ps">
+          <div class="pn-wrap"><div class="pn-glow"></div><div class="pn">01</div></div>
+          <div class="ps-icon"><i class="fas fa-satellite-dish"></i></div>
+          <h3>Monitor</h3>
+          <p>Scans every server event in real-time — bans, channel edits, role changes, webhooks — with zero latency</p>
+        </div>
+        <div class="ps">
+          <div class="pn-wrap"><div class="pn-glow"></div><div class="pn">02</div></div>
+          <div class="ps-icon"><i class="fas fa-brain"></i></div>
+          <h3>Analyze</h3>
+          <p>Compares activity against your configured thresholds, whitelist rules, and threat patterns intelligently</p>
+        </div>
+        <div class="ps">
+          <div class="pn-wrap"><div class="pn-glow"></div><div class="pn">03</div></div>
+          <div class="ps-icon"><i class="fas fa-bolt"></i></div>
+          <h3>Act</h3>
+          <p>Instantly neutralizes threats — bans attackers, strips roles, restores channels, notifies owners</p>
+        </div>
+        <div class="ps">
+          <div class="pn-wrap"><div class="pn-glow"></div><div class="pn">04</div></div>
+          <div class="ps-icon"><i class="fas fa-file-shield"></i></div>
+          <h3>Log</h3>
+          <p>Records every action with full details to your log channel for complete transparency and accountability</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="ctab rv">
+  <div class="ctab-border">
+    <div class="ctai">
+      <div class="ctt">
+        <h2>READY TO SECURE<br><span>YOUR SERVER?</span></h2>
+        <p>Join thousands of communities already protected by ZenoX. Free forever. No credit card. No catch.</p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.5rem;align-items:center;">
+          <div style="display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--t3);font-family:'Geist Mono',monospace;">
+            <i class="fas fa-check" style="color:#4ade80"></i> Free Forever
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--t3);font-family:'Geist Mono',monospace;">
+            <i class="fas fa-check" style="color:#4ade80"></i> 2-Minute Setup
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--t3);font-family:'Geist Mono',monospace;">
+            <i class="fas fa-check" style="color:#4ade80"></i> No Credit Card
+          </div>
+        </div>
+      </div>
+      <div class="ctbs">
+        <a href="https://discord.com/oauth2/authorize?client_id=1462047381100036126&permissions=8&integration_type=0&scope=bot" class="btn-mag btn-primary-mag" target="_blank">
+          <i class="fas fa-plus"></i> Add ZenoX Free
+        </a>
+        <a href="https://discord.gg/4WdpTb9cB4" class="btn-mag btn-secondary-mag" target="_blank">
+          <i class="fab fa-discord"></i> Join Support
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
-    <div class="container">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <a href="/" class="logo">
-                    <img src="zenox.png" alt="ZenoX">
-                    <span class="logo-name">ZenoX</span>
-                </a>
-                <p>Advanced Discord security &amp; moderation bot. Protecting communities 24/7.</p>
-            </div>
-            <div class="footer-col">
-                <h5>Product</h5>
-                <ul class="footer-links">
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#commands">Commands</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#process">Process</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h5>Legal</h5>
-                <ul class="footer-links">
-                    <li><a href="#">Terms</a></li>
-                    <li><a href="#">Privacy</a></li>
-                    <li><a href="#">Policy</a></li>
-                    <li><a href="#">Refunds</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h5>Connect</h5>
-                <div class="social-row">
-                    <a href="https://discord.gg/4WdpTb9cB4" class="social-btn" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
-                    <a href="#" class="social-btn" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="#" class="social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
+  <div class="w">
+    <div class="fg">
+      <div class="fb">
+        <a class="logo" href="/"><img src="zenox.png" alt="ZenoX" class="logo-img"><span class="logo-word">ZENOX</span></a>
+        <p>Advanced Discord security & moderation. Protecting communities around the clock, every single day.</p>
+        <div class="socs">
+          <a href="https://discord.gg/4WdpTb9cB4" class="soc" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
+          <a href="#" class="soc" title="GitHub"><i class="fab fa-github"></i></a>
+          <a href="#" class="soc" title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="soc" title="Twitter"><i class="fab fa-twitter"></i></a>
         </div>
-        <div class="footer-bottom">
-            <p>© 2025 ZenoX Bot. All rights reserved.</p>
-            <span>Made with ♥</span>
-        </div>
+      </div>
+      <div class="fc"><h5>Product</h5><ul class="fl"><li><a href="#features">Features</a></li><li><a href="#commands">Commands</a></li><li><a href="#about">About</a></li><li><a href="#process">How it works</a></li><li><a href="#testimonials">Reviews</a></li></ul></div>
+      <div class="fc"><h5>Legal</h5><ul class="fl"><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Cookie Policy</a></li><li><a href="#">Refunds</a></li><li><a href="#">DMCA</a></li></ul></div>
+      <div class="fc"><h5>Resources</h5><ul class="fl"><li><a href="#">Documentation</a></li><li><a href="#">Status Page</a></li><li><a href="#">Changelog</a></li><li><a href="#">Contact Us</a></li></ul></div>
     </div>
+    <div class="fbot">
+      <p>© 2025 ZenoX Bot. All rights reserved.</p>
+      <div class="fbot-right">
+        <span>Made with ♥ for Discord</span>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </div>
 </footer>
 
 <script>
-    // ── PARTICLES ──
-    const container = document.getElementById('particles');
-    for (let i = 0; i < 60; i++) {
-        const p = document.createElement('div');
-        p.className = 'p';
-        p.style.left = Math.random() * 100 + '%';
-        p.style.setProperty('--d', (Math.random() * 20 + 12) + 's');
-        p.style.setProperty('--delay', (Math.random() * 15) + 's');
-        p.style.setProperty('--tx', ((Math.random() - 0.5) * 80) + 'px');
-        p.style.width = p.style.height = (Math.random() < 0.3 ? 3 : 2) + 'px';
-        container.appendChild(p);
+/* ══════════ DATA ══════════ */
+const MODS=[
+  {id:'antinuke',label:'Antinuke',desc:'Protect from mass destruction',cmds:[['antinuke enable','Enable anti-nuke'],['antinuke disable','Disable anti-nuke'],['whitelist','Add to whitelist'],['whitelist reset','Reset whitelist'],['unwhitelist','Remove from whitelist'],['whitelisted','View whitelisted'],['extraowner set','Set extra owner'],['extraowner view','View extra owners'],['extraowner reset','Reset extra owners'],['nightmode enable','Enable night mode'],['nightmode disable','Disable night mode'],['vanityguard enable','Enable vanity guard'],['vanityguard disable','Disable vanity guard'],['vanityguard wl','Vanity guard whitelist'],['emergency enable','Enable emergency'],['emergency disable','Disable emergency'],['emergency role add','Add emergency role'],['emergency role remove','Remove emergency role'],['emergency role list','List emergency roles'],['emergency authorise add','Authorize user'],['emergency authorise remove','Remove authorization'],['emgs','Emergency settings']]},
+  {id:'moderation',label:'Moderation',desc:'Complete mod toolkit',cmds:[['ban','Ban a user'],['unban','Unban a user'],['kick','Kick a user'],['mute','Mute a user'],['warn','Warn a user'],['clearwarns','Clear warnings'],['nick','Change nickname'],['slowmode','Set slowmode'],['unslowmode','Remove slowmode'],['audit','View audit logs'],['kickrole','Kick all with role'],['banrole','Ban all with role'],['lock','Lock channel'],['unlock','Unlock channel'],['lockall','Lock all'],['unlockall','Unlock all'],['hide','Hide channel'],['unhide','Unhide channel'],['hideall','Hide all'],['unhideall','Unhide all'],['clear','Purge messages'],['nuke','Clone & delete channel'],['snipe','View deleted msgs'],['role','Manage roles'],['role create','Create role'],['role delete','Delete role'],['role rename','Rename role'],['role temp','Temp role'],['steal','Steal emoji/sticker'],['enlarge','Enlarge emoji'],['clone','Clone channel'],['deleteemoji','Delete emoji'],['deletesticker','Delete sticker']]},
+  {id:'automod',label:'Automod',desc:'Automated moderation',cmds:[['automod enable','Enable automod'],['automod disable','Disable automod'],['automod punishment','Set punishment'],['automod config','View config'],['automod logging','Set log channel'],['automod ignore channel','Ignore channel'],['automod ignore role','Ignore role'],['blacklistword add','Add bad word'],['blacklistword remove','Remove bad word'],['blacklistword reset','Reset blacklist'],['blacklistword config','View blacklist']]},
+  {id:'music',label:'Music',desc:'High-quality music playback',cmds:[['play','Play a song'],['playnext','Add to front'],['pause','Pause'],['resume','Resume'],['skip','Skip track'],['previous','Previous track'],['stop','Stop & clear'],['seek','Seek to time'],['volume','Adjust volume'],['loop','Toggle loop'],['queue','View queue'],['nowplaying','Current track'],['shuffle','Shuffle queue'],['lyrics','Get lyrics'],['youtube','Search YouTube'],['soundcloud','Search SoundCloud'],['spotify','Play from Spotify'],['247','24/7 mode'],['favorite','Add to favorites'],['favorites','View favorites'],['playfavorite','Play favorites'],['musicstats','Music stats']]},
+  {id:'voice',label:'Voice',desc:'Voice channel controls',cmds:[['voice mute','Mute in VC'],['voice unmute','Unmute in VC'],['voice deafen','Deafen in VC'],['voice undeafen','Undeafen in VC'],['voice kick','Kick from VC'],['voice move','Move users'],['voice pull','Pull to your VC'],['voice lock','Lock VC'],['voice unlock','Unlock VC'],['voice private','Make private'],['voice unprivate','Make public'],['vcrole','VC roles']]},
+  {id:'server',label:'Server',desc:'Server automation',cmds:[['autorole','Setup autoroles'],['autorole config','Configure'],['autorole reset all','Reset all'],['autorole humans','For humans'],['autorole bots','For bots'],['autoresponder','Setup responses'],['autoresponder create','Create'],['autoresponder edit','Edit'],['autoresponder delete','Delete'],['react add','Add auto reaction'],['react remove','Remove reaction'],['react list','List reactions'],['fastgreet_add','Add fast greet'],['fastgreet_remove','Remove fast greet'],['fastgreet_list','List fast greets']]},
+  {id:'welcomer',label:'Welcomer',desc:'Welcome system',cmds:[['greet setup','Setup welcomer'],['greet reset','Reset config'],['greet channel','Set channel'],['greet config','View config'],['greet autodelete','Auto-delete msgs'],['greet edit','Edit message'],['greet test','Test message']]},
+  {id:'reactionrole',label:'Reaction Role',desc:'Reaction role system',cmds:[['reactionrole add','Add reaction role'],['reactionrole remove','Remove reaction role'],['reactionrole list','List all'],['reactionrole reset','Reset all']]},
+  {id:'ticket',label:'Ticket',desc:'Support ticket system',cmds:[['ticket setup','Setup tickets'],['ticket close','Close ticket'],['ticket claim','Claim ticket'],['ticket lock','Lock ticket'],['ticket unlock','Unlock ticket'],['ticket transcript','Get transcript']]},
+  {id:'invitetracker',label:'Invite Tracker',desc:'Track invites',cmds:[['invites','Check invites'],['inviteleaderboard','Leaderboard'],['addinvites','Add fake invites'],['invitelogging','Configure logging']]},
+  {id:'verification',label:'Verification',desc:'User verification',cmds:[['verification setup','Setup'],['verification reset','Reset'],['verification enable','Enable'],['verification disable','Disable'],['verification logs','View logs'],['verification status','Check status'],['verification verify','Manual verify']]},
+  {id:'sticky',label:'Sticky',desc:'Sticky messages',cmds:[['stickymessage setup','Setup sticky'],['stickymessage remove','Remove sticky'],['stickymessage edit','Edit sticky'],['stickymessage toggle','Toggle sticky'],['stickymessage list','List stickies'],['stickymessage config','View config']]},
+  {id:'logging',label:'Logging',desc:'Audit logging',cmds:[['loggingsetup','Setup logging'],['removelogs','Remove logging']]},
+  {id:'ignore',label:'Ignore',desc:'Bot ignore system',cmds:[['ignore command','Ignore commands'],['ignore channel','Ignore channels'],['ignore user','Ignore users'],['ignore bypass','Manage bypass']]},
+  {id:'customrole',label:'Custom Role',desc:'Custom role system',cmds:[['setup','Setup custom roles'],['setup create','Create role'],['setup delete','Delete role'],['setup list','List roles'],['setup config','View config'],['setup reset','Reset roles'],['staff','Staff role'],['vip','VIP role'],['friend','Friend role'],['guest','Guest role']]},
+  {id:'ai',label:'AI',desc:'AI features',cmds:[['ai activate','Activate AI'],['ai deactivate','Deactivate AI'],['genimage','Generate image'],['autopfp setup','Auto profile pic']]},
+  {id:'giveaway',label:'Giveaway',desc:'Giveaway system',cmds:[['gstart','Start giveaway'],['gend','End giveaway'],['greroll','Reroll winner'],['glist','List giveaways']]},
+  {id:'fun',label:'Fun',desc:'Fun & entertainment',cmds:[['/imagine','AI image gen'],['chat','Chat with AI'],['translate','Translate text'],['gif','Search GIFs'],['weather','Get weather'],['8ball','Magic 8ball'],['truth','Truth'],['dare','Dare'],['ship','Ship users'],['counting enable','Enable counting'],['counting disable','Disable counting'],['counting channel','Set channel'],['counting stats','Counting stats']]},
+  {id:'general',label:'General',desc:'General commands',cmds:[['status','Check status'],['afk','Set AFK'],['poll','Create poll'],['snipe','Snipe messages'],['avatar','View avatar'],['banner','View banner'],['servericon','Server icon'],['membercount','Member count'],['urban','Urban dictionary'],['list roles','List roles'],['password','Generate password']]},
+  {id:'boost',label:'Booster',desc:'Booster rewards',cmds:[['boost channel add','Add boost channel'],['boost channel remove','Remove channel'],['boost message','Set message'],['boost image','Set image'],['boost autodel','Auto-delete'],['boost test','Test message'],['boost config','View config'],['boost reset','Reset']]},
+  {id:'j2c',label:'JoinToCreate',desc:'VC automation',cmds:[['j2c setup','Setup J2C'],['j2c reset','Reset J2C']]},
+  {id:'vanityrole',label:'VanityRole',desc:'Vanity role system',cmds:[['vanityroles setup','Setup vanity'],['vanityroles show','Show roles'],['vanityroles reset','Reset']]},
+  {id:'games',label:'Games',desc:'13 mini-games',cmds:[['chess','Chess'],['battleship','Battleship'],['connect-four','Connect Four'],['tic-tac-toe','Tic-Tac-Toe'],['rps','Rock Paper Scissors'],['blackjack','Blackjack'],['slots','Slot Machine'],['wordle','Wordle'],['2048','2048 Puzzle'],['memory-game','Memory Game'],['number-slider','Number Slider'],['lights-out','Lights Out'],['country-guesser','Country Guesser']]},
+  {id:'utility',label:'Utility',desc:'Tools & info',cmds:[['botinfo','Bot info'],['stats','Bot stats'],['ping','Latency'],['invite','Invite link'],['serverinfo','Server info'],['userinfo','User info'],['roleinfo','Role info'],['channelinfo','Channel info'],['badges','Profile badges'],['permissions','Check perms'],['reminder','Set reminder'],['timer','Set timer'],['unbanall','Unban all'],['media setup','Setup media'],['media config','Media config']]},
+];
+
+/* ══════════ CANVAS STARS ══════════ */
+(function(){
+  const cv=document.getElementById('stars');
+  const ctx=cv.getContext('2d');
+  let W,H,stars=[];
+  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
+  function init(){
+    stars=[];
+    for(let i=0;i<180;i++){
+      stars.push({
+        x:Math.random()*W,y:Math.random()*H,
+        r:Math.random()*1.2+.2,
+        a:Math.random(),da:Math.random()*.005+.002,
+        speed:Math.random()*.3+.1,
+        color:`hsl(${240+Math.random()*60},60%,${70+Math.random()*30}%)`
+      });
     }
-
-    // ── MOBILE MENU ──
-    const mobileBtn = document.getElementById('mobileBtn');
-    const navEl = document.getElementById('nav');
-    mobileBtn.addEventListener('click', () => {
-        navEl.classList.toggle('open');
-        const icon = mobileBtn.querySelector('i');
-        icon.className = navEl.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    stars.forEach(s=>{
+      s.a+=s.da;if(s.a>1||s.a<0)s.da*=-1;
+      s.y-=s.speed;if(s.y<-2)s.y=H+2;
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=s.color;ctx.globalAlpha=s.a*.7;ctx.fill();
     });
+    ctx.globalAlpha=1;
+    requestAnimationFrame(draw);
+  }
+  resize();init();draw();
+  window.addEventListener('resize',()=>{resize();init();});
+})();
 
-    // ── COMMAND TABS ──
-    document.querySelectorAll('.cmd-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            document.querySelectorAll('.cmd-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.command-panel').forEach(p => p.classList.remove('active'));
-            tab.classList.add('active');
-            document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
-        });
-    });
+/* ══════════ BUILD COMMANDS ══════════ */
+const side=document.getElementById('cmdSide'),cmain=document.getElementById('cmdMain');
+MODS.forEach((m,i)=>{
+  const b=document.createElement('button');b.className='csb'+(i===0?' ac':'');b.dataset.id=m.id;
+  b.innerHTML=`${m.label}<span class="cc">${m.cmds.length}</span>`;side.appendChild(b);
+  const p=document.createElement('div');p.className='cmdpanel'+(i===0?' ac':'');p.id='cp-'+m.id;
+  p.innerHTML=`<div class="cph"><div class="cph-left"><h3>${m.label}</h3><p>${m.desc}</p></div><div style="display:flex;gap:.75rem;align-items:center"><span class="cph-badge">${m.cmds.length} cmds</span><button class="scb" onclick="tcg('cg-${m.id}',this)">View all <span class="ar">▾</span></button></div></div><div class="cgrid" id="cg-${m.id}">${m.cmds.map(([n,d])=>`<div class="cr"><span class="cn">${n}</span><span class="cd">${d}</span></div>`).join('')}</div>`;
+  cmain.appendChild(p);
+});
+side.addEventListener('click',e=>{
+  const b=e.target.closest('.csb');if(!b)return;
+  document.querySelectorAll('.csb').forEach(x=>x.classList.remove('ac'));
+  document.querySelectorAll('.cmdpanel').forEach(x=>x.classList.remove('ac'));
+  b.classList.add('ac');document.getElementById('cp-'+b.dataset.id).classList.add('ac');
+  document.querySelectorAll('.cgrid').forEach(g=>g.classList.remove('sh'));
+  document.querySelectorAll('.scb').forEach(x=>x.classList.remove('op'));
+});
+function tcg(id,btn){const g=document.getElementById(id),o=g.classList.contains('sh');document.querySelectorAll('.cgrid').forEach(x=>x.classList.remove('sh'));document.querySelectorAll('.scb').forEach(x=>x.classList.remove('op'));if(!o){g.classList.add('sh');btn.classList.add('op');}}
 
-    // ── TOGGLE COMMANDS ──
-    function toggleList(id, btn) {
-        const list = document.getElementById(id);
-        const isOpen = list.classList.contains('show');
-        document.querySelectorAll('.cmd-list').forEach(l => l.classList.remove('show'));
-        document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('open'));
-        if (!isOpen) {
-            list.classList.add('show');
-            btn.classList.add('open');
-        }
-    }
+/* ══════════ MARQUEE ══════════ */
+const items=['Antinuke Protection','Moderation Suite','Music Playback','AI Image Generation','Giveaway System','Ticket System','Welcome Messages','Reaction Roles','Voice Management','13 Mini Games','Auto Moderation','Invite Tracker','Sticky Messages','Custom Roles','User Verification','24/7 Monitoring','Emergency Mode','Vanity Guard','JoinToCreate','Boost Rewards'];
+const t=document.getElementById('mqt');
+[...items,...items,...items,...items].forEach(x=>{const e=document.createElement('span');e.className='mqi';e.innerHTML=`<span class="dot">✦</span>${x}`;t.appendChild(e);});
 
-    // ── SCROLL REVEAL ──
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+/* ══════════ LIVE THREAT COUNTER ══════════ */
+let threatCount=Math.floor(Math.random()*8000)+15000;
+function animCount(el,target,dur){
+  const start=performance.now();
+  const from=0;
+  function update(now){
+    const p=Math.min((now-start)/dur,1);
+    const val=Math.floor(from+(target-from)*p);
+    el.textContent=val.toLocaleString();
+    if(p<1)requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+const cntEl=document.getElementById('cnt-threats');
+let counted=false;
+function checkCount(){
+  if(!counted&&cntEl){
+    const r=cntEl.getBoundingClientRect();
+    if(r.top<window.innerHeight){counted=true;animCount(cntEl,threatCount,2000);}
+  }
+}
+window.addEventListener('scroll',checkCount);checkCount();
+// Slowly increment
+setInterval(()=>{
+  threatCount+=Math.floor(Math.random()*3);
+  if(counted)cntEl.textContent=threatCount.toLocaleString();
+},3000);
 
-    // ── FEATURE CARD GLOW ──
-    document.querySelectorAll('.feature-card').forEach(card => {
-        card.addEventListener('mousemove', e => {
-            const rect = card.getBoundingClientRect();
-            const x = ((e.clientX - rect.left) / rect.width * 100) + '%';
-            const y = ((e.clientY - rect.top) / rect.height * 100) + '%';
-            card.style.setProperty('--mx', x);
-            card.style.setProperty('--my', y);
-        });
-    });
+/* ══════════ HEADER SCROLL ══════════ */
+window.addEventListener('scroll',()=>document.getElementById('hdr').classList.toggle('sc',scrollY>50));
 
-    // ── SMOOTH SCROLL ──
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', e => {
-            const href = a.getAttribute('href');
-            const target = href !== '#' && document.querySelector(href);
-            if (target) {
-                e.preventDefault();
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                if (navEl.classList.contains('open')) {
-                    navEl.classList.remove('open');
-                    mobileBtn.querySelector('i').className = 'fas fa-bars';
-                }
-            }
-        });
-    });
+/* ══════════ MOBILE MENU ══════════ */
+document.getElementById('mBtn').addEventListener('click',()=>{
+  const n=document.getElementById('nav');n.classList.toggle('op');
+  document.getElementById('mBtn').querySelector('i').className=n.classList.contains('op')?'fas fa-times':'fas fa-bars';
+});
+
+/* ══════════ CURSOR ══════════ */
+const cur=document.getElementById('cur');
+const dot=cur.querySelector('.c-dot'),ring=cur.querySelector('.c-ring'),trail=cur.querySelector('.c-trail');
+let mx=0,my=0,rx=0,ry=0,tx=0,ty=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function raf(){
+  rx+=(mx-rx)*.16;ry+=(my-ry)*.16;ring.style.left=rx+'px';ring.style.top=ry+'px';
+  tx+=(mx-tx)*.06;ty+=(my-ty)*.06;trail.style.left=tx+'px';trail.style.top=ty+'px';
+  requestAnimationFrame(raf);
+})();
+document.querySelectorAll('a,button,.bc,.csb,.cr,.sc2,.ps,.tcard,.asc,.chip').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+});
+
+/* ══════════ REVEAL ══════════ */
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vi');}),{threshold:.08});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+/* ══════════ BENTO GLOW ══════════ */
+document.querySelectorAll('.bc').forEach(c=>c.addEventListener('mousemove',e=>{
+  const r=c.getBoundingClientRect();
+  c.style.setProperty('--cx',((e.clientX-r.left)/r.width*100)+'%');
+  c.style.setProperty('--cy',((e.clientY-r.top)/r.height*100)+'%');
+}));
+
+/* ══════════ SMOOTH SCROLL ══════════ */
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+  const t=a.getAttribute('href');
+  if(t!=='#'&&document.querySelector(t)){
+    e.preventDefault();document.querySelector(t).scrollIntoView({behavior:'smooth',block:'start'});
+    const n=document.getElementById('nav');
+    if(n.classList.contains('op')){n.classList.remove('op');document.getElementById('mBtn').querySelector('i').className='fas fa-bars';}
+  }
+}));
 </script>
 </body>
 </html>
