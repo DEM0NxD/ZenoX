@@ -873,36 +873,218 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
    TEAM SECTION
 ════════════════════════════════════════ */
 .team-section{position:relative;z-index:10;max-width:1100px;margin:0 auto;padding:0 2.5rem 4rem;}
-.dev-featured{display:flex;justify-content:center;margin-bottom:3rem;}
 
-.dev-card{background:var(--glass);border:1px solid var(--b);border-radius:24px;padding:2.8rem 3rem;display:flex;align-items:flex-start;gap:2.5rem;max-width:680px;width:100%;position:relative;overflow:hidden;transition:all .4s cubic-bezier(.4,0,.2,1);}
-.dev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--v2),var(--pk2),transparent);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.4,0,.2,1);}
-.dev-card::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.015) 50%,transparent 60%);transform:translateX(-100%);transition:transform .6s cubic-bezier(.4,0,.2,1);pointer-events:none;}
+/* ── Updated: 3-card grid layout ── */
+.dev-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+  margin-bottom:3rem;
+}
+
+/* Featured (lead dev) spans full width on its own row */
+.dev-grid .dev-card.featured{
+  grid-column:span 3;
+  flex-direction:row;
+  align-items:flex-start;
+}
+
+/* Secondary cards (Manager, Co-Dev) */
+.dev-card{
+  background:var(--glass);
+  border:1px solid var(--b);
+  border-radius:24px;
+  padding:2.2rem;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  transition:all .4s cubic-bezier(.4,0,.2,1);
+}
+.dev-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--v2),var(--pk2),transparent);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .5s cubic-bezier(.4,0,.2,1);
+}
+.dev-card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.015) 50%,transparent 60%);
+  transform:translateX(-100%);
+  transition:transform .6s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;
+}
 .dev-card:hover::before{transform:scaleX(1);}
 .dev-card:hover::after{transform:translateX(100%);}
-.dev-card:hover{background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.3);transform:translateY(-6px);box-shadow:0 20px 60px rgba(124,58,237,.2);}
+.dev-card:hover{
+  background:rgba(124,58,237,.08);
+  border-color:rgba(124,58,237,.3);
+  transform:translateY(-6px);
+  box-shadow:0 20px 60px rgba(124,58,237,.2);
+}
 
-.dev-av-wrap{position:relative;flex-shrink:0;}
-.dev-av-ring{position:absolute;inset:-3px;border-radius:50%;background:conic-gradient(from 0deg,#7c3aed,#ec4899,#a855f7,#7c3aed);animation:spin-r 6s linear infinite;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 2px));}
-.dev-av{width:110px;height:110px;border-radius:50%;object-fit:cover;position:relative;z-index:1;animation:fl 7s ease-in-out infinite;}
-.dev-av-fallback{width:110px;height:110px;border-radius:50%;background:var(--gv);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:#fff;position:relative;z-index:1;}
+/* Featured card overrides */
+.dev-card.featured{
+  flex-direction:row;
+  align-items:flex-start;
+  text-align:left;
+  padding:2.8rem 3rem;
+}
+.dev-card.featured .dev-info{
+  flex:1;
+  min-width:0;
+}
+.dev-card.featured .dev-socials{justify-content:flex-start;}
+.dev-card.featured .dev-stack{justify-content:flex-start;}
 
-.dev-role-badge{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);background:var(--gv);color:#fff;font-family:'Geist Mono',monospace;font-size:.6rem;font-weight:500;letter-spacing:.08em;padding:3px 10px;border-radius:100px;white-space:nowrap;z-index:2;box-shadow:0 4px 12px rgba(124,58,237,.4);}
+/* Manager card — orange/amber accent */
+.dev-card.manager{
+  border-color:rgba(251,146,60,.15);
+}
+.dev-card.manager:hover{
+  background:rgba(251,146,60,.06);
+  border-color:rgba(251,146,60,.35);
+  box-shadow:0 20px 60px rgba(251,146,60,.15);
+}
+.dev-card.manager::before{
+  background:linear-gradient(90deg,transparent,rgba(251,146,60,.6),transparent);
+}
+.dev-card.manager .dev-name{
+  background:linear-gradient(135deg,#fb923c,#f59e0b);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.dev-card.manager .dev-role-badge{
+  background:linear-gradient(135deg,#fb923c,#f59e0b);
+  box-shadow:0 4px 12px rgba(251,146,60,.4);
+}
+.dev-card.manager .dev-av-ring{
+  background:conic-gradient(from 0deg,#fb923c,#f59e0b,#fbbf24,#fb923c);
+}
+.dev-card.manager .stack-tag{
+  background:rgba(251,146,60,.08);
+  border-color:rgba(251,146,60,.2);
+  color:#fdba74;
+}
+.dev-card.manager:hover .stack-tag{
+  background:rgba(251,146,60,.15);
+  border-color:rgba(251,146,60,.35);
+}
+.dev-card.manager .dev-av-fallback{
+  background:linear-gradient(135deg,#fb923c,#f59e0b);
+}
 
-.dev-info{flex:1;min-width:0;}
-.dev-name{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.06em;line-height:1;margin-bottom:.25rem;background:var(--gv);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.dev-handle{font-family:'Geist Mono',monospace;font-size:.73rem;color:var(--t4);margin-bottom:1rem;letter-spacing:.06em;}
-.dev-desc{color:var(--t2);font-size:.88rem;line-height:1.75;margin-bottom:1.3rem;}
+/* Co-Dev card — cyan accent */
+.dev-card.codev{
+  border-color:rgba(34,211,238,.15);
+}
+.dev-card.codev:hover{
+  background:rgba(34,211,238,.06);
+  border-color:rgba(34,211,238,.35);
+  box-shadow:0 20px 60px rgba(34,211,238,.15);
+}
+.dev-card.codev::before{
+  background:linear-gradient(90deg,transparent,rgba(34,211,238,.6),transparent);
+}
+.dev-card.codev .dev-name{
+  background:linear-gradient(135deg,#22d3ee,#67e8f9);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.dev-card.codev .dev-role-badge{
+  background:linear-gradient(135deg,#0891b2,#22d3ee);
+  box-shadow:0 4px 12px rgba(34,211,238,.4);
+}
+.dev-card.codev .dev-av-ring{
+  background:conic-gradient(from 0deg,#0891b2,#22d3ee,#67e8f9,#0891b2);
+}
+.dev-card.codev .stack-tag{
+  background:rgba(34,211,238,.08);
+  border-color:rgba(34,211,238,.2);
+  color:#67e8f9;
+}
+.dev-card.codev:hover .stack-tag{
+  background:rgba(34,211,238,.15);
+  border-color:rgba(34,211,238,.35);
+}
+.dev-card.codev .dev-av-fallback{
+  background:linear-gradient(135deg,#0891b2,#22d3ee);
+}
 
-.dev-stack{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.5rem;}
-.stack-tag{padding:.28rem .75rem;border-radius:6px;font-family:'Geist Mono',monospace;font-size:.68rem;background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.18);color:var(--v3);transition:.2s;}
+.dev-av-wrap{position:relative;flex-shrink:0;margin-bottom:1.2rem;}
+.dev-card.featured .dev-av-wrap{margin-bottom:0;margin-right:0;}
+.dev-av-ring{
+  position:absolute;inset:-3px;border-radius:50%;
+  background:conic-gradient(from 0deg,#7c3aed,#ec4899,#a855f7,#7c3aed);
+  animation:spin-r 6s linear infinite;
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 2px));
+  mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 2px));
+}
+.dev-av{width:90px;height:90px;border-radius:50%;object-fit:cover;position:relative;z-index:1;animation:fl 7s ease-in-out infinite;}
+.dev-card.featured .dev-av{width:110px;height:110px;}
+.dev-av-fallback{
+  width:90px;height:90px;border-radius:50%;
+  background:var(--gv);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:2.4rem;color:#fff;
+  position:relative;z-index:1;
+}
+.dev-card.featured .dev-av-fallback{width:110px;height:110px;font-size:2.8rem;}
+
+.dev-role-badge{
+  position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);
+  background:var(--gv);color:#fff;
+  font-family:'Geist Mono',monospace;font-size:.6rem;font-weight:500;
+  letter-spacing:.08em;padding:3px 10px;border-radius:100px;
+  white-space:nowrap;z-index:2;
+  box-shadow:0 4px 12px rgba(124,58,237,.4);
+}
+
+.dev-info{width:100%;}
+.dev-card.featured .dev-info{width:auto;}
+.dev-name{
+  font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.06em;line-height:1;margin-bottom:.2rem;
+  background:var(--gv);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.dev-card.featured .dev-name{font-size:2.2rem;margin-bottom:.25rem;}
+.dev-handle{font-family:'Geist Mono',monospace;font-size:.73rem;color:var(--t4);margin-bottom:.9rem;letter-spacing:.06em;}
+.dev-desc{color:var(--t2);font-size:.86rem;line-height:1.7;margin-bottom:1.2rem;}
+
+.dev-stack{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.3rem;justify-content:center;}
+.dev-card.featured .dev-stack{justify-content:flex-start;}
+.stack-tag{
+  padding:.28rem .75rem;border-radius:6px;font-family:'Geist Mono',monospace;font-size:.68rem;
+  background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.18);color:var(--v3);
+  transition:.2s;
+}
 .dev-card:hover .stack-tag{background:rgba(124,58,237,.14);border-color:rgba(124,58,237,.3);}
 
-.dev-socials{display:flex;gap:.6rem;flex-wrap:wrap;}
-.dev-social-link{display:inline-flex;align-items:center;gap:7px;padding:.45rem 1rem;border-radius:9px;background:var(--glass);border:1px solid var(--b);color:var(--t2);text-decoration:none;font-size:.78rem;font-weight:600;transition:all .22s cubic-bezier(.4,0,.2,1);}
+.dev-socials{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;}
+.dev-card.featured .dev-socials{justify-content:flex-start;}
+.dev-social-link{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:.45rem 1rem;border-radius:9px;
+  background:var(--glass);border:1px solid var(--b);
+  color:var(--t2);text-decoration:none;font-size:.78rem;font-weight:600;
+  transition:all .22s cubic-bezier(.4,0,.2,1);
+}
 .dev-social-link:hover{background:rgba(124,58,237,.12);border-color:rgba(124,58,237,.3);color:var(--v2);transform:translateY(-2px);}
 .dev-social-link.discord:hover{background:rgba(88,101,242,.15);border-color:rgba(88,101,242,.35);color:#7289da;}
 .dev-social-link.instagram:hover{background:rgba(225,48,108,.1);border-color:rgba(225,48,108,.3);color:#e1306c;}
+
+/* Role tags for non-featured cards */
+.dev-role-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:.35rem .9rem;border-radius:100px;
+  font-family:'Geist Mono',monospace;font-size:.68rem;font-weight:600;
+  letter-spacing:.06em;margin-bottom:1rem;
+}
+.dev-role-tag.manager-tag{
+  background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.25);color:#fdba74;
+}
+.dev-role-tag.codev-tag{
+  background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);color:#67e8f9;
+}
 
 .team-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--b);border:1px solid var(--b);border-radius:16px;overflow:hidden;margin-bottom:4rem;}
 .ts-card{background:var(--bg1);padding:2rem;text-align:center;transition:background .3s;}
@@ -922,6 +1104,13 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
 /* ════════════════════════════════════════
    RESPONSIVE PRIVACY & TEAM
 ════════════════════════════════════════ */
+@media(max-width:900px){
+  .dev-grid{grid-template-columns:1fr;}
+  .dev-card.featured{grid-column:span 1;flex-direction:column;align-items:center;text-align:center;}
+  .dev-card.featured .dev-socials{justify-content:center;}
+  .dev-card.featured .dev-stack{justify-content:center;}
+  .dev-card.featured .dev-av-wrap{margin-bottom:1.2rem;}
+}
 @media(max-width:768px){
   .privacy-wrap{padding:0 1.4rem 5rem;}
   .toc-list{grid-template-columns:1fr;}
@@ -1017,7 +1206,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
   <div class="hgrid"></div>
   <div class="hero-lines"></div>
 
-  <!-- Floating code snippets -->
   <div class="code-float" style="top:15%;left:5%;--cd:18s;--cdl:0s;--cr:-4deg">antinuke.enable()</div>
   <div class="code-float" style="top:25%;right:7%;--cd:22s;--cdl:-6s;--cr:3deg">threat.neutralize()</div>
   <div class="code-float" style="top:55%;left:3%;--cd:16s;--cdl:-3s;--cr:-2deg">server.protect()</div>
@@ -1108,7 +1296,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
       <p class="sec-p">Every tool your server needs — security, entertainment, and automation — engineered to perfection.</p>
     </div>
     <div class="bento rv d1">
-      <!-- Big feature -->
       <div class="bc bc1">
         <div class="bico bv"><i class="fas fa-shield-halved"></i></div>
         <h3>Real-Time Anti-Nuke Engine</h3>
@@ -1132,7 +1319,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
         </div>
       </div>
 
-      <!-- Stats -->
       <div class="bc bc2" style="display:flex;flex-direction:column;justify-content:space-between;">
         <div>
           <div class="bbl">Total Commands</div>
@@ -1162,7 +1348,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
         </div>
       </div>
 
-      <!-- Music -->
       <div class="bc bc3">
         <div class="bico bp"><i class="fas fa-music"></i></div>
         <h3>High-Quality Music</h3>
@@ -1170,7 +1355,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
         <div class="btags" style="margin-top:1rem"><span class="bta">YouTube</span><span class="bta">Spotify</span><span class="bta">SoundCloud</span></div>
       </div>
 
-      <!-- AI -->
       <div class="bc bc4">
         <div class="bico bc2i"><i class="fas fa-robot"></i></div>
         <h3>AI Powered</h3>
@@ -1178,7 +1362,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
         <div class="btags" style="margin-top:1rem"><span class="bta">Genimage</span><span class="bta">AI Chat</span><span class="bta">AutoPFP</span></div>
       </div>
 
-      <!-- Games -->
       <div class="bc bc5">
         <div class="bico bg2i"><i class="fas fa-gamepad"></i></div>
         <h3>13 Games</h3>
@@ -1186,14 +1369,12 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
         <div class="btags" style="margin-top:1rem"><span class="bta">Chess</span><span class="bta">Wordle</span><span class="bta">2048</span></div>
       </div>
 
-      <!-- Customizable -->
       <div class="bc bc6">
         <div class="bico bv" style="margin-bottom:1rem"><i class="fas fa-gears"></i></div>
         <h3>Infinitely Customizable</h3>
         <p>Every single module is fully configurable for your server. Set custom whitelists, bypass roles, punishment types, log channels, thresholds, and more. ZenoX adapts completely to how you run your community.</p>
       </div>
 
-      <!-- Shield card -->
       <div class="bc bc7 shield-card">
         <svg class="shield-svg" viewBox="0 0 80 80" fill="none">
           <defs>
@@ -1393,8 +1574,8 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
   <div class="team-section">
     <div class="rv">
       <div class="tag-line" style="justify-content:center">The Team</div>
-      <h2 class="sec-h" style="text-align:center">MEET THE<br><span class="g">DEVELOPER</span></h2>
-      <p class="sec-p" style="margin:0 auto;text-align:center">The brilliant mind behind ZenoX — building powerful, elegant Discord tools.</p>
+      <h2 class="sec-h" style="text-align:center">MEET THE<br><span class="g">TEAM</span></h2>
+      <p class="sec-p" style="margin:0 auto;text-align:center">The talented minds behind ZenoX — building powerful, elegant Discord tools together.</p>
     </div>
 
     <!-- Vote Banner -->
@@ -1420,21 +1601,22 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
       <div class="ts-card"><div class="ts-num">22+</div><div class="ts-lbl">Modules Crafted</div></div>
     </div>
 
-    <!-- Developer Card -->
-    <div class="dev-featured rv d3">
-      <div class="dev-card">
+    <!-- Team Grid -->
+    <div class="dev-grid rv d3">
+
+      <!-- ── Lead Developer: Axel (featured, full width) ── -->
+      <div class="dev-card featured">
         <div class="dev-av-wrap">
           <div class="dev-av-ring"></div>
           <img src="developer.png" alt="Axel" class="dev-av" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
           <div class="dev-av-fallback" style="display:none;">A</div>
           <div class="dev-role-badge">Lead Developer</div>
         </div>
-
         <div class="dev-info">
           <div class="dev-name">Axel</div>
           <div class="dev-handle">// developer of ZenoX</div>
           <p class="dev-desc">
-            Developer behind the ZenoX. Expert in Node.js, HTML, and Python with a focus on core features and aesthetic look.
+            Developer behind ZenoX. Expert in Node.js, HTML, and Python with a focus on core features and aesthetic look.
           </p>
           <div class="dev-stack">
             <span class="stack-tag">Node.js</span>
@@ -1453,7 +1635,64 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
           </div>
         </div>
       </div>
-    </div>
+
+      <!-- ── Manager: KILLER ── -->
+      <div class="dev-card manager">
+        <div class="dev-av-wrap">
+          <div class="dev-av-ring"></div>
+          <img src="killer.png" alt="KILLER" class="dev-av" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="dev-av-fallback" style="display:none;">K</div>
+          <div class="dev-role-badge" style="background:linear-gradient(135deg,#fb923c,#f59e0b);box-shadow:0 4px 12px rgba(251,146,60,.4);">Manager</div>
+        </div>
+        <div class="dev-info">
+          <div class="dev-role-tag manager-tag"><i class="fas fa-crown" style="font-size:.6rem"></i> Manager</div>
+          <div class="dev-name">KILLER</div>
+          <div class="dev-handle">// manager of ZenoX</div>
+          <p class="dev-desc">
+            Keeps ZenoX running smoothly — overseeing operations, community management, and strategic direction of the project.
+          </p>
+          <div class="dev-stack">
+            <span class="stack-tag">Management</span>
+            <span class="stack-tag">Operations</span>
+            <span class="stack-tag">Community</span>
+          </div>
+          <div class="dev-socials">
+            <a href="#" class="dev-social-link discord" target="_blank">
+              <i class="fab fa-discord"></i> Discord
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Co-Developer: Cyru ── -->
+      <div class="dev-card codev">
+        <div class="dev-av-wrap">
+          <div class="dev-av-ring"></div>
+          <img src="cyru.png" alt="Cyru" class="dev-av" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="dev-av-fallback" style="display:none;">C</div>
+          <div class="dev-role-badge" style="background:linear-gradient(135deg,#0891b2,#22d3ee);box-shadow:0 4px 12px rgba(34,211,238,.4);">Co-Developer</div>
+        </div>
+        <div class="dev-info">
+          <div class="dev-role-tag codev-tag"><i class="fas fa-code" style="font-size:.6rem"></i> Co-Developer</div>
+          <div class="dev-name">Cyru</div>
+          <div class="dev-handle">// co-dev of ZenoX</div>
+          <p class="dev-desc">
+            Co-developer contributing to ZenoX's features and codebase — focused on building new modules and improving bot performance.
+          </p>
+          <div class="dev-stack">
+            <span class="stack-tag">Node.js</span>
+            <span class="stack-tag">Discord.js</span>
+            <span class="stack-tag">JavaScript</span>
+          </div>
+          <div class="dev-socials">
+            <a href="#" class="dev-social-link discord" target="_blank">
+              <i class="fab fa-discord"></i> Discord
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /dev-grid -->
   </div>
 </section>
 
@@ -1466,7 +1705,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
       <p class="sec-p" style="margin:0 auto;text-align:center">We respect your privacy and are committed to protecting it. Here's everything you need to know about how ZenoX handles your data.</p>
     </div>
 
-    <!-- Table of Contents -->
     <div class="toc rv d1">
       <div class="toc-title"><i class="fas fa-list" style="margin-right:6px"></i>Table of Contents</div>
       <ul class="toc-list">
@@ -1481,7 +1719,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
       </ul>
     </div>
 
-    <!-- Information We Collect -->
     <div id="collect" class="policy-section rv d2">
       <div class="ps-header">
         <div class="ps-icon"><i class="fas fa-database"></i></div>
@@ -1498,7 +1735,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
       </div>
     </div>
 
-    <!-- How We Use Information -->
     <div id="use" class="policy-section rv d1">
       <div class="ps-header">
         <div class="ps-icon"><i class="fas fa-gear"></i></div>
@@ -1516,7 +1752,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
       </div>
     </div>
 
-    <!-- Data Storage & Security -->
     <div id="storage" class="policy-section rv d2">
       <div class="ps-header">
         <div class="ps-icon"><i class="fas fa-lock"></i></div>
@@ -1532,7 +1767,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
       </div>
     </div>
 
-    <!-- No Selling or Sharing -->
     <div id="sharing" class="policy-section rv d1">
       <div class="ps-header">
         <div class="ps-icon"><i class="fas fa-ban"></i></div>
@@ -1548,7 +1782,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
       </div>
     </div>
 
-    <!-- Data Retention & Deletion -->
     <div id="retention" class="policy-section rv d2">
       <div class="ps-header">
         <div class="ps-icon"><i class="fas fa-clock-rotate-left"></i></div>
@@ -1564,7 +1797,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
       </div>
     </div>
 
-    <!-- Service Availability & Data Loss -->
     <div id="availability" class="policy-section rv d1">
       <div class="ps-header">
         <div class="ps-icon"><i class="fas fa-triangle-exclamation"></i></div>
@@ -1581,7 +1813,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
       </div>
     </div>
 
-    <!-- Changes to This Policy -->
     <div id="changes" class="policy-section rv d2">
       <div class="ps-header">
         <div class="ps-icon"><i class="fas fa-file-pen"></i></div>
@@ -1597,7 +1828,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
       </div>
     </div>
 
-    <!-- Contact Us -->
     <div id="contact" class="policy-section rv d1">
       <div class="ps-header">
         <div class="ps-icon"><i class="fab fa-discord"></i></div>
@@ -1617,7 +1847,6 @@ footer{border-top:1px solid var(--b);background:var(--bg1);padding:4.5rem 0 2.5r
       </div>
     </div>
 
-    <!-- Highlight Box -->
     <div class="highlight-box rv d2">
       <i class="fas fa-shield-halved"></i>
       <p>By using ZenoX, you agree to this Privacy Policy. We are committed to being <strong>transparent</strong> about our data practices and giving you <strong>control</strong> over your information.</p>
@@ -1762,7 +1991,6 @@ function checkCount(){
   }
 }
 window.addEventListener('scroll',checkCount);checkCount();
-// Slowly increment
 setInterval(()=>{
   threatCount+=Math.floor(Math.random()*3);
   if(counted)cntEl.textContent=threatCount.toLocaleString();
@@ -1787,7 +2015,7 @@ document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.le
   tx+=(mx-tx)*.06;ty+=(my-ty)*.06;trail.style.left=tx+'px';trail.style.top=ty+'px';
   requestAnimationFrame(raf);
 })();
-document.querySelectorAll('a,button,.bc,.csb,.cr,.sc2,.ps,.tcard,.asc,.chip').forEach(el=>{
+document.querySelectorAll('a,button,.bc,.csb,.cr,.sc2,.ps,.tcard,.asc,.chip,.dev-card').forEach(el=>{
   el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
   el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
 });
